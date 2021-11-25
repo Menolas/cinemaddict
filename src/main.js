@@ -21,4 +21,4 @@ for (step = 0; step < 5; step++) {
 
 renderTemplate(allMoviesContainer, createShowMoreButtonTemplate(), RenderPosition.AFTEREND);
 
-//renderTemplate(siteFooterElement, createDetailedInfoTemplate(), RenderPosition.AFTEREND);
+renderTemplate(siteFooterElement, createDetailedInfoTemplate(), RenderPosition.AFTEREND);
