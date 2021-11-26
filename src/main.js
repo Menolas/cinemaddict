@@ -14,8 +14,7 @@ const siteFooterElement = document.querySelector('.footer');
 renderTemplate(siteHeaderElement, createUserRankTemplate(), RenderPosition.BEFOREEND);
 renderTemplate(siteMainElement, createSiteMenuTemplate(), RenderPosition.AFTERBEGIN);
 
-let step;
-for (step = 0; step < 5; step++) {
+for (let step = 0; step < 5; step++) {
   renderTemplate(allMoviesContainer, createMovieCardTemplate(), RenderPosition.BEFOREEND);
 }
 
