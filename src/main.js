@@ -4,6 +4,12 @@ import {createMovieCardTemplate} from './view/movie-card-view.js';
 import {createShowMoreButtonTemplate} from './view/show-more-button-view.js';
 import {createDetailedInfoTemplate} from './view/detailed-info-view.js';
 import {renderTemplate, RenderPosition} from './render.js';
+import {generateFilmCard} from './mock/film.js';
+
+const FILM_COUNT = 20;
+
+const filmCollection = Array.from({length: FILM_COUNT}, generateFilmCard);
+console.log(filmCollection);
 
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
@@ -14,10 +20,11 @@ const siteFooterElement = document.querySelector('.footer');
 renderTemplate(siteHeaderElement, createUserRankTemplate(), RenderPosition.BEFOREEND);
 renderTemplate(siteMainElement, createSiteMenuTemplate(), RenderPosition.AFTERBEGIN);
 
-for (let step = 0; step < 5; step++) {
-  renderTemplate(allMoviesContainer, createMovieCardTemplate(), RenderPosition.BEFOREEND);
+for (let i = 0; i < 5; i++) {
+  renderTemplate(allMoviesContainer, createMovieCardTemplate(filmCollection[i]), RenderPosition.BEFOREEND);
 }
 
 renderTemplate(allMoviesContainer, createShowMoreButtonTemplate(), RenderPosition.AFTEREND);
+siteFooterElement.querySelector('.footer__statistics span').textContent = FILM_COUNT;
 
 //renderTemplate(siteFooterElement, createDetailedInfoTemplate(), RenderPosition.AFTEREND);
