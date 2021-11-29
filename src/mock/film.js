@@ -1,0 +1,53 @@
+export const generateFilmCard = () => ({
+  title,
+  poster,
+  rating,
+  relised,
+  watchingTime,
+  genres: {
+    musical: false,
+    cartoon: false,
+    drama: true,
+    comedy: false,
+    western: true,
+    mystery: true,
+    thriller: false,
+  },
+  description,
+  commentsNumber,
+  controlblock: {
+    'Add to watchlist': true,
+    'Already watched': false,
+    'Add to favourites': false,    
+  },
+});
+
+export const generatePopUP = () => ({
+  title,
+  fullSizePoster,
+  titleOriginal,
+  rating,
+  director,
+  writers,
+  actors,
+  relise,
+  watchingTime,
+  country,
+  genres: {
+    musical: false,
+    cartoon: false,
+    drama: true,
+    comedy: false,
+    western: true,
+    mystery: true,
+    thriller: false,
+  },
+  description,
+  ageRating,
+  commentsNumber,
+  controlblock: {
+    'Add to watchlist': true,
+    'Already watched': false,
+    'Add to favourites': false,    
+  },
+});
