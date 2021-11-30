@@ -1,4 +1,3 @@
-
 export const createMovieCardTemplate = (film) => {
 
   const {

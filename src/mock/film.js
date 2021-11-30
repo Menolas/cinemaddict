@@ -74,9 +74,35 @@ const genres = [
 ];
 
 const writers = [
+  'Marcel Proust',
+  'James Joyce',
+  'Miguel de Cervantes',
+  'Gabriel Garcia Marquez',
+  'F. Scott Fitzgerald',
+  'Herman Melville',
+  'William Shakespeare',
+  'Homer',
+  'Gustave Flaubert',
+  'Dante Alighieri',
+  'Vladimir Nabokov',
+  'Emily Brontë',
+  'J. D. Salinger',
 ];
 
 const actors = [
+  'Marlon Brando',
+  'Robert De Niro',
+  'Meryl Streep',
+  'Dustin Lee Hoffman',
+  'Thomas Jeffrey Hanks',
+  'Jodie Foster',
+  'Anthony Hopkins',
+  'Michael Caine',
+  'Elizabeth Rosemond Taylor',
+  'Charlie Chaplin',
+  'Ben Kingsley',
+  'Susan Sarandon',
+  'Scarlett Ingrid Johansson',
 ];
 
 const generateFewNonRepeatableValues = (a, b, array) => {
@@ -100,6 +126,19 @@ const posters = [
   'the-dance-of-life.jpg',
   'the-great-flamarion.jpg',
   'the-man-with-the-golden-arm.jpg',
+  'allien-2.jpg',
+  'allien.jpg',
+  'elm-strit.jpg',
+  'mahakali.jpg',
+  'matrix.jpg',
+  'mission.jpg',
+  'mummy.jpg',
+  'nice-guy.jpg',
+  'park.jpg',
+  'sister.jpg',
+  'x-men.jpg',
+  'deadly.jpg',
+  'rushmore.jpg',
 ];
 
 const countries = [
@@ -148,8 +187,8 @@ export const generateFilmCard = () => ({
   isWatched: Boolean(getRandomInteger(0, 1)),
   isInFavourites: Boolean(getRandomInteger(0, 1)),
   director: generateRandomValue(directors),
-  // writers: film.writers,
-  // actors: film.actors,
+  writers: generateFewNonRepeatableValues(1, 3, writers),
+  actors: generateFewNonRepeatableValues(3, 6, actors),
   country: generateRandomValue(countries),
   ageRating: generateRandomValue(ageRatings),
 });
