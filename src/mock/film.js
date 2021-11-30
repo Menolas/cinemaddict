@@ -21,50 +21,36 @@ const generateWatchingTime = () => {
 };
 
 const generateTitle = () => {
+  const allTitles = {
+    'The Dance of Life': 'The Old Man and the Sea',
+    'Holly Molly': 'Apple sider and Giovanny',
+    'Developer in Wonderland': 'Moby Dick',
+    'Death on the beach': 'My Biography',
+    'Dexter on vacation': 'Sweet mango',
+    'Timosha the Ripper': 'The Ideal Crime',
+    'Helloween night': 'Vitamins or dopamines',
+    'Apple sider and Giovanny': 'Butcher in the bushes',
+    'Hello bitches': 'Developer in Wonderland',
+    'Prison for tailors': 'The Dance of Life',
+    'Vitamins or dopamines': 'First kill is the sweetest one',
+    'Sweet mango': 'Timosha the Ripper',
+    'My Biography': 'Moby Dick',
+    'Moby Dick': 'Helloween night',
+    'The Old Man and the Sea': 'Lion is not a Panther',
+    'The Jungle Book': 'Prison for tailors',
+    'Lion is not a Panther': 'Holly Molly',
+    'The Ideal Crime': 'Apple sider and Giovanny',
+    'Butcher in the bushes': 'Vitamins or dopamines',
+    'First kill is the sweetest one': 'Death on the beach',
+  };
 
-  const titles = [
-    'The Dance of Life',
-    'Holly Molly',
-    'Developer in Wonderland',
-    'Death on the beach',
-    'Dexter on vacation',
-    'Timosha the Ripper',
-    'Helloween night',
-    'Apple sider and Giovanny',
-    'Hello bitches',
-    'Prison for tailors',
-    'Vitamins or dopamines',
-    'Sweet mango',
-    'My Biography',
-    'Moby Dick',
-    'The Old Man and the Sea',
-    'The Jungle Book',
-    'Lion is not a Panther',
-    'The Ideal Crime',
-    'Butcher in the bushes',
-    'First kill is the sweetest one',
-  ];
+  const keys = Object.keys(allTitles);
+  const randomIndex = getRandomInteger(0, keys.length - 1);
+  const title = [];
+  title.push(keys[randomIndex]);
+  title.push(allTitles[keys[randomIndex]]);
 
-  const randomIndex = getRandomInteger(0, titles.length - 1);
-
-  return titles[randomIndex];
-};
-
-const generatePoster = () => {
-
-  const posters = [
-    'made-for-each-other.png',
-    'popeye-meets-sinbad.png',
-    'sagebrush-trail.jpg',
-    'santa-claus-conquers-the-martians.jpg',
-    'the-dance-of-life.jpg',
-    'the-great-flamarion.jpg',
-    'the-man-with-the-golden-arm.jpg',
-  ];
-
-  const randomIndexForPoster = getRandomInteger(0, posters.length - 1);
-
-  return posters[randomIndexForPoster];
+  return title;
 };
 
 const generateDescription = () => {
@@ -76,72 +62,94 @@ const generateDescription = () => {
   return description.join(' ');
 };
 
-const generateGenres = () => {
+const genres = [
+  'Musical',
+  'Cartoon',
+  'Drama',
+  'Comedy',
+  'Western',
+  'Mystery',
+  'Thriller',
+  'Arthouse',
+];
 
-  const genres = [
-    'Musical',
-    'Cartoon',
-    'Drama',
-    'Comedy',
-    'Western',
-    'Mystery',
-    'Thriller',
-    'Arthouse',
-  ];
+const writers = [
+];
 
-  const numberOfGenres = getRandomInteger(1, 3);
+const actors = [
+];
+
+const generateFewNonRepeatableValues = (a, b, array) => {
+  const numberOfValues = getRandomInteger(a, b);
   let result = [];
 
-  while (result.length != numberOfGenres) {
-    let index = getRandomInteger(0, genres.length - 1);    
-    result.push(genres[index]);    
+  while (result.length != numberOfValues) {
+    let index = getRandomInteger(0, array.length - 1);
+    result.push(array[index]);    
     result = result.filter((v, i, arr) =>  arr.indexOf(v) == i);
   }
 
   return result.join(', ');
+};
 
+const posters = [
+  'made-for-each-other.png',
+  'popeye-meets-sinbad.png',
+  'sagebrush-trail.jpg',
+  'santa-claus-conquers-the-martians.jpg',
+  'the-dance-of-life.jpg',
+  'the-great-flamarion.jpg',
+  'the-man-with-the-golden-arm.jpg',
+];
+
+const countries = [
+  'USA',
+  'USSR',
+  'Narnia',
+  'Wonderland',
+  'Far Far Away',
+  'Afganistan',
+];
+
+const directors = [
+  'Roman Polansky',
+  'Tarantinych',
+  'Sandul V.V.',
+  'A. Tarkovskii',
+  'Linata Retvinova',
+  'Volodymyr Zagoruyko',
+  'Giovanny Limonchello',
+];
+
+const ageRatings = ['18+', '13+', '91+', '387+',];
+
+const generateRandomValue = (array) => {
+  const randomIndex = getRandomInteger(0, array.length - 1);
+
+  return array[randomIndex];
 };
 
 export const generateFilmCard = () => ({
-  title: generateTitle(),
-  poster: generatePoster(),
+  _filmTitle: generateTitle(),
+  get title() {
+    return this._filmTitle[0];
+  },
+  get titleOriginal() {
+    return this._filmTitle[1];
+  },
+  poster: generateRandomValue(posters),
   rating: getRandomRating(),
   relised: getRandomInteger(1950, 2021),
   watchingTime: generateWatchingTime(),
-  genres: generateGenres(),
+  genres: generateFewNonRepeatableValues(1, 3, genres),
   description: generateDescription(),
   commentsNumber: getRandomInteger(0, 5),
   isInWatchlist: Boolean(getRandomInteger(0, 1)),
   isWatched: Boolean(getRandomInteger(0, 1)),
   isInFavourites: Boolean(getRandomInteger(0, 1)),
+  director: generateRandomValue(directors),
+  // writers: film.writers,
+  // actors: film.actors,
+  country: generateRandomValue(countries),
+  ageRating: generateRandomValue(ageRatings),
 });
-
-// export const generatePopUP = () => ({
-//   title,
-//   fullSizePoster,
-//   titleOriginal,
-//   rating,
-//   director,
-//   writers,
-//   actors,
-//   relise,
-//   watchingTime,
-//   country,
-//   genres: {
-//     musical: false,
-//     cartoon: false,
-//     drama: true,
-//     comedy: false,
-//     western: true,
-//     mystery: true,
-//     thriller: false,
-//   },
-//   description,
-//   ageRating,
-//   commentsNumber,
-//   controlblock: {
-//     'Add to watchlist': true,
-//     'Already watched': false,
-//     'Add to favourites': false,    
-//   },
-// });
