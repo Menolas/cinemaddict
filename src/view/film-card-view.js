@@ -1,10 +1,12 @@
+import {humanizeFilmReleaseDate} from '../utils.js';
+
 export const createMovieCardTemplate = (film) => {
 
   const {
     title,
     poster,
     rating,
-    relised,
+    released,
     watchingTime,
     genres,
     description,
@@ -14,12 +16,14 @@ export const createMovieCardTemplate = (film) => {
     isInFavourites,
   } = film;
 
+  const releaseDate = humanizeFilmReleaseDate(released);
+
   return `<article class="film-card">
     <a class="film-card__link">
       <h3 class="film-card__title">${title}</h3>
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
-        <span class="film-card__year">${relised}</span>
+        <span class="film-card__year">${releaseDate}</span>
         <span class="film-card__duration">${watchingTime}</span>
         <span class="film-card__genre">${genres}</span>
       </p>

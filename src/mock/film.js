@@ -1,11 +1,6 @@
-// Функция из интернета по генерации случайного числа из диапазона
-// Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
+import dayjs from 'dayjs';
+import {getRandomInteger} from '../utils.js';
+import {generateRandomValue} from '../utils.js';
 
 const getRandomRating = () => {
   const randomNumber = 1 + Math.random() *9;
@@ -162,10 +157,10 @@ const directors = [
 
 const ageRatings = ['18+', '13+', '91+', '387+',];
 
-const generateRandomValue = (array) => {
-  const randomIndex = getRandomInteger(0, array.length - 1);
+const getReleaseDate = () => {
+  const timeGap = getRandomInteger(0, 60*60*24*365*70);
+  return dayjs().subtract(timeGap, 'second').toDate()
 
-  return array[randomIndex];
 };
 
 export const generateFilmCard = () => ({
@@ -178,7 +173,7 @@ export const generateFilmCard = () => ({
   },
   poster: generateRandomValue(posters),
   rating: getRandomRating(),
-  relised: getRandomInteger(1950, 2021),
+  released: getReleaseDate(),
   watchingTime: generateWatchingTime(),
   genres: generateFewNonRepeatableValues(1, 3, genres),
   description: generateDescription(),

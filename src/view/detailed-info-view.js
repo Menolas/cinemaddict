@@ -1,4 +1,4 @@
-
+import {humanizeFilmReleaseDetailedDate} from '../utils.js';
 
 export const createDetailedInfoTemplate = (film) => {
 
@@ -7,7 +7,7 @@ export const createDetailedInfoTemplate = (film) => {
     titleOriginal,
     poster,
     rating,
-    relised,
+    released,
     watchingTime,
     genres,
     description,
@@ -21,6 +21,8 @@ export const createDetailedInfoTemplate = (film) => {
     country,
     ageRating,
   } = film;
+
+  const detailedReleaseDate = humanizeFilmReleaseDetailedDate(released);
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -61,7 +63,7 @@ export const createDetailedInfoTemplate = (film) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Release Date</td>
-                <td class="film-details__cell">${relised}</td>
+                <td class="film-details__cell">${detailedReleaseDate}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
