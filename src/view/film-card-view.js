@@ -17,6 +17,9 @@ export const createMovieCardTemplate = (film) => {
   } = film;
 
   const releaseDate = humanizeFilmReleaseDate(released);
+  const favoriteClassName = isInFavourites ? 'film-card__controls-item--active' : '';
+  const watchedClassName = isWatched ? 'film-card__controls-item--active' : '';
+  const watchListClassName = isInWatchlist ? 'film-card__controls-item--active' : '';
 
   return `<article class="film-card">
     <a class="film-card__link">
@@ -32,9 +35,9 @@ export const createMovieCardTemplate = (film) => {
       <span class="film-card__comments">${commentsNumber} comments</span>
     </a>
     <div class="film-card__controls">
-        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
-        <button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-        <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
+        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isInWatchlist}" type="button">Add to watchlist</button>
+        <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${watchedClassName}" type="button">Mark as watched</button>
+        <button class="film-card__controls-item film-card__controls-item--favorite ${favoriteClassName}" type="button">Mark as favorite</button>
     </div>
   </article>`;
 };

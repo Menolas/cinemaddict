@@ -7,15 +7,19 @@ import {renderTemplate, RenderPosition} from './render.js';
 import {generateFilmCard} from './mock/film.js';
 import {createCommentTemplate} from './view/comment-view.js';
 import {generateComment} from './mock/comment.js';
-
-const FILM_COUNT = 20;
-const FILM_COUNT_PER_STEP = 5;
-const filmCollection = Array.from({length: FILM_COUNT}, generateFilmCard);
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const siteContentElement = document.querySelector('.films');
 const allMoviesContainer = siteContentElement.querySelector('.films-list__container');
 const siteFooterElement = document.querySelector('.footer');
+
+const FILM_COUNT = 20;
+const FILM_COUNT_PER_STEP = 5;
+const filmCollection = Array.from({length: FILM_COUNT}, generateFilmCard);
+
+export const watchList = filmCollection.filter(el => el.isInWatchlist === true).length;
+export const watchedList = filmCollection.filter(el => el.isWatched === true).length;
+export const favourites = filmCollection.filter(el => el.isInFavourites === true).length;
 
 renderTemplate(siteHeaderElement, createUserRankTemplate(), RenderPosition.BEFOREEND);
 renderTemplate(siteMainElement, createSiteMenuTemplate(), RenderPosition.AFTERBEGIN);

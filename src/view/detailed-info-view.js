@@ -23,6 +23,9 @@ export const createDetailedInfoTemplate = (film) => {
   } = film;
 
   const detailedReleaseDate = humanizeFilmReleaseDetailedDate(released);
+  const favoriteClassName = isInFavourites ? 'film-details__control-button--active' : '';
+  const watchedClassName = isWatched ? 'film-details__control-button--active' : '';
+  const watchListClassName = isInWatchlist ? 'film-details__control-button--active' : '';
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -84,9 +87,9 @@ export const createDetailedInfoTemplate = (film) => {
         </div>
 
         <section class="film-details__controls">
-          <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-          <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-          <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+          <button type="button" class="film-details__control-button ${watchListClassName} film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
+          <button type="button" class="film-details__control-button ${watchedClassName} film-details__control-button--watched" id="watched" name="watched">Already watched</button>
+          <button type="button" class="film-details__control-button ${favoriteClassName} film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
         </section>
       </div>
 
