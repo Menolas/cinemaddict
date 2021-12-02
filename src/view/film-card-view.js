@@ -1,6 +1,6 @@
 import {humanizeFilmReleaseDate} from '../utils.js';
 
-export const createMovieCardTemplate = (film) => {
+export const createFilmCardTemplate = (film) => {
 
   const {
     title,
