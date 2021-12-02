@@ -24,14 +24,33 @@ export const favourites = filmCollection.filter(el => el.isInFavourites === true
 renderTemplate(siteHeaderElement, createUserRankTemplate(), RenderPosition.BEFOREEND);
 renderTemplate(siteMainElement, createSiteMenuTemplate(), RenderPosition.AFTERBEGIN);
 
-for (let i = 0; i < FILM_COUNT_PER_STEP; i++) {
+for (let i = 0; i < Math.min(FILM_COUNT, FILM_COUNT_PER_STEP); i++) {
   renderTemplate(allMoviesContainer, createMovieCardTemplate(filmCollection[i]), RenderPosition.BEFOREEND);
 }
 
-renderTemplate(allMoviesContainer, createShowMoreButtonTemplate(), RenderPosition.AFTEREND);
+if (filmCollection.length > FILM_COUNT_PER_STEP) {
+  let renderedFilmCount = FILM_COUNT_PER_STEP;
+  renderTemplate(allMoviesContainer, createShowMoreButtonTemplate(), RenderPosition.AFTEREND);
+  const showMoreButton = siteContentElement.querySelector('.films-list__show-more');
+
+  showMoreButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+
+    filmCollection
+      .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
+      .forEach((film) => renderTemplate(allMoviesContainer, createMovieCardTemplate(film), RenderPosition.BEFOREEND));
+    renderedFilmCount += FILM_COUNT_PER_STEP;
+
+    if (renderedFilmCount >= filmCollection.length) {
+      showMoreButton.remove();
+    }
+  });
+}
+
+
 siteFooterElement.querySelector('.footer__statistics span').textContent = FILM_COUNT;
 
-//renderTemplate(siteFooterElement, createDetailedInfoTemplate(filmCollection[0]), RenderPosition.AFTEREND);
+renderTemplate(siteFooterElement, createDetailedInfoTemplate(filmCollection[0]), RenderPosition.AFTEREND);
 const commentsContainer = document.querySelector('.film-details__comments-list');
 
 if (commentsContainer && filmCollection[0].commentsNumber > 0) {
