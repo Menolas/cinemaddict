@@ -17,9 +17,9 @@ const FILM_COUNT = 20;
 const FILM_COUNT_PER_STEP = 5;
 const filmCollection = Array.from({length: FILM_COUNT}, generateFilmCard);
 
-export const watchList = filmCollection.filter(el => el.isInWatchlist === true).length;
-export const watchedList = filmCollection.filter(el => el.isWatched === true).length;
-export const favourites = filmCollection.filter(el => el.isInFavourites === true).length;
+export const watchList = filmCollection.filter((el) => el.isInWatchlist === true).length;
+export const watchedList = filmCollection.filter((el) => el.isWatched === true).length;
+export const favourites = filmCollection.filter((el) => el.isInFavourites === true).length;
 
 renderTemplate(siteHeaderElement, createUserRankTemplate(), RenderPosition.BEFOREEND);
 renderTemplate(siteMainElement, createSiteMenuTemplate(), RenderPosition.AFTERBEGIN);
