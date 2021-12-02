@@ -53,7 +53,7 @@ const generateDescription = () => {
   const descriptionArray = descriptionFish.split('.');
   const sentanseNumber = getRandomInteger(1, descriptionArray.length);
   const description = descriptionArray.slice(0, sentanseNumber);
-  
+
   return description.join(' ');
 };
 
@@ -104,10 +104,10 @@ const generateFewNonRepeatableValues = (a, b, array) => {
   const numberOfValues = getRandomInteger(a, b);
   let result = [];
 
-  while (result.length != numberOfValues) {
-    let index = getRandomInteger(0, array.length - 1);
-    result.push(array[index]);    
-    result = result.filter((v, i, arr) =>  arr.indexOf(v) == i);
+  while (result.length !== numberOfValues) {
+    const index = getRandomInteger(0, array.length - 1);
+    result.push(array[index]);
+    result = result.filter((v, i, arr) =>  arr.indexOf(v) === i);
   }
 
   return result.join(', ');
@@ -159,8 +159,7 @@ const ageRatings = ['18+', '13+', '91+', '387+',];
 
 const getReleaseDate = () => {
   const timeGap = getRandomInteger(0, 60*60*24*365*70);
-  return dayjs().subtract(timeGap, 'second').toDate()
-
+  return dayjs().subtract(timeGap, 'second').toDate();
 };
 
 export const generateFilmCard = () => ({

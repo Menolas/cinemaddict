@@ -47,7 +47,6 @@ if (filmCollection.length > FILM_COUNT_PER_STEP) {
   });
 }
 
-
 siteFooterElement.querySelector('.footer__statistics span').textContent = FILM_COUNT;
 
 renderTemplate(siteFooterElement, createDetailedInfoTemplate(filmCollection[0]), RenderPosition.AFTEREND);

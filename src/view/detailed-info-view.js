@@ -131,5 +131,5 @@ export const createDetailedInfoTemplate = (film) => {
         </section>
       </div>
     </form>
-  </section>`
+  </section>`;
 };
