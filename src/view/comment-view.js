@@ -1,5 +1,7 @@
 import {humanizeCommentDate} from '../utils.js';
-export const createCommentTemplate = (comment) => {
+import {createElement} from '../render.js';
+
+const createCommentTemplate = (comment) => {
 
   const {
     text,
@@ -24,3 +26,29 @@ export const createCommentTemplate = (comment) => {
       </div>
     </li>`;
 };
+
+export default class CommentView {
+  #element = null;
+  #comment = null;
+
+  constructor(comment) {
+    this.#comment = comment;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createCommentTemplate(this.#comment);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+};
+
