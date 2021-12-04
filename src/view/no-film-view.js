@@ -1,8 +1,12 @@
 import {createElement} from '../render.js';
 
-const createFilmBoardTemplate = () => `<section class="films"></section>`;
+const createNoFilmTemplate = () => (
+  `<section class="films-list">
+    <h2 class="films-list__title">There are no movies in our database</h2>
+    </section>`
+);
 
-export default class FilmBoardView {
+export default class NoFilmView {
   #element = null;
 
   get element() {
@@ -14,7 +18,7 @@ export default class FilmBoardView {
   }
 
   get template() {
-    return createFilmBoardTemplate();
+    return createNoFilmTemplate();
   }
 
   removeElement() {
