@@ -25,4 +25,4 @@ export default class FilmBoardView {
   removeElement() {
     this.#element = null;
   }
-};
+}

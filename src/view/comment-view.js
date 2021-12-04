@@ -50,5 +50,4 @@ export default class CommentView {
   removeElement() {
     this.#element = null;
   }
-};
-
+}

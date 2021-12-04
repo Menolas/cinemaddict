@@ -32,4 +32,4 @@ export default class SiteMenuView {
   removeElement() {
     this.#element = null;
   }
-};
+}

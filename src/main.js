@@ -21,7 +21,7 @@ export const filteredData = {
   watchList: films.filter((el) => el.isInWatchlist).length,
   watchedList: films.filter((el) => el.isWatched).length,
   favourites: films.filter((el) => el.isInFavourites).length,
-}
+};
 
 const renderFilm = (filmListElement, film) => {
   const filmComponent = new FilmCardView(film);
@@ -29,17 +29,17 @@ const renderFilm = (filmListElement, film) => {
   const closePopup = () => {
     siteFooterElement.removeChild(detailedFilmComponent.element);
     body.classList.remove('hide-overflow');
-  }
+  };
   const showPopup = () => {
     //render(siteFooterElement, detailedFilmComponent.element, RenderPosition.AFTEREND);
     siteFooterElement.appendChild(detailedFilmComponent.element);
     body.classList.add('hide-overflow');
-  }
+  };
 
   detailedFilmComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
     closePopup();
   });
-  
+
   filmComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
     showPopup();
   });

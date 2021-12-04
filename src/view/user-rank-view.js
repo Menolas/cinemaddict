@@ -25,4 +25,4 @@ export default class UserRankView {
   removeElement() {
     this.#element = null;
   }
-};
+}

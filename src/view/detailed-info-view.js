@@ -158,4 +158,4 @@ export default class DetailedInfoView {
   removeElement() {
     this.#element = null;
   }
-};
+}
