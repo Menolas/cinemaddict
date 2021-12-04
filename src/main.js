@@ -21,15 +21,14 @@ const filmContainerViewComponent = new FilmContainerView();
 
 const films = Array.from({length: FILM_COUNT}, generateFilmCard);
 export const filteredData = {
-    watchList: films.filter((el) => el.isInWatchlist).length,
-    watchedList: films.filter((el) => el.isWatched).length,
-    favourites: films.filter((el) => el.isInFavourites).length,
+  watchList: films.filter((el) => el.isInWatchlist).length,
+  watchedList: films.filter((el) => el.isWatched).length,
+  favourites: films.filter((el) => el.isInFavourites).length,
 };
 
 render(siteHeaderElement, new UserRankView().element, RenderPosition.BEFOREEND);
 render(siteMainElement, new SiteMenuView().element, RenderPosition.AFTERBEGIN);
 render(siteMainElement, filmBoardViewComponent.element, RenderPosition.BEFOREEND);
-console.log(films);
 
 if (films.length === 0) {
   render(filmBoardViewComponent.element, new NoFilmView().element, RenderPosition.BEFOREEND);
