@@ -67,7 +67,7 @@ const renderFilmBoard = (container, cards) => {
   if (cards.length === 0) {
     render(filmBoardViewComponent.element, new NoFilmView().element, RenderPosition.BEFOREEND);
   } else {
-    
+
     render(filmBoardViewComponent.element, filmContainerViewComponent.element, RenderPosition.BEFOREEND);
     render(filmBoardViewComponent.element, new SortListView().element, RenderPosition.BEFOREBEGIN);
     const allMoviesContainer = filmBoardViewComponent.element.querySelector('.films-list__container');
@@ -106,6 +106,6 @@ const renderFilmBoard = (container, cards) => {
   }
 
   siteFooterElement.querySelector('.footer__statistics span').textContent = FILM_COUNT;
-}
+};
 
 renderFilmBoard(siteMainElement, films);
