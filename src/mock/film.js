@@ -156,7 +156,6 @@ const directors = [
 ];
 
 const ageRatings = ['18+', '13+', '91+', '387+',];
-
 const getReleaseDate = () => {
   const timeGap = getRandomInteger(0, 60*60*24*365*70);
   return dayjs().subtract(timeGap, 'second').toDate();
