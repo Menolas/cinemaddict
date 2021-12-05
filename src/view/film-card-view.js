@@ -1,6 +1,7 @@
 import {humanizeFilmReleaseDate} from '../utils.js';
+import {createElement} from '../render.js';
 
-export const createFilmCardTemplate = (film) => {
+const createFilmCardTemplate = (film) => {
 
   const {
     title,
@@ -41,3 +42,28 @@ export const createFilmCardTemplate = (film) => {
     </div>
   </article>`;
 };
+
+export default class FilmCardView {
+  #element = null;
+  #film = null;
+
+  constructor(film) {
+    this.#film = film;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createFilmCardTemplate(this.#film);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

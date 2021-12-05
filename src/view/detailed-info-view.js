@@ -1,6 +1,7 @@
 import {humanizeFilmReleaseDetailedDate} from '../utils.js';
+import {createElement} from '../render.js';
 
-export const createDetailedInfoTemplate = (film) => {
+const createDetailedInfoTemplate = (film) => {
 
   const {
     title,
@@ -133,3 +134,28 @@ export const createDetailedInfoTemplate = (film) => {
     </form>
   </section>`;
 };
+
+export default class DetailedInfoView {
+  #element = null;
+  #film = null;
+
+  constructor(film) {
+    this.#film = film;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createDetailedInfoTemplate(this.#film);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
