@@ -57,12 +57,12 @@ const renderFilm = (filmListElement, film) => {
     }
   };
 
-  detailedFilmComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
+  detailedFilmComponent.setClosePopupClickHandler(() => {
     closePopup();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  filmComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
+  filmComponent.setPopupClickHandler(() => {
     showPopup();
     document.addEventListener('keydown', onEscKeyDown);
   });
@@ -92,8 +92,7 @@ const renderFilmBoard = (container, cards) => {
       const showMoreButtonComponent = new ShowMoreButtonView();
       render(allMoviesContainer, showMoreButtonComponent.element, RenderPosition.AFTEREND);
 
-      showMoreButtonComponent.element.addEventListener('click', (evt) => {
-        evt.preventDefault();
+      showMoreButtonComponent.setClickHandler(() => {
 
         cards
           .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
