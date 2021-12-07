@@ -89,10 +89,10 @@ const renderFilmBoard = (container, cards) => {
 
     if (cards.length > FILM_COUNT_PER_STEP) {
       let renderedFilmCount = FILM_COUNT_PER_STEP;
-      render(allMoviesContainer, new ShowMoreButtonView().element, RenderPosition.AFTEREND);
-      const showMoreButton = filmBoardViewComponent.element.querySelector('.films-list__show-more');
+      const showMoreButtonComponent = new ShowMoreButtonView();
+      render(allMoviesContainer, showMoreButtonComponent.element, RenderPosition.AFTEREND);
 
-      showMoreButton.addEventListener('click', (evt) => {
+      showMoreButtonComponent.element.addEventListener('click', (evt) => {
         evt.preventDefault();
 
         cards
