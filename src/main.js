@@ -33,9 +33,20 @@ const renderFilm = (filmListElement, film) => {
     siteFooterElement.removeChild(detailedFilmComponent.element);
     body.classList.remove('hide-overflow');
   };
+
   const showPopup = () => {
     siteFooterElement.appendChild(detailedFilmComponent.element);
     body.classList.add('hide-overflow');
+    console.log(film.commentsNumber);
+
+    const commentsContainer = document.querySelector('.film-details__comments-list');
+
+    if (commentsContainer && film.commentsNumber) {
+      const comments = Array.from({length: film.commentsNumber}, generateComment);
+      for (let i = 0; i < comments.length; i++) {
+        render(commentsContainer, new CommentView(comments[i]).element, RenderPosition.AFTERBEGIN);
+      }
+    }
   };
 
   const onEscKeyDown = (evt) => {
@@ -93,15 +104,6 @@ const renderFilmBoard = (container, cards) => {
           showMoreButton.remove();
         }
       });
-    }
-
-    const commentsContainer = document.querySelector('.film-details__comments-list');
-
-    if (commentsContainer && cards[0].commentsNumber) {
-      const comments = Array.from({length: cards[0].commentsNumber}, generateComment);
-      for (let i = 0; i < comments.length; i++) {
-        render(commentsContainer, new CommentView(comments[i]).element, RenderPosition.AFTERBEGIN);
-      }
     }
   }
 
