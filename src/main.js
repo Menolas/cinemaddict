@@ -40,8 +40,8 @@ const renderFilm = (filmListElement, film) => {
 
     if (commentsContainer && film.commentsNumber) {
       const comments = Array.from({length: film.commentsNumber}, generateComment);
-      for (let i = 0; i < comments.length; i++) {
-        render(commentsContainer, new CommentView(comments[i]), RenderPosition.AFTERBEGIN);
+      for (const comment of comments) {
+        render(commentsContainer, new CommentView(comment), RenderPosition.AFTERBEGIN);
       }
     }
   };
@@ -76,7 +76,7 @@ const renderFilmBoard = (container, cards) => {
   render(container, filmBoardViewComponent, RenderPosition.BEFOREEND);
   render(filmBoardViewComponent, filmContainerViewComponent, RenderPosition.BEFOREEND);
 
-  if (cards.length === 0) {
+  if (!cards.length) {
     render(filmBoardViewComponent, new NoFilmView(), RenderPosition.BEFOREEND);
   } else {
     render(filmBoardViewComponent, new SortListView(), RenderPosition.BEFOREBEGIN);
