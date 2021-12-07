@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from '../utils.js';
-import {generateRandomValue} from '../utils.js';
+import {getRandomInteger} from '../utils/common.js';
+import {generateRandomValue} from '../utils/common.js';
 
 const getRandomRating = () => {
   const randomNumber = 1 + Math.random() *9;

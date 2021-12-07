@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view.js';
-import {humanizeFilmReleaseDate} from '../utils.js';
+import {humanizeFilmReleaseDate} from '../utils/common.js';
 
 const createFilmCardTemplate = (film) => {
 

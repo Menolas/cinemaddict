@@ -1,4 +1,4 @@
-import {humanizeFilmReleaseDetailedDate} from '../utils.js';
+import {humanizeFilmReleaseDetailedDate} from '../utils/common.js';
 import AbstractView from './abstract-view.js';
 
 const createDetailedInfoTemplate = (film) => {
