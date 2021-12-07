@@ -35,7 +35,6 @@ const renderFilm = (filmListElement, film) => {
   const showPopup = () => {
     siteFooterElement.appendChild(detailedFilmComponent.element);
     body.classList.add('hide-overflow');
-    console.log(film.commentsNumber);
 
     const commentsContainer = document.querySelector('.film-details__comments-list');
 
@@ -100,7 +99,7 @@ const renderFilmBoard = (container, cards) => {
         renderedFilmCount += FILM_COUNT_PER_STEP;
 
         if (renderedFilmCount >= cards.length) {
-          showMoreButton.remove();
+          showMoreButtonComponent.remove();
         }
       });
     }
