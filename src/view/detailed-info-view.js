@@ -1,5 +1,5 @@
-import {humanizeFilmReleaseDetailedDate} from '../utils.js';
-import {createElement} from '../render.js';
+import {humanizeFilmReleaseDetailedDate} from '../utils/common.js';
+import AbstractView from './abstract-view.js';
 
 const createDetailedInfoTemplate = (film) => {
 
@@ -135,27 +135,25 @@ const createDetailedInfoTemplate = (film) => {
   </section>`;
 };
 
-export default class DetailedInfoView {
-  #element = null;
+export default class DetailedInfoView extends AbstractView {
   #film = null;
 
   constructor(film) {
+    super();
     this.#film = film;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createDetailedInfoTemplate(this.#film);
   }
 
-  removeElement() {
-    this.#element = null;
+  setClosePopupClickHandler = (callback) => {
+    this._callback.closePopup = callback;
+    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#popupCloseHandler);
+  }
+
+  #popupCloseHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.closePopup();
   }
 }

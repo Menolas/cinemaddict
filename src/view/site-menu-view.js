@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from './abstract-view.js';
 import {filteredData} from '../main.js';
 
 const createSiteMenuTemplate = () => `<nav class="main-navigation">
@@ -11,22 +11,9 @@ const createSiteMenuTemplate = () => `<nav class="main-navigation">
             <a href="#stats" class="main-navigation__additional">Stats</a>
           </nav>`;
 
-export default class SiteMenuView {
-  #element = null;
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
+export default class SiteMenuView extends AbstractView {
 
   get template() {
     return createSiteMenuTemplate();
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
