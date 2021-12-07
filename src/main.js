@@ -81,10 +81,10 @@ const renderFilmBoard = (container, cards) => {
   } else {
     render(filmBoardViewComponent, new SortListView(), RenderPosition.BEFOREBEGIN);
     const allMoviesContainer = filmBoardViewComponent.element.querySelector('.films-list__container');
-
-    for (let i = 0; i < Math.min(FILM_COUNT, FILM_COUNT_PER_STEP); i++) {
-      renderFilm(allMoviesContainer, cards[i]);
-    }
+    
+    cards
+      .slice(0, Math.min(FILM_COUNT, FILM_COUNT_PER_STEP))
+      .forEach((card) => renderFilm(allMoviesContainer, card));
 
     if (cards.length > FILM_COUNT_PER_STEP) {
       let renderedFilmCount = FILM_COUNT_PER_STEP;
@@ -95,7 +95,7 @@ const renderFilmBoard = (container, cards) => {
 
         cards
           .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
-          .forEach((film) => renderFilm(allMoviesContainer, film));
+          .forEach((card) => renderFilm(allMoviesContainer, card));
         renderedFilmCount += FILM_COUNT_PER_STEP;
 
         if (renderedFilmCount >= cards.length) {
