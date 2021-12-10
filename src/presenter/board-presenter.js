@@ -1,11 +1,17 @@
-import BoardView from '../view/film-board-view.js';
-import SortView from '../view/sort-list-view.js';
-import TaskListView from '../view/film-container-view.js';
-import NoTaskView from '../view/no-film-view.js';
-import TaskView from '../view/film-card-view.js';
-import TaskEditView from '../view/task-edit-view.js';
-import LoadMoreButtonView from '../view/show-more-button-view.js';
+import FilmBoardView from '../view/film-board-view.js';
+import SortListView from '../view/sort-list-view.js';
+import FilmContainerView from '../view/film-container-view.js';
+import NoFilmView from '../view/no-film-view.js';
+import FilmCardView from '../view/film-card-view.js';
+import DetailedInfoView from '../view/detailed-info-view.js';
+import ShowMoreButtonView from '../view/show-more-button-view.js';
+import CommentView from './view/comment-view.js';
 import {render, RenderPosition} from '../utils/render.js';
+import {FILM_COUNT, FILM_COUNT_PER_STEP} from './const.js';
+const body = document.querySelector('body');
+const siteHeaderElement = document.querySelector('.header');
+const siteMainElement = document.querySelector('.main');
+const siteFooterElement = document.querySelector('.footer');
 
 export default class FilmBoardPresenter {
   #boardContainer = null;
@@ -23,34 +29,88 @@ export default class FilmBoardPresenter {
 
   init = (boardFilms) => {
     this.#boardFilms = [...boardFilms];
-    // Метод для инициализации (начала работы) модуля,
-    // малая часть текущей функции renderBoard в main.js
+    
+    render(this.#boardContainer, this.#filmBoardComponent, RenderPosition.BEFOREEND);
+    render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
+
+    this.#renderFilmBoard();
   }
 
   #renderSort = () => {
-    // Метод для рендеринга сортировки
+    render(this.#filmBoardComponent, this.#sortListComponent, RenderPosition.BEFOREBEGIN);
   }
 
-  #renderFilm = () => {
-    // Метод, куда уйдёт логика созданию и рендерингу компонетов задачи,
-    // текущая функция renderTask в main.js
+  #renderFilm = (film) => {
+    const filmComponent = new FilmCardView(film);
+    const detailedFilmComponent = new DetailedInfoView(film);
+
+    const closePopup = () => {
+	    siteFooterElement.removeChild(detailedFilmComponent.element);
+	    body.classList.remove('hide-overflow');
+	  };
+
+	  const showPopup = () => {
+	    siteFooterElement.appendChild(detailedFilmComponent.element);
+	    body.classList.add('hide-overflow');
+
+	    const commentsContainer = document.querySelector('.film-details__comments-list');
+
+	    if (commentsContainer && film.commentsNumber) {
+	      const comments = Array.from({length: film.commentsNumber}, generateComment);
+	      for (const comment of comments) {
+	        render(commentsContainer, new CommentView(comment), RenderPosition.AFTERBEGIN);
+	      }
+	    }
+	  };
+
+	  const onEscKeyDown = (evt) => {
+	    if (evt.key === 'Escape' || evt.key === 'Esc') {
+	      evt.preventDefault();
+	      closePopup();
+	      document.removeEventListener('keydown', onEscKeyDown);
+	    }
+	  };
+
+	  detailedFilmComponent.setClosePopupClickHandler(() => {
+	    closePopup();
+	    document.removeEventListener('keydown', onEscKeyDown);
+	  });
+
+	  filmComponent.setPopupClickHandler(() => {
+	    showPopup();
+	    document.addEventListener('keydown', onEscKeyDown);
+	  });
+
+	  render(filmListElement, filmComponent, RenderPosition.BEFOREEND); 
   }
 
-  #renderFilms = () => {
-    // Метод для рендеринга N-задач за раз
+  #renderFilms = (from, to) => {
+    this.#boardFilms
+      .slice(from, to)
+      .forEach((boardFilm) => this.#renderFilm(boardFilm));
   }
 
   #renderNoFilm = () => {
-    // Метод для рендеринга заглушки
+    render(this.#filmBoardComponent, this.#noFilmComponent, RenderPosition.BEFOREEND);
   }
 
-  #renderLoadMoreButton = () => {
+  #renderShowMoreButton = () => {
     // Метод, куда уйдёт логика по отрисовке кнопки допоказа задач,
     // сейчас в main.js является частью renderBoard
   }
 
-  #renderBoard = () => {
-    // Метод для инициализации (начала работы) модуля,
-    // бОльшая часть текущей функции renderBoard в main.js
+  #renderFilmBoard = () => {
+    if (!this.#boardFilms.length) {
+      this.#renderNoFilm();
+      return;
+    }
+
+    this.#renderSort();
+
+    this.#renderTasks(0, Math.min(this.#boardFilms.length, FILM_COUNT_PER_STEP));
+
+    if (this.#boardFilms.length > FILM_COUNT_PER_STEP) {
+      this.#renderShowMoreButton();
+    }
   }
 }
