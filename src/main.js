@@ -10,6 +10,7 @@ const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer');
 
 const movies = Array.from({length: FILM_COUNT}, generateFilmCard);
+
 export const filteredData = {
   watchList: movies.filter((el) => el.isInWatchlist).length,
   watchedList: movies.filter((el) => el.isWatched).length,

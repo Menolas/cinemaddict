@@ -1,3 +1,4 @@
+import {nanoid} from 'nanoid';
 import dayjs from 'dayjs';
 import {getRandomInteger} from '../utils/common.js';
 import {generateRandomValue} from '../utils/common.js';
@@ -162,6 +163,7 @@ const getReleaseDate = () => {
 };
 
 export const generateFilmCard = () => ({
+  id: nanoid(),
   _filmTitle: generateTitle(),
   get title() {
     return this._filmTitle[0];
@@ -176,9 +178,9 @@ export const generateFilmCard = () => ({
   genres: generateFewNonRepeatableValues(1, 3, genres),
   description: generateDescription(),
   commentsNumber: getRandomInteger(0, 5),
-  isInWatchlist: Boolean(getRandomInteger(0, 1)),
-  isWatched: Boolean(getRandomInteger(0, 1)),
-  isInFavourites: Boolean(getRandomInteger(0, 1)),
+  isInWatchlist: false,
+  isWatched: false,
+  isInFavourites: false,
   director: generateRandomValue(directors),
   writers: generateFewNonRepeatableValues(1, 3, writers),
   actors: generateFewNonRepeatableValues(3, 6, actors),
