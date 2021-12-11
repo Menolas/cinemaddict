@@ -59,8 +59,8 @@ export default class FilmPresenter {
   #onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      closePopup();
-      document.removeEventListener('keydown', onEscKeyDown);
+      this.#closePopup();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
     }
   }
 }

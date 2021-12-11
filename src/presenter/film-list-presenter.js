@@ -5,10 +5,10 @@ import FilmListView from '../view/film-list-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import FilmPresenter from './film-presenter.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
-import CommentView from '../view/comment-view.js';
+
 import {render, RenderPosition, remove} from '../utils/render.js';
-import {FILM_COUNT, FILM_COUNT_PER_STEP} from '../const.js';
-const body = document.querySelector('body');
+import {FILM_COUNT_PER_STEP} from '../const.js';
+
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer');
@@ -25,7 +25,6 @@ export default class FilmListPresenter {
 
   #films = [];
   #renderedFilmCount = FILM_COUNT_PER_STEP;
-
 
   constructor(boardContainer) {
     this.#boardContainer = boardContainer;
