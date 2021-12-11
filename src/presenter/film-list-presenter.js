@@ -3,8 +3,7 @@ import SortListView from '../view/sort-list-view.js';
 import FilmContainerView from '../view/film-container-view.js';
 import FilmListView from '../view/film-list-view.js';
 import NoFilmView from '../view/no-film-view.js';
-import FilmCardView from '../view/film-card-view.js';
-import DetailedInfoView from '../view/detailed-info-view.js';
+import FilmPresenter from './film-presenter.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import CommentView from '../view/comment-view.js';
 import {render, RenderPosition, remove} from '../utils/render.js';
@@ -47,47 +46,8 @@ export default class FilmListPresenter {
   }
 
   #renderFilm = (film) => {
-    const filmComponent = new FilmCardView(film);
-    const detailedFilmComponent = new DetailedInfoView(film);
-    
-    const closePopup = () => {
-	    siteFooterElement.removeChild(detailedFilmComponent.element);
-	    body.classList.remove('hide-overflow');
-	  };
-
-	  const showPopup = () => {
-	    siteFooterElement.appendChild(detailedFilmComponent.element);
-	    body.classList.add('hide-overflow');
-
-	    const commentsContainer = document.querySelector('.film-details__comments-list');
-
-	    if (commentsContainer && film.commentsNumber) {
-	      const comments = Array.from({length: film.commentsNumber}, generateComment);
-	      for (const comment of comments) {
-	        render(commentsContainer, new CommentView(comment), RenderPosition.AFTERBEGIN);
-	      }
-	    }
-	  };
-
-	  const onEscKeyDown = (evt) => {
-	    if (evt.key === 'Escape' || evt.key === 'Esc') {
-	      evt.preventDefault();
-	      closePopup();
-	      document.removeEventListener('keydown', onEscKeyDown);
-	    }
-	  };
-
-	  detailedFilmComponent.setClosePopupClickHandler(() => {
-	    closePopup();
-	    document.removeEventListener('keydown', onEscKeyDown);
-	  });
-
-	  filmComponent.setPopupClickHandler(() => {
-	    showPopup();
-	    document.addEventListener('keydown', onEscKeyDown);
-	  });
-
-	  render(this.#filmListComponent, filmComponent, RenderPosition.BEFOREEND); 
+    const filmPresenter = new FilmPresenter(this.#filmListComponent);
+    filmPresenter.init(film);
   }
 
   #renderFilms = (from, to) => {
