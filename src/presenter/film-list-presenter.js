@@ -22,8 +22,11 @@ export default class FilmListPresenter {
   #filmContainerComponent = new FilmContainerView();
   #filmListComponent = new FilmListView();
   #noFilmComponent = new NoFilmView();
+  #showMoreButtonComponent = new ShowMoreButtonView();
 
   #films = [];
+  #renderedFilmCount = FILM_COUNT_PER_STEP;
+
 
   constructor(boardContainer) {
     this.#boardContainer = boardContainer;
@@ -46,8 +49,7 @@ export default class FilmListPresenter {
   #renderFilm = (film) => {
     const filmComponent = new FilmCardView(film);
     const detailedFilmComponent = new DetailedInfoView(film);
-    const allMoviesContainer = this.#filmBoardComponent.element.querySelector('.films-list__container');
-
+    
     const closePopup = () => {
 	    siteFooterElement.removeChild(detailedFilmComponent.element);
 	    body.classList.remove('hide-overflow');
@@ -98,24 +100,19 @@ export default class FilmListPresenter {
     render(this.#filmBoardComponent, this.#noFilmComponent, RenderPosition.BEFOREEND);
   }
 
+  #handleShowMoreButtonClick = () => {
+    this.#renderFilms(this.#renderedFilmCount, this.#renderedFilmCount + FILM_COUNT_PER_STEP);
+    this.#renderedFilmCount += FILM_COUNT_PER_STEP;
+    
+    if (this.#renderedFilmCount >= this.#films.length) {
+    	remove(this.#showMoreButtonComponent);
+    }
+  }
+
   #renderShowMoreButton = () => {
-  	let renderedFilmCount = FILM_COUNT_PER_STEP;
-  	const showMoreButtonComponent = new ShowMoreButtonView();
+  	render(this.#filmListComponent, this.#showMoreButtonComponent, RenderPosition.AFTEREND);
 
-    render(this.#filmListComponent, showMoreButtonComponent, RenderPosition.AFTEREND);
-
-    showMoreButtonComponent.setClickHandler(() => {
-
-      this.#films
-        .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
-        .forEach((boardFilm) => this.#renderFilm(boardFilm));
-
-      renderedFilmCount += FILM_COUNT_PER_STEP;
-
-      if (renderedFilmCount >= this.#films.length) {
-        remove(showMoreButtonComponent);
-      }
-    });
+  	this.#showMoreButtonComponent.setClickHandler(this.#handleShowMoreButtonClick);
   }
 
   #renderFilmList = () => {
