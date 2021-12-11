@@ -1,37 +1,40 @@
 import FilmBoardView from '../view/film-board-view.js';
 import SortListView from '../view/sort-list-view.js';
 import FilmContainerView from '../view/film-container-view.js';
+import FilmListView from '../view/film-list-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import FilmCardView from '../view/film-card-view.js';
 import DetailedInfoView from '../view/detailed-info-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
-import CommentView from './view/comment-view.js';
-import {render, RenderPosition} from '../utils/render.js';
-import {FILM_COUNT, FILM_COUNT_PER_STEP} from './const.js';
+import CommentView from '../view/comment-view.js';
+import {render, RenderPosition, remove} from '../utils/render.js';
+import {FILM_COUNT, FILM_COUNT_PER_STEP} from '../const.js';
 const body = document.querySelector('body');
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer');
 
-export default class FilmBoardPresenter {
+export default class FilmListPresenter {
   #boardContainer = null;
 
   #filmBoardComponent = new FilmBoardView();
   #sortListComponent = new SortListView();
   #filmContainerComponent = new FilmContainerView();
+  #filmListComponent = new FilmListView();
   #noFilmComponent = new NoFilmView();
 
-  #boardFilms = [];
+  #films = [];
 
   constructor(boardContainer) {
     this.#boardContainer = boardContainer;
   }
 
-  init = (boardFilms) => {
-    this.#boardFilms = [...boardFilms];
-    
+  init = (films) => {
+    this.#films = [...films];
+
     render(this.#boardContainer, this.#filmBoardComponent, RenderPosition.BEFOREEND);
     render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
+    render(this.#filmContainerComponent, this.#filmListComponent, RenderPosition.BEFOREEND);
 
     this.#renderFilmBoard();
   }
@@ -43,6 +46,7 @@ export default class FilmBoardPresenter {
   #renderFilm = (film) => {
     const filmComponent = new FilmCardView(film);
     const detailedFilmComponent = new DetailedInfoView(film);
+    const allMoviesContainer = this.#filmBoardComponent.element.querySelector('.films-list__container');
 
     const closePopup = () => {
 	    siteFooterElement.removeChild(detailedFilmComponent.element);
@@ -81,13 +85,13 @@ export default class FilmBoardPresenter {
 	    document.addEventListener('keydown', onEscKeyDown);
 	  });
 
-	  render(filmListElement, filmComponent, RenderPosition.BEFOREEND); 
+	  render(this.#filmListComponent, filmComponent, RenderPosition.BEFOREEND); 
   }
 
   #renderFilms = (from, to) => {
-    this.#boardFilms
+    this.#films
       .slice(from, to)
-      .forEach((boardFilm) => this.#renderFilm(boardFilm));
+      .forEach((film) => this.#renderFilm(film));
   }
 
   #renderNoFilm = () => {
@@ -95,22 +99,40 @@ export default class FilmBoardPresenter {
   }
 
   #renderShowMoreButton = () => {
-    // Метод, куда уйдёт логика по отрисовке кнопки допоказа задач,
-    // сейчас в main.js является частью renderBoard
+  	let renderedFilmCount = FILM_COUNT_PER_STEP;
+  	const showMoreButtonComponent = new ShowMoreButtonView();
+
+    render(this.#filmListComponent, showMoreButtonComponent, RenderPosition.AFTEREND);
+
+    showMoreButtonComponent.setClickHandler(() => {
+
+      this.#films
+        .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
+        .forEach((boardFilm) => this.#renderFilm(boardFilm));
+
+      renderedFilmCount += FILM_COUNT_PER_STEP;
+
+      if (renderedFilmCount >= this.#films.length) {
+        remove(showMoreButtonComponent);
+      }
+    });
+  }
+
+  #renderFilmList = () => {
+    this.#renderFilms(0, Math.min(this.#films.length, FILM_COUNT_PER_STEP));
+
+    if (this.#films.length > FILM_COUNT_PER_STEP) {
+      this.#renderShowMoreButton();
+    }
   }
 
   #renderFilmBoard = () => {
-    if (!this.#boardFilms.length) {
+    if (!this.#films.length) {
       this.#renderNoFilm();
       return;
     }
 
     this.#renderSort();
-
-    this.#renderTasks(0, Math.min(this.#boardFilms.length, FILM_COUNT_PER_STEP));
-
-    if (this.#boardFilms.length > FILM_COUNT_PER_STEP) {
-      this.#renderShowMoreButton();
-    }
+    this.#renderFilmList();
   }
 }
