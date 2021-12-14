@@ -1,3 +1,4 @@
+import {makeElementLookActive, removeElementActiveLook} from '../utils/common.js';
 import FilmBoardView from '../view/film-board-view.js';
 import SortListView from '../view/sort-list-view.js';
 import FilmContainerView from '../view/film-container-view.js';
@@ -37,6 +38,10 @@ export default class FilmListPresenter {
     render(this.#boardContainer, this.#filmBoardComponent, RenderPosition.BEFOREEND);
     render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
     render(this.#filmContainerComponent, this.#filmListComponent, RenderPosition.BEFOREEND);
+    this.#sortListComponent.setFilterClickHandler(() => {
+      removeElementActiveLook(this.#sortListComponent.element.querySelectorAll('.sort__button'), 'sort__button--active');
+      makeElementLookActive(event.target, 'sort__button--active');
+    });
 
     this.#renderFilmBoard();
   }

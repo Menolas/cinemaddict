@@ -1,3 +1,4 @@
+import {makeElementLookActive, removeElementActiveLook} from './utils/common.js';
 import {FILM_COUNT} from './const.js';
 import UserRankView from './view/user-rank-view.js';
 import FilterMenuView from './view/filter-menu-view.js';
@@ -12,11 +13,16 @@ const siteFooterElement = document.querySelector('.footer');
 
 const movies = Array.from({length: FILM_COUNT}, generateFilmCard);
 const filters = generateFilter(movies);
+const filterMenuComponent = new FilterMenuView(filters);
 
 const filmListPresenter = new FilmListPresenter(siteMainElement);
 
 render(siteHeaderElement, new UserRankView(), RenderPosition.BEFOREEND);
-render(siteMainElement, new FilterMenuView(filters), RenderPosition.AFTERBEGIN);
+render(siteMainElement, filterMenuComponent, RenderPosition.AFTERBEGIN);
+filterMenuComponent.setFilterClickHandler(() => {
+  removeElementActiveLook(filterMenuComponent.element.querySelectorAll('.main-navigation__item'), 'main-navigation__item--active');
+  makeElementLookActive(event.target,'main-navigation__item--active');
+});
 
 filmListPresenter.init(movies);
 

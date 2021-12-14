@@ -33,4 +33,16 @@ export default class FilterMenuView extends AbstractView {
   get template() {
     return createFilterMenuTemplate(this.#filters);
   }
+
+  setFilterClickHandler = (callback) => {
+    this._callback.filterClick = callback;
+    this.element.querySelectorAll('.main-navigation__item').forEach(item => {
+      item.addEventListener('click', this.#filterClickHandler);
+    });
+  }
+
+  #filterClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.filterClick();
+  }
 };

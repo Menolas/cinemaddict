@@ -15,3 +15,13 @@ export const generateRandomValue = (array) => {
 
   return array[randomIndex];
 };
+
+export const makeElementLookActive = (item, cl) => {
+  item.classList.add(cl);
+}
+
+export const removeElementActiveLook = (array, cl) => {
+  array.forEach(item => {
+    item.classList.remove(cl);
+  });
+}
