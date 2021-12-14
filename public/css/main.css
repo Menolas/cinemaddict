@@ -248,6 +248,7 @@ button {
   color: var(--text-color);
   margin-right: 40px;
   padding: var(--vertical-gap) 0;
+  text-transform: capitalize;
 }
 
 .main-navigation__item:first-child {

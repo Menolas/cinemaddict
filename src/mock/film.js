@@ -180,7 +180,7 @@ export const generateFilmCard = () => ({
   commentsNumber: getRandomInteger(0, 5),
   isInWatchlist: false,
   isWatched: false,
-  isInFavourites: false,
+  isFavourite: false,
   director: generateRandomValue(directors),
   writers: generateFewNonRepeatableValues(1, 3, writers),
   actors: generateFewNonRepeatableValues(3, 6, actors),

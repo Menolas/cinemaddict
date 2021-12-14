@@ -14,11 +14,11 @@ const createFilmCardTemplate = (film) => {
     commentsNumber,
     isInWatchlist,
     isWatched,
-    isInFavourites,
+    isFavourite,
   } = film;
 
   const releaseDate = humanizeFilmReleaseDate(released);
-  const favoriteClassName = isInFavourites ? 'film-card__controls-item--active' : '';
+  const favoriteClassName = isFavourite ? 'film-card__controls-item--active' : '';
   const watchedClassName = isWatched ? 'film-card__controls-item--active' : '';
   const watchListClassName = isInWatchlist ? 'film-card__controls-item--active' : '';
 
