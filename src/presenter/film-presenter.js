@@ -55,7 +55,7 @@ export default class FilmPresenter {
     }
 
     remove(prevFilmComponent);
-    remove(detailedFilmComponent);
+    remove(prevDetailedFilmComponent);
   }
 
   destroy = () => {
