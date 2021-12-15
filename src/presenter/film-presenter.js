@@ -8,14 +8,16 @@ const siteFooterElement = document.querySelector('.footer');
 
 export default class FilmPresenter {
   #filmBox = null;
+  #changeData = null;
   #filmComponent = null;
   #detailedFilmComponent = null;
   #film = null;
   #comments = null;
   #commentsNumber = null;
 
-  constructor(filmBox) {
+  constructor(filmBox, changeData) {
   	this.#filmBox = filmBox;
+    this.#changeData = changeData;
   }
 
   init = (film) => {
@@ -38,6 +40,10 @@ export default class FilmPresenter {
       this.#closePopup();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     });
+
+    this.#filmComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+    //this.#filmComponent.setWatchedClickHandler(this.#handleArchiveClick);
+    //this.#filmComponent.setAddToWatchListClickHandler(this.#handleArchiveClick);
 
     if (prevFilmComponent === null || prevDetailedFilmComponent === null) {
       render(this.#filmBox, this.#filmComponent, RenderPosition.BEFOREEND);
@@ -85,5 +91,9 @@ export default class FilmPresenter {
       this.#closePopup();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     }
+  }
+
+  #handleFavoriteClick = () => {
+    this.#changeData({...this.#film, isFavorite: !this.#film.isFavorite});
   }
 }

@@ -1,4 +1,4 @@
-import {makeElementLookActive, removeElementActiveLook} from '../utils/common.js';
+import {makeElementLookActive, removeElementActiveLook, updateItem} from '../utils/common.js';
 import FilmBoardView from '../view/film-board-view.js';
 import SortListView from '../view/sort-list-view.js';
 import FilmContainerView from '../view/film-container-view.js';
@@ -46,12 +46,17 @@ export default class FilmListPresenter {
     this.#renderFilmBoard();
   }
 
+  #handleFilmCardChange = (updatedFilmCard) => {
+    this.#films = updateItem(this.#films, updatedFilmCard);
+    this.#filmPresenter.get(updatedFilmCard.id).init(updatedFilmCard);
+  }
+
   #renderSort = () => {
     render(this.#filmBoardComponent, this.#sortListComponent, RenderPosition.BEFOREBEGIN);
   }
 
   #renderFilm = (film) => {
-    const filmPresenter = new FilmPresenter(this.#filmListComponent);
+    const filmPresenter = new FilmPresenter(this.#filmListComponent, this.#handleFilmCardChange);
     filmPresenter.init(film);
     this.#filmPresenter.set(film.id, filmPresenter);
   }
