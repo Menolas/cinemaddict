@@ -16,6 +16,10 @@
   --font-size-bigger: 20px;
 }
 
+* {
+  outline: 1px solid red;
+}
+
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
@@ -436,6 +440,7 @@ button {
   position: absolute;
   transition: height 0.1s ease-in;
   width: 100%;
+  z-index: 1000;
 }
 
 .film-card__controls-item {

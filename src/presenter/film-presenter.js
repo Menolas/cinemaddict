@@ -1,6 +1,7 @@
 import FilmCardView from '../view/film-card-view.js';
 import DetailedInfoView from '../view/detailed-info-view.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
+import {toggleClass} from '../utils/common.js';
 import {generateComment} from '../mock/comment.js';
 import CommentView from '../view/comment-view.js';
 const body = document.querySelector('body');
@@ -40,7 +41,8 @@ export default class FilmPresenter {
       this.#closePopup();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     });
-
+    
+    this.#filmComponent.setControlButtonsClickHandler(this.#controlButtonClick);
     this.#filmComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     //this.#filmComponent.setWatchedClickHandler(this.#handleArchiveClick);
     //this.#filmComponent.setAddToWatchListClickHandler(this.#handleArchiveClick);
@@ -48,6 +50,10 @@ export default class FilmPresenter {
     if (prevFilmComponent === null || prevDetailedFilmComponent === null) {
       render(this.#filmBox, this.#filmComponent, RenderPosition.BEFOREEND);
       return;
+    }
+
+    if (this.#filmBox.element.contains(prevFilmComponent.element)) {
+      replace(this.#filmComponent, prevFilmComponent);
     }
 
     if (this.#filmBox.element.contains(prevDetailedFilmComponent.element)) {
@@ -63,7 +69,7 @@ export default class FilmPresenter {
     remove(this.#detailedFilmComponent);
   }
     
-  #closePopup = () => {
+  #closePopup = (evt) => {
     siteFooterElement.removeChild(this.#detailedFilmComponent.element);
     body.classList.remove('hide-overflow');
   }
@@ -78,7 +84,7 @@ export default class FilmPresenter {
     }
   }
 
-  #showPopup = () => {
+  #showPopup = (evt) => {
     siteFooterElement.appendChild(this.#detailedFilmComponent.element);
     body.classList.add('hide-overflow');
 
@@ -93,7 +99,11 @@ export default class FilmPresenter {
     }
   }
 
-  #handleFavoriteClick = () => {
+  #controlButtonClick = (evt) => {
+    toggleClass(event.target, 'film-card__controls-item--active');
+  }
+
+  #handleFavoriteClick = (evt) => {
     this.#changeData({...this.#film, isFavorite: !this.#film.isFavorite});
   }
 }

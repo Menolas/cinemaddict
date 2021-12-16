@@ -26,6 +26,10 @@ export const removeElementActiveLook = (array, cl) => {
   });
 }
 
+export const toggleClass = (element, cl) => {
+  element.classList.toggle(cl);
+}
+
 export const updateItem = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
 
