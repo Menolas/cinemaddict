@@ -42,12 +42,13 @@ export default class FilmPresenter {
       document.removeEventListener('keydown', this.#onEscKeyDown);
     });
     
-    //this.#filmComponent.setControlButtonsClickHandler(this.#controlButtonClick);
     this.#filmComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#filmComponent.setAddToWatchListClickHandler(this.#handleAddToWatchListClick);
     this.#filmComponent.setMarkAsWatchedClickHandler(this.#handleMarkAsWatchedClick);
+    this.#detailedFilmComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+    this.#detailedFilmComponent.setAddToWatchListClickHandler(this.#handleAddToWatchListClick);
+    this.#detailedFilmComponent.setMarkAsWatchedClickHandler(this.#handleMarkAsWatchedClick);
     
-
     if (prevFilmComponent === null || prevDetailedFilmComponent === null) {
       render(this.#filmBox, this.#filmComponent, RenderPosition.BEFOREEND);
       return;
@@ -86,6 +87,12 @@ export default class FilmPresenter {
   }
 
   #showPopup = (evt) => {
+    const popup = document.querySelector('.film-details');
+    console.log(popup);
+    if (popup) {
+      popup.body.removeChild(document.querySelector(popup));
+    }
+
     siteFooterElement.appendChild(this.#detailedFilmComponent.element);
     body.classList.add('hide-overflow');
 
@@ -99,10 +106,6 @@ export default class FilmPresenter {
       document.removeEventListener('keydown', this.#onEscKeyDown);
     }
   }
-
-  // #controlButtonClick = (evt) => {
-  //   toggleClass(event.target, 'film-card__controls-item--active');
-  // }
 
   #handleFavoriteClick = (evt) => {
     this.#changeData({...this.#film, isFavorite: !this.#film.isFavorite});

@@ -152,8 +152,38 @@ export default class DetailedInfoView extends AbstractView {
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#popupCloseHandler);
   }
 
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClick = callback;
+    this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoriteClickHandler);
+  }
+
+  setAddToWatchListClickHandler = (callback) => {
+    this._callback.addToWatchList = callback;
+    this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#addToWatchListClickHandler);
+  }
+
+  setMarkAsWatchedClickHandler = (callback) => {
+    this._callback.markAsWatched = callback;
+    this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#markAsWatchedClickHandler);
+  }
+
   #popupCloseHandler = (evt) => {
     evt.preventDefault();
     this._callback.closePopup(this.#film);
+  }
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  #addToWatchListClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.addToWatchList();
+  }
+
+  #markAsWatchedClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.markAsWatched();
   }
 }
