@@ -42,10 +42,11 @@ export default class FilmPresenter {
       document.removeEventListener('keydown', this.#onEscKeyDown);
     });
     
-    this.#filmComponent.setControlButtonsClickHandler(this.#controlButtonClick);
+    //this.#filmComponent.setControlButtonsClickHandler(this.#controlButtonClick);
     this.#filmComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
-    //this.#filmComponent.setWatchedClickHandler(this.#handleArchiveClick);
-    //this.#filmComponent.setAddToWatchListClickHandler(this.#handleArchiveClick);
+    this.#filmComponent.setAddToWatchListClickHandler(this.#handleAddToWatchListClick);
+    this.#filmComponent.setMarkAsWatchedClickHandler(this.#handleMarkAsWatchedClick);
+    
 
     if (prevFilmComponent === null || prevDetailedFilmComponent === null) {
       render(this.#filmBox, this.#filmComponent, RenderPosition.BEFOREEND);
@@ -99,11 +100,19 @@ export default class FilmPresenter {
     }
   }
 
-  #controlButtonClick = (evt) => {
-    toggleClass(event.target, 'film-card__controls-item--active');
-  }
+  // #controlButtonClick = (evt) => {
+  //   toggleClass(event.target, 'film-card__controls-item--active');
+  // }
 
   #handleFavoriteClick = (evt) => {
     this.#changeData({...this.#film, isFavorite: !this.#film.isFavorite});
+  }
+
+  #handleAddToWatchListClick = (evt) => {
+    this.#changeData({...this.#film, isInWatchlist: !this.#film.isInWatchlist});
+  }
+
+  #handleMarkAsWatchedClick = (evt) => {
+    this.#changeData({...this.#film, isWatched: !this.#film.isWatched});
   }
 }

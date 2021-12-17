@@ -14,13 +14,14 @@ const createFilmCardTemplate = (film) => {
     commentsNumber,
     isInWatchlist,
     isWatched,
-    isFavourite,
+    isFavorite,
   } = film;
 
   const releaseDate = humanizeFilmReleaseDate(released);
-  const favoriteClassName = isFavourite ? 'film-card__controls-item--active' : '';
-  const watchedClassName = isWatched ? 'film-card__controls-item--active' : '';
-  const watchListClassName = isInWatchlist ? 'film-card__controls-item--active' : '';
+  const activeClass = 'film-card__controls-item--active';
+  const favoriteClassName = isFavorite ? activeClass : '';
+  const watchedClassName = isWatched ? activeClass : '';
+  const watchListClassName = isInWatchlist ? activeClass : '';
 
   return `<article class="film-card">
     <a class="film-card__link">
@@ -65,25 +66,45 @@ export default class FilmCardView extends AbstractView {
     this.element.querySelector('.film-card__controls-item--favorite').addEventListener('click', this.#favoriteClickHandler);
   }
 
-  setControlButtonsClickHandler = (callback) => {
-    this._callback.controlButtonClick = callback;
-    this.element.querySelectorAll('.film-card__controls-item').forEach(item => {
-      item.addEventListener('click', this.#controlButtonClickHandler);
-    });
+  setAddToWatchListClickHandler = (callback) => {
+    this._callback.addToWatchList = callback;
+    this.element.querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this.#addToWatchListClickHandler);
   }
+
+  setMarkAsWatchedClickHandler = (callback) => {
+    this._callback.markAsWatched = callback;
+    this.element.querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this.#markAsWatchedClickHandler);
+  }
+
+  // setControlButtonsClickHandler = (callback) => {
+  //   this._callback.controlButtonClick = callback;
+  //   this.element.querySelectorAll('.film-card__controls-item').forEach(item => {
+  //     item.addEventListener('click', this.#controlButtonClickHandler);
+  //   });
+  // }
 
   #popupClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.popupClick();
   }
 
-  #controlButtonClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.controlButtonClick();
-  }
+  // #controlButtonClickHandler = (evt) => {
+  //   evt.preventDefault();
+  //   this._callback.controlButtonClick();
+  // }
 
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.favoriteClick();
+  }
+
+  #addToWatchListClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.addToWatchList();
+  }
+
+  #markAsWatchedClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.markAsWatched();
   }
 }
