@@ -169,7 +169,7 @@ export default class DetailedInfoView extends AbstractView {
 
   #popupCloseHandler = (evt) => {
     evt.preventDefault();
-    this._callback.closePopup(this.#film);
+    this._callback.closePopup();
   }
 
   #favoriteClickHandler = (evt) => {

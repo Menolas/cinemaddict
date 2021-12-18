@@ -1,11 +1,11 @@
 import FilmCardView from '../view/film-card-view.js';
 import DetailedInfoView from '../view/detailed-info-view.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
-import {toggleClass} from '../utils/common.js';
 import {generateComment} from '../mock/comment.js';
 import CommentView from '../view/comment-view.js';
 const body = document.querySelector('body');
 const siteFooterElement = document.querySelector('.footer');
+const popup = document.querySelector('.film-details');
 
 export default class FilmPresenter {
   #filmBox = null;
@@ -33,6 +33,10 @@ export default class FilmPresenter {
     this.#comments = Array.from({length: this.#commentsNumber}, generateComment);
 
   	this.#filmComponent.setPopupClickHandler(() => {
+      if (popup) {
+        console.log(popup);
+        siteFooterElement.removeChild(popup);
+      }
   		this.#showPopup(this.#commentsNumber);
       document.addEventListener('keydown', this.#onEscKeyDown);
   	});
@@ -87,12 +91,6 @@ export default class FilmPresenter {
   }
 
   #showPopup = (evt) => {
-    const popup = document.querySelector('.film-details');
-    console.log(popup);
-    if (popup) {
-      popup.body.removeChild(document.querySelector(popup));
-    }
-
     siteFooterElement.appendChild(this.#detailedFilmComponent.element);
     body.classList.add('hide-overflow');
 
