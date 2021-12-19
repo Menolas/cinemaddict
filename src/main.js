@@ -1,4 +1,3 @@
-import {makeElementLookActive, removeElementActiveLook} from './utils/common.js';
 import {FILM_COUNT} from './const.js';
 import UserRankView from './view/user-rank-view.js';
 import {render, RenderPosition} from './utils/render.js';

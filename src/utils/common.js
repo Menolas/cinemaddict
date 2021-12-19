@@ -18,13 +18,13 @@ export const generateRandomValue = (array) => {
 
 export const makeElementLookActive = (item, cl) => {
   item.classList.add(cl);
-}
+};
 
 export const removeElementActiveLook = (array, cl) => {
-  array.forEach(item => {
+  array.forEach((item) => {
     item.classList.remove(cl);
   });
-}
+};
 
 export const updateItem = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);

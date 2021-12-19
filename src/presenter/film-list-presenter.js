@@ -12,10 +12,7 @@ import {generateFilter} from '../mock/filter.js';
 import {render, RenderPosition, remove} from '../utils/render.js';
 import {FILM_COUNT_PER_STEP} from '../const.js';
 
-const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
-const siteFooterElement = document.querySelector('.footer');
-const body = document.querySelector('body');
 
 export default class FilmListPresenter {
   #boardContainer = null;
@@ -90,16 +87,16 @@ export default class FilmListPresenter {
   #handleShowMoreButtonClick = () => {
     this.#renderFilms(this.#renderedFilmCount, this.#renderedFilmCount + FILM_COUNT_PER_STEP);
     this.#renderedFilmCount += FILM_COUNT_PER_STEP;
-    
+
     if (this.#renderedFilmCount >= this.#films.length) {
-    	remove(this.#showMoreButtonComponent);
+      remove(this.#showMoreButtonComponent);
     }
   }
 
   #renderShowMoreButton = () => {
-  	render(this.#filmListComponent, this.#showMoreButtonComponent, RenderPosition.AFTEREND);
+    render(this.#filmListComponent, this.#showMoreButtonComponent, RenderPosition.AFTEREND);
 
-  	this.#showMoreButtonComponent.setClickHandler(this.#handleShowMoreButtonClick);
+    this.#showMoreButtonComponent.setClickHandler(this.#handleShowMoreButtonClick);
   }
 
   #clearFilmList = () => {

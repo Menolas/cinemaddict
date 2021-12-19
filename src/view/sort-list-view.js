@@ -7,8 +7,6 @@ const createSortListTemplate = () => `<ul class="sort">
             <li><a href="#" class="sort__button" data-sort-type="${SortType.RATE}">Sort by rating</a></li>
           </ul>`;
 
-//Array.from(this.element.querySelectorAll('.sort__button'));
-
 export default class SortListView extends AbstractView {
   #sortTypes = null;
 
@@ -23,7 +21,7 @@ export default class SortListView extends AbstractView {
 
   setFilterClickHandler = (callback) => {
     this._callback.filterClick = callback;
-    this.element.querySelectorAll('.sort__button').forEach(item => {
+    this.element.querySelectorAll('.sort__button').forEach((item) => {
       item.addEventListener('click', this.#filterClickHandler);
     });
   }

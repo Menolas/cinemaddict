@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view.js';
 
-const createFilterItemTemplate = (filter, isChecked) => {
+const createFilterItemTemplate = (filter) => {
   const {name, count} = filter;
 
   return (
@@ -36,7 +36,7 @@ export default class FilterMenuView extends AbstractView {
 
   setFilterClickHandler = (callback) => {
     this._callback.filterClick = callback;
-    this.element.querySelectorAll('.main-navigation__item').forEach(item => {
+    this.element.querySelectorAll('.main-navigation__item').forEach((item) => {
       item.addEventListener('click', this.#filterClickHandler);
     });
   }
@@ -45,4 +45,4 @@ export default class FilterMenuView extends AbstractView {
     evt.preventDefault();
     this._callback.filterClick();
   }
-};
+}

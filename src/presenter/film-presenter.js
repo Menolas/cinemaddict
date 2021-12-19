@@ -16,26 +16,26 @@ export default class FilmPresenter {
   #commentsNumber = null;
 
   constructor(filmBox, changeData) {
-  	this.#filmBox = filmBox;
+    this.#filmBox = filmBox;
     this.#changeData = changeData;
   }
 
   init = (film) => {
-  	this.#film = film;
+    this.#film = film;
 
     const prevFilmComponent = this.#filmComponent;
     const prevDetailedFilmComponent = this.#detailedFilmComponent;
 
-  	this.#filmComponent = new FilmCardView(film);
-  	this.#detailedFilmComponent = new DetailedInfoView(film);
-  	this.#commentsNumber = this.#film.commentsNumber;
+    this.#filmComponent = new FilmCardView(film);
+    this.#detailedFilmComponent = new DetailedInfoView(film);
+    this.#commentsNumber = this.#film.commentsNumber;
     this.#comments = Array.from({length: this.#commentsNumber}, generateComment);
 
-  	this.#detailedFilmComponent.setClosePopupClickHandler(() => {
+    this.#detailedFilmComponent.setClosePopupClickHandler(() => {
       this.#closePopup();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     });
-    
+
     this.#filmComponent.setPopupClickHandler(() => {
       this.#showPopup();
       document.addEventListener('keydown', this.#onEscKeyDown);
@@ -47,7 +47,7 @@ export default class FilmPresenter {
     this.#detailedFilmComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#detailedFilmComponent.setAddToWatchListClickHandler(this.#handleAddToWatchListClick);
     this.#detailedFilmComponent.setMarkAsWatchedClickHandler(this.#handleMarkAsWatchedClick);
-    
+
     if (prevFilmComponent === null || prevDetailedFilmComponent === null) {
       render(this.#filmBox, this.#filmComponent, RenderPosition.BEFOREEND);
       return;
@@ -69,8 +69,8 @@ export default class FilmPresenter {
     remove(this.#filmComponent);
     remove(this.#detailedFilmComponent);
   }
-    
-  #closePopup = (evt) => {
+
+  #closePopup = () => {
     siteFooterElement.removeChild(this.#detailedFilmComponent.element);
     body.classList.remove('hide-overflow');
   }
@@ -85,12 +85,12 @@ export default class FilmPresenter {
     }
   }
 
-  #showPopup = (evt) => {
+  #showPopup = () => {
     const popup = siteFooterElement.querySelector('.film-details');
     if (popup) {
       siteFooterElement.removeChild(popup);
     }
-    
+
     siteFooterElement.appendChild(this.#detailedFilmComponent.element);
     body.classList.add('hide-overflow');
 
@@ -105,15 +105,15 @@ export default class FilmPresenter {
     }
   }
 
-  #handleFavoriteClick = (evt) => {
+  #handleFavoriteClick = () => {
     this.#changeData({...this.#film, isFavorite: !this.#film.isFavorite});
   }
 
-  #handleAddToWatchListClick = (evt) => {
+  #handleAddToWatchListClick = () => {
     this.#changeData({...this.#film, isInWatchlist: !this.#film.isInWatchlist});
   }
 
-  #handleMarkAsWatchedClick = (evt) => {
+  #handleMarkAsWatchedClick = () => {
     this.#changeData({...this.#film, isWatched: !this.#film.isWatched});
   }
 }
