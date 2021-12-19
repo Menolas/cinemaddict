@@ -15,6 +15,7 @@ import {FILM_COUNT_PER_STEP} from '../const.js';
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer');
+const body = document.querySelector('body');
 
 export default class FilmListPresenter {
   #boardContainer = null;
@@ -31,13 +32,7 @@ export default class FilmListPresenter {
   #renderedFilmCount = FILM_COUNT_PER_STEP;
   #filmPresenter = new Map();
   #sourcedFilms = [];
-  
   #filters = [];
-
-  // filterMenuComponent.setFilterClickHandler(() => {
-  //   removeElementActiveLook(filterMenuComponent.element.querySelectorAll('.main-navigation__item'), 'main-navigation__item--active');
-  //   makeElementLookActive(event.target,'main-navigation__item--active');
-  // });
 
   constructor(boardContainer) {
     this.#boardContainer = boardContainer;
@@ -46,7 +41,7 @@ export default class FilmListPresenter {
   init = (films) => {
     this.#films = [...films];
     this.#sourcedFilms = [...films];
-    this.#filters = generateFilter(films);
+    this.#filters = generateFilter(this.#films);
     this.#filterMenuComponent = new FilterMenuView(this.#filters);
 
     render(this.#boardContainer, this.#filmBoardComponent, RenderPosition.BEFOREEND);
@@ -66,6 +61,10 @@ export default class FilmListPresenter {
     this.#films = updateItem(this.#films, updatedFilmCard);
     this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilmCard);
     this.#filmPresenter.get(updatedFilmCard.id).init(updatedFilmCard);
+    remove(this.#filterMenuComponent);
+    this.#filters = generateFilter(updateItem(this.#films, updatedFilmCard));
+    this.#filterMenuComponent = new FilterMenuView(generateFilter(updateItem(this.#films, updatedFilmCard)));
+    render(siteMainElement, this.#filterMenuComponent, RenderPosition.AFTERBEGIN);
   }
 
   #renderSort = () => {

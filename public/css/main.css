@@ -16,10 +16,6 @@
   --font-size-bigger: 20px;
 }
 
-* {
-  outline: 1px solid red;
-}
-
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
