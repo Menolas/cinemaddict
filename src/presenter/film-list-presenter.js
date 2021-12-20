@@ -13,6 +13,7 @@ import {render, RenderPosition, remove} from '../utils/render.js';
 import {FILM_COUNT_PER_STEP} from '../const.js';
 
 const siteMainElement = document.querySelector('.main');
+//const siteFooterElement = document.querySelector('.footer');
 
 export default class FilmListPresenter {
   #boardContainer = null;
@@ -45,6 +46,11 @@ export default class FilmListPresenter {
     render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
     render(this.#filmContainerComponent, this.#filmListComponent, RenderPosition.BEFOREEND);
     render(siteMainElement, this.#filterMenuComponent, RenderPosition.AFTERBEGIN);
+    
+    this.#filterMenuComponent.setFilterClickHandler(() => {
+      removeElementActiveLook(this.#filterMenuComponent.element.querySelectorAll('.main-navigation__item'), 'main-navigation__item--active');
+      makeElementLookActive(event.target, 'main-navigation__item--active');
+    });
 
     this.#sortListComponent.setFilterClickHandler(() => {
       removeElementActiveLook(this.#sortListComponent.element.querySelectorAll('.sort__button'), 'sort__button--active');
@@ -59,10 +65,21 @@ export default class FilmListPresenter {
     this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilmCard);
     this.#filmPresenter.get(updatedFilmCard.id).init(updatedFilmCard);
     remove(this.#filterMenuComponent);
-    this.#filters = generateFilter(updateItem(this.#films, updatedFilmCard));
-    this.#filterMenuComponent = new FilterMenuView(generateFilter(updateItem(this.#films, updatedFilmCard)));
+    this.#filters = generateFilter(this.#films);
+    this.#filterMenuComponent = new FilterMenuView(this.#filters);
     render(siteMainElement, this.#filterMenuComponent, RenderPosition.AFTERBEGIN);
   }
+
+  // #handleDetailedFilmCardChange = (updatedFilmCard) => {
+  //   this.#films = updateItem(this.#films, updatedFilmCard);
+  //   this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilmCard);
+  //   this.#filmPresenter.get(updatedFilmCard.id).init(updatedFilmCard);
+  //   //siteFooterElement.appendChild(this.#filmPresenter.updatedFilmCard.id.#detailedFilmComponent.element);
+  //   remove(this.#filterMenuComponent);
+  //   this.#filters = generateFilter(this.#films);
+  //   this.#filterMenuComponent = new FilterMenuView(this.#filters);
+  //   render(siteMainElement, this.#filterMenuComponent, RenderPosition.AFTERBEGIN);
+  // }
 
   #renderSort = () => {
     render(this.#filmBoardComponent, this.#sortListComponent, RenderPosition.BEFOREBEGIN);

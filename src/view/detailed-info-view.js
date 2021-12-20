@@ -24,9 +24,10 @@ const createDetailedInfoTemplate = (film) => {
   } = film;
 
   const detailedReleaseDate = humanizeFilmReleaseDetailedDate(released);
-  const favoriteClassName = isInFavourites ? 'film-details__control-button--active' : '';
-  const watchedClassName = isWatched ? 'film-details__control-button--active' : '';
-  const watchListClassName = isInWatchlist ? 'film-details__control-button--active' : '';
+  const activeClass = 'film-details__control-button--active';
+  const favoriteClassName = isInFavourites ? activeClass : '';
+  const watchedClassName = isWatched ? activeClass : '';
+  const watchListClassName = isInWatchlist ? activeClass : '';
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
