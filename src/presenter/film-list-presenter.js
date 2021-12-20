@@ -46,7 +46,7 @@ export default class FilmListPresenter {
     render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
     render(this.#filmContainerComponent, this.#filmListComponent, RenderPosition.BEFOREEND);
     render(siteMainElement, this.#filterMenuComponent, RenderPosition.AFTERBEGIN);
-    
+
     this.#filterMenuComponent.setFilterClickHandler(() => {
       removeElementActiveLook(this.#filterMenuComponent.element.querySelectorAll('.main-navigation__item'), 'main-navigation__item--active');
       makeElementLookActive(event.target, 'main-navigation__item--active');
