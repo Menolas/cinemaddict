@@ -13,7 +13,6 @@ import {render, RenderPosition, remove} from '../utils/render.js';
 import {FILM_COUNT_PER_STEP} from '../const.js';
 
 const siteMainElement = document.querySelector('.main');
-//const siteFooterElement = document.querySelector('.footer');
 
 export default class FilmListPresenter {
   #boardContainer = null;
@@ -60,6 +59,10 @@ export default class FilmListPresenter {
     this.#renderFilmBoard();
   }
 
+  #handleModeChange = () => {
+    this.#filmPresenter.forEach((presenter) => presenter.resetView());
+  }
+
   #handleFilmCardChange = (updatedFilmCard) => {
     this.#films = updateItem(this.#films, updatedFilmCard);
     this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilmCard);
@@ -70,23 +73,12 @@ export default class FilmListPresenter {
     render(siteMainElement, this.#filterMenuComponent, RenderPosition.AFTERBEGIN);
   }
 
-  // #handleDetailedFilmCardChange = (updatedFilmCard) => {
-  //   this.#films = updateItem(this.#films, updatedFilmCard);
-  //   this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilmCard);
-  //   this.#filmPresenter.get(updatedFilmCard.id).init(updatedFilmCard);
-  //   //siteFooterElement.appendChild(this.#filmPresenter.updatedFilmCard.id.#detailedFilmComponent.element);
-  //   remove(this.#filterMenuComponent);
-  //   this.#filters = generateFilter(this.#films);
-  //   this.#filterMenuComponent = new FilterMenuView(this.#filters);
-  //   render(siteMainElement, this.#filterMenuComponent, RenderPosition.AFTERBEGIN);
-  // }
-
   #renderSort = () => {
     render(this.#filmBoardComponent, this.#sortListComponent, RenderPosition.BEFOREBEGIN);
   }
 
   #renderFilm = (film) => {
-    const filmPresenter = new FilmPresenter(this.#filmListComponent, this.#handleFilmCardChange);
+    const filmPresenter = new FilmPresenter(this.#filmListComponent, this.#handleFilmCardChange, this.#handleModeChange);
     filmPresenter.init(film);
     this.#filmPresenter.set(film.id, filmPresenter);
   }

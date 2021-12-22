@@ -15,7 +15,7 @@ const createDetailedInfoTemplate = (film) => {
     commentsNumber,
     isInWatchlist,
     isWatched,
-    isInFavourites,
+    isFavorite,
     director,
     writers,
     actors,
@@ -25,7 +25,7 @@ const createDetailedInfoTemplate = (film) => {
 
   const detailedReleaseDate = humanizeFilmReleaseDetailedDate(released);
   const activeClass = 'film-details__control-button--active';
-  const favoriteClassName = isInFavourites ? activeClass : '';
+  const favoriteClassName = isFavorite ? activeClass : '';
   const watchedClassName = isWatched ? activeClass : '';
   const watchListClassName = isInWatchlist ? activeClass : '';
 
