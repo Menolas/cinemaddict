@@ -17,7 +17,7 @@ export default class FilmPresenter {
   #detailedFilmComponent = null;
   #film = null;
   #mode = Mode.DEFAULT;
-  
+
   constructor(filmBox, changeData, changeMode) {
     this.#filmBox = filmBox;
     this.#changeData = changeData;

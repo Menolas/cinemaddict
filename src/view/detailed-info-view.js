@@ -196,7 +196,7 @@ export default class DetailedInfoView extends AbstractView {
     this._callback.markAsWatched();
   }
 
-  #renderComments = (comments) => {
+  #renderComments = () => {
     const commentsContainer = this.element.querySelector('.film-details__comments-list');
 
     if (this.#comments.length) {
