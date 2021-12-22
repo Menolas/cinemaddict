@@ -1,5 +1,8 @@
 import {humanizeFilmReleaseDetailedDate} from '../utils/common.js';
 import AbstractView from './abstract-view.js';
+import {generateComment} from '../mock/comment.js';
+import CommentView from '../view/comment-view.js';
+import {render, RenderPosition} from '../utils/render.js';
 
 const createDetailedInfoTemplate = (film) => {
 
@@ -138,10 +141,15 @@ const createDetailedInfoTemplate = (film) => {
 
 export default class DetailedInfoView extends AbstractView {
   #film = null;
+  #comments = null;
+  #commentsNumber = null;
 
   constructor(film) {
     super();
     this.#film = film;
+    this.#commentsNumber = film.commentsNumber;
+    this.#comments = Array.from({length: this.#commentsNumber}, generateComment);
+    this.#renderComments();
   }
 
   get template() {
@@ -186,5 +194,15 @@ export default class DetailedInfoView extends AbstractView {
   #markAsWatchedClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.markAsWatched();
+  }
+
+  #renderComments = (comments) => {
+    const commentsContainer = this.element.querySelector('.film-details__comments-list');
+
+    if (this.#comments.length) {
+      for (const comment of this.#comments) {
+        render(commentsContainer, new CommentView(comment), RenderPosition.AFTERBEGIN);
+      }
+    }
   }
 }
