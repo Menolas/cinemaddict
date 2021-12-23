@@ -72,7 +72,7 @@ export default class FilmListPresenter {
   }
 
   #sortFilms = (sortType) => {
-    
+
     switch (sortType) {
       case SortType.DATE:
         this.#films.sort(sortFilmByDate);
@@ -81,7 +81,7 @@ export default class FilmListPresenter {
         this.#films.sort(sortFilmByRate);
         break;
       default:
-        
+
         this.#films = [...this.#sourcedFilms];
     }
 
