@@ -8,8 +8,10 @@ import NoFilmView from '../view/no-film-view.js';
 import FilmPresenter from './film-presenter.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import {generateFilter} from '../mock/filter.js';
+import {SortType} from '../const.js';
 
 import {render, RenderPosition, remove} from '../utils/render.js';
+import {sortFilmByDate, sortFilmByRate} from '../utils/common.js';
 import {FILM_COUNT_PER_STEP} from '../const.js';
 
 const siteMainElement = document.querySelector('.main');
@@ -30,6 +32,7 @@ export default class FilmListPresenter {
   #filmPresenter = new Map();
   #sourcedFilms = [];
   #filters = [];
+  #currentSortType = SortType.DEFAULT;
 
   constructor(boardContainer) {
     this.#boardContainer = boardContainer;
@@ -51,11 +54,6 @@ export default class FilmListPresenter {
       makeElementLookActive(event.target, 'main-navigation__item--active');
     });
 
-    this.#sortListComponent.setFilterClickHandler(() => {
-      removeElementActiveLook(this.#sortListComponent.element.querySelectorAll('.sort__button'), 'sort__button--active');
-      makeElementLookActive(event.target, 'sort__button--active');
-    });
-
     this.#renderFilmBoard();
   }
 
@@ -73,8 +71,38 @@ export default class FilmListPresenter {
     render(siteMainElement, this.#filterMenuComponent, RenderPosition.AFTERBEGIN);
   }
 
+  #sortFilms = (sortType) => {
+    
+    switch (sortType) {
+      case SortType.DATE:
+        this.#films.sort(sortFilmByDate);
+        break;
+      case SortType.RATE:
+        this.#films.sort(sortFilmByRate);
+        break;
+      default:
+        
+        this.#films = [...this.#sourcedFilms];
+    }
+
+    this.#currentSortType = sortType;
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortFilms(sortType);
+    removeElementActiveLook(this.#sortListComponent.element.querySelectorAll('.sort__button'), 'sort__button--active');
+    makeElementLookActive(event.target, 'sort__button--active');
+    this.#clearFilmList();
+    this.#renderFilmList();
+  }
+
   #renderSort = () => {
     render(this.#filmBoardComponent, this.#sortListComponent, RenderPosition.BEFOREBEGIN);
+    this.#sortListComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   }
 
   #renderFilm = (film) => {

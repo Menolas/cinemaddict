@@ -19,15 +19,17 @@ export default class SortListView extends AbstractView {
     return createSortListTemplate(this.#sortTypes);
   }
 
-  setFilterClickHandler = (callback) => {
-    this._callback.filterClick = callback;
-    this.element.querySelectorAll('.sort__button').forEach((item) => {
-      item.addEventListener('click', this.#filterClickHandler);
-    });
+  setSortTypeChangeHandler = (callback) => {
+    this._callback.sortTypeChange = callback;
+    this.element.addEventListener('click', this.#sortTypeChangeHandler);
   }
 
-  #filterClickHandler = (evt) => {
+  #sortTypeChangeHandler = (evt) => {
+    if (evt.target.tagName !== 'A') {
+      return;
+    }
+
     evt.preventDefault();
-    this._callback.filterClick();
+    this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
 }
