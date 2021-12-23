@@ -1,5 +1,8 @@
 import {humanizeFilmReleaseDetailedDate} from '../utils/common.js';
 import AbstractView from './abstract-view.js';
+import {generateComment} from '../mock/comment.js';
+import CommentView from '../view/comment-view.js';
+import {render, RenderPosition} from '../utils/render.js';
 
 const createDetailedInfoTemplate = (film) => {
 
@@ -15,7 +18,7 @@ const createDetailedInfoTemplate = (film) => {
     commentsNumber,
     isInWatchlist,
     isWatched,
-    isInFavourites,
+    isFavorite,
     director,
     writers,
     actors,
@@ -24,9 +27,10 @@ const createDetailedInfoTemplate = (film) => {
   } = film;
 
   const detailedReleaseDate = humanizeFilmReleaseDetailedDate(released);
-  const favoriteClassName = isInFavourites ? 'film-details__control-button--active' : '';
-  const watchedClassName = isWatched ? 'film-details__control-button--active' : '';
-  const watchListClassName = isInWatchlist ? 'film-details__control-button--active' : '';
+  const activeClass = 'film-details__control-button--active';
+  const favoriteClassName = isFavorite ? activeClass : '';
+  const watchedClassName = isWatched ? activeClass : '';
+  const watchListClassName = isInWatchlist ? activeClass : '';
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -137,10 +141,15 @@ const createDetailedInfoTemplate = (film) => {
 
 export default class DetailedInfoView extends AbstractView {
   #film = null;
+  #comments = null;
+  #commentsNumber = null;
 
   constructor(film) {
     super();
     this.#film = film;
+    this.#commentsNumber = film.commentsNumber;
+    this.#comments = Array.from({length: this.#commentsNumber}, generateComment);
+    this.#renderComments();
   }
 
   get template() {
@@ -152,8 +161,48 @@ export default class DetailedInfoView extends AbstractView {
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#popupCloseHandler);
   }
 
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClick = callback;
+    this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoriteClickHandler);
+  }
+
+  setAddToWatchListClickHandler = (callback) => {
+    this._callback.addToWatchList = callback;
+    this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#addToWatchListClickHandler);
+  }
+
+  setMarkAsWatchedClickHandler = (callback) => {
+    this._callback.markAsWatched = callback;
+    this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#markAsWatchedClickHandler);
+  }
+
   #popupCloseHandler = (evt) => {
     evt.preventDefault();
     this._callback.closePopup();
+  }
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  #addToWatchListClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.addToWatchList();
+  }
+
+  #markAsWatchedClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.markAsWatched();
+  }
+
+  #renderComments = () => {
+    const commentsContainer = this.element.querySelector('.film-details__comments-list');
+
+    if (this.#comments.length) {
+      for (const comment of this.#comments) {
+        render(commentsContainer, new CommentView(comment), RenderPosition.AFTERBEGIN);
+      }
+    }
   }
 }

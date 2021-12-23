@@ -14,13 +14,14 @@ const createFilmCardTemplate = (film) => {
     commentsNumber,
     isInWatchlist,
     isWatched,
-    isInFavourites,
+    isFavorite,
   } = film;
 
   const releaseDate = humanizeFilmReleaseDate(released);
-  const favoriteClassName = isInFavourites ? 'film-card__controls-item--active' : '';
-  const watchedClassName = isWatched ? 'film-card__controls-item--active' : '';
-  const watchListClassName = isInWatchlist ? 'film-card__controls-item--active' : '';
+  const activeClass = 'film-card__controls-item--active';
+  const favoriteClassName = isFavorite ? activeClass : '';
+  const watchedClassName = isWatched ? activeClass : '';
+  const watchListClassName = isInWatchlist ? activeClass : '';
 
   return `<article class="film-card">
     <a class="film-card__link">
@@ -60,8 +61,38 @@ export default class FilmCardView extends AbstractView {
     this.element.querySelector('.film-card__link').addEventListener('click', this.#popupClickHandler);
   }
 
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClick = callback;
+    this.element.querySelector('.film-card__controls-item--favorite').addEventListener('click', this.#favoriteClickHandler);
+  }
+
+  setAddToWatchListClickHandler = (callback) => {
+    this._callback.addToWatchList = callback;
+    this.element.querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this.#addToWatchListClickHandler);
+  }
+
+  setMarkAsWatchedClickHandler = (callback) => {
+    this._callback.markAsWatched = callback;
+    this.element.querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this.#markAsWatchedClickHandler);
+  }
+
   #popupClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.popupClick();
+  }
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  #addToWatchListClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.addToWatchList();
+  }
+
+  #markAsWatchedClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.markAsWatched();
   }
 }
