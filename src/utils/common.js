@@ -40,30 +40,12 @@ export const updateItem = (items, update) => {
   ];
 };
 
-const getWeightForNullDate = (dateA, dateB) => {
-  if (dateA === null && dateB === null) {
-    return 0;
-  }
-
-  if (dateA === null) {
-    return 1;
-  }
-
-  if (dateB === null) {
-    return -1;
-  }
-
-  return null;
-};
-
 export const sortFilmByDate = (filmA, filmB) => {
-  const weight = getWeightForNullDate(filmA.released, filmB.released);
 
-  return weight ?? dayjs(filmB.released).diff(dayjs(filmA.released));
+  return dayjs(filmB.released).diff(dayjs(filmA.released));
 };
 
 export const sortFilmByRate = (filmA, filmB) => {
-  const weight = getWeightForNullDate(filmA.rating, filmB.rating);
 
-  return weight ?? dayjs(filmB.rating).diff(dayjs(filmA.rating));
+  return filmB.rating - filmA.rating;
 };

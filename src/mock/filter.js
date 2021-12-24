@@ -1,4 +1,4 @@
-const filmToFilterMap = {
+export const filmToFilterMap = {
   favourites: (films) => films.filter((film) => film.isFavorite).length,
   history: (films) => films.filter((film) => film.isWatched).length,
   watchlist: (films) => films.filter((film) => film.isInWatchlist).length,
