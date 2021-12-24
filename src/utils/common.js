@@ -39,3 +39,7 @@ export const updateItem = (items, update) => {
     ...items.slice(index + 1),
   ];
 };
+
+export const sortFilmByDate = (filmA, filmB) => dayjs(filmB.released).diff(dayjs(filmA.released));
+
+export const sortFilmByRate = (filmA, filmB) => filmB.rating - filmA.rating;
