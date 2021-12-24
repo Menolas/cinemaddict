@@ -65,15 +65,15 @@ export default class FilmListPresenter {
     render(siteMainElement, this.#filterMenuComponent, RenderPosition.AFTERBEGIN);
   }
 
-  #filterFilms = (films, filterType) => {
-    return films.filter((film) => film.filterType);
-  }
+  // #filterFilms = (films, filterType) => {
+  //   return films.filter((film) => film.filterType);
+  // }
 
-  #handleFilterTypeChange = (filterType) => {
-    if (this.#currentFilterType === filterType) {
-      retutn;
-    }
-  }
+  // #handleFilterTypeChange = (filterType) => {
+  //   if (this.#currentFilterType === filterType) {
+  //     retutn;
+  //   }
+  // }
 
   #sortFilms = (sortType) => {
 
@@ -168,7 +168,7 @@ export default class FilmListPresenter {
       this.#renderNoFilm();
       return;
     }
-    
+
     this.#renderFilter();
     this.#renderSort();
     this.#renderFilmList();
