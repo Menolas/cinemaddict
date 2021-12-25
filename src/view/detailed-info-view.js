@@ -1,5 +1,5 @@
 import {humanizeFilmReleaseDetailedDate} from '../utils/common.js';
-import AbstractView from './abstract-view.js';
+import SmartView from './smart-view.js';
 import {generateComment} from '../mock/comment.js';
 import CommentView from '../view/comment-view.js';
 import {render, RenderPosition} from '../utils/render.js';
@@ -18,7 +18,7 @@ const createDetailedInfoTemplate = (film) => {
     commentsNumber,
     isInWatchlist,
     isWatched,
-    isFavorite,
+    isFavourite,
     director,
     writers,
     actors,
@@ -28,7 +28,7 @@ const createDetailedInfoTemplate = (film) => {
 
   const detailedReleaseDate = humanizeFilmReleaseDetailedDate(released);
   const activeClass = 'film-details__control-button--active';
-  const favoriteClassName = isFavorite ? activeClass : '';
+  const favouriteClassName = isFavourite ? activeClass : '';
   const watchedClassName = isWatched ? activeClass : '';
   const watchListClassName = isInWatchlist ? activeClass : '';
 
@@ -94,7 +94,7 @@ const createDetailedInfoTemplate = (film) => {
         <section class="film-details__controls">
           <button type="button" class="film-details__control-button ${watchListClassName} film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
           <button type="button" class="film-details__control-button ${watchedClassName} film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-          <button type="button" class="film-details__control-button ${favoriteClassName} film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+          <button type="button" class="film-details__control-button ${favouriteClassName} film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
         </section>
       </div>
 
@@ -139,7 +139,8 @@ const createDetailedInfoTemplate = (film) => {
   </section>`;
 };
 
-export default class DetailedInfoView extends AbstractView {
+export default class DetailedInfoView extends SmartView {
+  #emojiPicker = null;
   #film = null;
   #comments = null;
   #commentsNumber = null;
@@ -161,9 +162,9 @@ export default class DetailedInfoView extends AbstractView {
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#popupCloseHandler);
   }
 
-  setFavoriteClickHandler = (callback) => {
-    this._callback.favoriteClick = callback;
-    this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoriteClickHandler);
+  setFavouriteClickHandler = (callback) => {
+    this._callback.favouriteClick = callback;
+    this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favouriteClickHandler);
   }
 
   setAddToWatchListClickHandler = (callback) => {
@@ -181,9 +182,9 @@ export default class DetailedInfoView extends AbstractView {
     this._callback.closePopup();
   }
 
-  #favoriteClickHandler = (evt) => {
+  #favouriteClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.favoriteClick();
+    this._callback.favouriteClick();
   }
 
   #addToWatchListClickHandler = (evt) => {

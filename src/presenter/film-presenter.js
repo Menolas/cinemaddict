@@ -43,10 +43,10 @@ export default class FilmPresenter {
       document.addEventListener('keydown', this.#onEscKeyDown);
     });
 
-    this.#filmComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+    this.#filmComponent.setFavouriteClickHandler(this.#handleFavouriteClick);
     this.#filmComponent.setAddToWatchListClickHandler(this.#handleAddToWatchListClick);
     this.#filmComponent.setMarkAsWatchedClickHandler(this.#handleMarkAsWatchedClick);
-    this.#detailedFilmComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+    this.#detailedFilmComponent.setFavouriteClickHandler(this.#handleFavouriteClick);
     this.#detailedFilmComponent.setAddToWatchListClickHandler(this.#handleAddToWatchListClick);
     this.#detailedFilmComponent.setMarkAsWatchedClickHandler(this.#handleMarkAsWatchedClick);
 
@@ -100,8 +100,8 @@ export default class FilmPresenter {
     }
   }
 
-  #handleFavoriteClick = () => {
-    this.#changeData({...this.#film, isFavorite: !this.#film.isFavorite});
+  #handleFavouriteClick = () => {
+    this.#changeData({...this.#film, isFavourite: !this.#film.isFavourite});
   }
 
   #handleAddToWatchListClick = () => {

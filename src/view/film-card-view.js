@@ -14,12 +14,12 @@ const createFilmCardTemplate = (film) => {
     commentsNumber,
     isInWatchlist,
     isWatched,
-    isFavorite,
+    isFavourite,
   } = film;
 
   const releaseDate = humanizeFilmReleaseDate(released);
   const activeClass = 'film-card__controls-item--active';
-  const favoriteClassName = isFavorite ? activeClass : '';
+  const favouriteClassName = isFavourite ? activeClass : '';
   const watchedClassName = isWatched ? activeClass : '';
   const watchListClassName = isInWatchlist ? activeClass : '';
 
@@ -39,7 +39,7 @@ const createFilmCardTemplate = (film) => {
     <div class="film-card__controls">
         <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${watchListClassName}" type="button">Add to watchlist</button>
         <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${watchedClassName}" type="button">Mark as watched</button>
-        <button class="film-card__controls-item film-card__controls-item--favorite ${favoriteClassName}" type="button">Mark as favorite</button>
+        <button class="film-card__controls-item film-card__controls-item--favorite ${favouriteClassName}" type="button">Mark as favorite</button>
     </div>
   </article>`;
 };
@@ -61,9 +61,9 @@ export default class FilmCardView extends AbstractView {
     this.element.querySelector('.film-card__link').addEventListener('click', this.#popupClickHandler);
   }
 
-  setFavoriteClickHandler = (callback) => {
-    this._callback.favoriteClick = callback;
-    this.element.querySelector('.film-card__controls-item--favorite').addEventListener('click', this.#favoriteClickHandler);
+  setFavouriteClickHandler = (callback) => {
+    this._callback.favouriteClick = callback;
+    this.element.querySelector('.film-card__controls-item--favorite').addEventListener('click', this.#favouriteClickHandler);
   }
 
   setAddToWatchListClickHandler = (callback) => {
@@ -81,9 +81,9 @@ export default class FilmCardView extends AbstractView {
     this._callback.popupClick();
   }
 
-  #favoriteClickHandler = (evt) => {
+  #favouriteClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.favoriteClick();
+    this._callback.favouriteClick();
   }
 
   #addToWatchListClickHandler = (evt) => {

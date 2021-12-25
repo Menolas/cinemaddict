@@ -1,4 +1,12 @@
 import AbstractView from './abstract-view.js';
+import {filmToFilterMap, FilterType} from '../const.js';
+
+export const generateFilter = (films) => Object.entries(filmToFilterMap).map(
+  ([filterName, countFilms]) => ({
+    name: filterName,
+    count: countFilms(films),
+  }),
+);
 
 const createFilterItemTemplate = (filter) => {
   const {name, count} = filter;
@@ -24,10 +32,12 @@ const createFilterMenuTemplate = (filterItems) => {
 
 export default class FilterMenuView extends AbstractView {
   #filters = null;
+  #filterTypes = null;
 
-  constructor(filters) {
+  constructor(filters, filterTypes) {
     super();
     this.#filters = filters;
+    this.#filterTypes = filterTypes;
   }
 
   get template() {

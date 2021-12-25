@@ -8,8 +8,8 @@ import FilmListView from '../view/film-list-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import FilmPresenter from './film-presenter.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
-import {generateFilter, filmToFilterMap} from '../mock/filter.js';
-import {SortType} from '../const.js';
+import {generateFilter} from '../view/filter-menu-view.js';
+import {SortType, filmToFilterMap} from '../const.js';
 
 import {FILM_COUNT_PER_STEP} from '../const.js';
 
@@ -65,15 +65,35 @@ export default class FilmListPresenter {
     render(siteMainElement, this.#filterMenuComponent, RenderPosition.AFTERBEGIN);
   }
 
-  // #filterFilms = (films, filterType) => {
-  //   return films.filter((film) => film.filterType);
-  // }
+  #filterFilms = (filterType) => {
 
-  // #handleFilterTypeChange = (filterType) => {
-  //   if (this.#currentFilterType === filterType) {
-  //     retutn;
-  //   }
-  // }
+    switch (filterType) {
+      case FilterType.FAVOURITE:
+        this.#films.filter((film) => film.isFavourite);
+        break;
+      case FilterType.WATCHED:
+        this.#films.filter((film) => film.isWatched);
+        break;
+      case FilterType.WATCHEDLIST:
+        this.#films.filter((film) => film.isInWatchlist);
+      default:
+      this.#films = [...this.#sourcedFilms];
+    }
+
+    this.#currentFilterType = filterType;
+  }
+
+  #handleFilterTypeChange = (filterType) => {
+    if (this.#currentFilterType === filterType) {
+      retutn;
+    }
+
+    this.#filterFilms(filterType);
+    removeElementActiveLook(this.#filterMenuComponent.element.querySelectorAll('.main-navigation__item'), 'main-navigation__item--active');
+    makeElementLookActive(event.target, 'main-navigation__item--active');
+    this.#clearFilmList();
+    this.#renderFilmList();
+  }
 
   #sortFilms = (sortType) => {
 
