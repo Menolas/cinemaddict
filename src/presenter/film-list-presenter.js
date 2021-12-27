@@ -92,6 +92,7 @@ export default class FilmListPresenter {
     makeElementLookActive(event.target, 'main-navigation__item--active');
     this.#clearFilmList();
     this.#renderFilmList();
+    //this.#renderFilmBoard;
   }
 
   #sortFilms = (sortType) => {
