@@ -8,8 +8,7 @@ import FilmListView from '../view/film-list-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import FilmPresenter from './film-presenter.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
-import {generateFilter} from '../view/filter-menu-view.js';
-import {SortType, filmToFilterMap} from '../const.js';
+import {SortType, FilterType} from '../const.js';
 
 import {FILM_COUNT_PER_STEP} from '../const.js';
 
@@ -30,9 +29,9 @@ export default class FilmListPresenter {
   #renderedFilmCount = FILM_COUNT_PER_STEP;
   #filmPresenter = new Map();
   #sourcedFilms = [];
-  #filters = [];
+  //#filters = [];
   #currentSortType = SortType.DEFAULT;
-  #currentFilterType = filmToFilterMap.DEFAULT;
+  #currentFilterType = FilterType.DEFAULT;
 
   constructor(boardContainer) {
     this.#boardContainer = boardContainer;
@@ -41,8 +40,7 @@ export default class FilmListPresenter {
   init = (films) => {
     this.#films = [...films];
     this.#sourcedFilms = [...films];
-    this.#filters = generateFilter(this.#films);
-    this.#filterMenuComponent = new FilterMenuView(this.#filters);
+    //this.#filterMenuComponent = new FilterMenuView(this.#films);
 
     render(this.#boardContainer, this.#filmBoardComponent, RenderPosition.BEFOREEND);
     render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
@@ -60,22 +58,23 @@ export default class FilmListPresenter {
     this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilmCard);
     this.#filmPresenter.get(updatedFilmCard.id).init(updatedFilmCard);
     remove(this.#filterMenuComponent);
-    this.#filters = generateFilter(this.#films);
-    this.#filterMenuComponent = new FilterMenuView(this.#filters);
+    this.#filterMenuComponent = new FilterMenuView(this.#films);
     render(siteMainElement, this.#filterMenuComponent, RenderPosition.AFTERBEGIN);
+    this.#filterMenuComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
   }
 
   #filterFilms = (filterType) => {
 
     switch (filterType) {
-      case FilterType.FAVOURITE:
-        this.#films.filter((film) => film.isFavourite);
+      case FilterType.FAVOURITES:
+        this.#films = this.#films.filter((film) => film.isFavourite);
         break;
       case FilterType.WATCHED:
-        this.#films.filter((film) => film.isWatched);
+        this.#films = this.#films.filter((film) => film.isWatched);
         break;
-      case FilterType.WATCHEDLIST:
-        this.#films.filter((film) => film.isInWatchlist);
+      case FilterType.WATCHLIST:
+        this.#films = this.#films.filter((film) => film.isInWatchlist);
+        break;
       default:
       this.#films = [...this.#sourcedFilms];
     }
@@ -85,7 +84,7 @@ export default class FilmListPresenter {
 
   #handleFilterTypeChange = (filterType) => {
     if (this.#currentFilterType === filterType) {
-      retutn;
+      return;
     }
 
     this.#filterFilms(filterType);
@@ -125,11 +124,9 @@ export default class FilmListPresenter {
   }
 
   #renderFilter = () => {
+    this.#filterMenuComponent = new FilterMenuView(this.#films);
     render(siteMainElement, this.#filterMenuComponent, RenderPosition.AFTERBEGIN);
-    this.#filterMenuComponent.setFilterTypeChangeHandler(() => {
-      removeElementActiveLook(this.#filterMenuComponent.element.querySelectorAll('.main-navigation__item'), 'main-navigation__item--active');
-      makeElementLookActive(event.target, 'main-navigation__item--active');
-    });
+    this.#filterMenuComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
   }
 
   #renderSort = () => {

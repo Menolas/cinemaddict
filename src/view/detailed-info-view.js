@@ -3,6 +3,9 @@ import SmartView from './smart-view.js';
 import {generateComment} from '../mock/comment.js';
 import CommentView from '../view/comment-view.js';
 import {render, RenderPosition} from '../utils/render.js';
+import {EMOJIS} from '../const';
+
+const createEmojiImgTemplate = (emojiName) => emojiName ? `<img src="./images/emoji/${emojiName}.png" width="30" height="30" alt="emoji">` : '';
 
 const createDetailedInfoTemplate = (film) => {
 
@@ -24,6 +27,8 @@ const createDetailedInfoTemplate = (film) => {
     actors,
     country,
     ageRating,
+    newEmoji,
+    newComment,
   } = film;
 
   const detailedReleaseDate = humanizeFilmReleaseDetailedDate(released);
@@ -31,6 +36,7 @@ const createDetailedInfoTemplate = (film) => {
   const favouriteClassName = isFavourite ? activeClass : '';
   const watchedClassName = isWatched ? activeClass : '';
   const watchListClassName = isInWatchlist ? activeClass : '';
+  const newEmojiImg = createEmojiImgTemplate(newEmoji);
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -105,7 +111,7 @@ const createDetailedInfoTemplate = (film) => {
           <ul class="film-details__comments-list"></ul>
 
           <div class="film-details__new-comment">
-            <div class="film-details__add-emoji-label"></div>
+            <div class="film-details__add-emoji-label">${newEmojiImg}</div>
 
             <label class="film-details__comment-label">
               <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
