@@ -4,7 +4,7 @@ import FilmBoardView from '../view/film-board-view.js';
 import FilterMenuView from '../view/filter-menu-view.js';
 import SortListView from '../view/sort-list-view.js';
 import FilmContainerView from '../view/film-container-view.js';
-import FilmListView from '../view/film-list-view.js';
+import FilmListContainerView from '../view/film-list-container-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import FilmPresenter from './film-presenter.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
@@ -20,8 +20,7 @@ export default class FilmListPresenter {
   #filmBoardComponent = new FilmBoardView();
   #sortListComponent = new SortListView();
   #filmContainerComponent = new FilmContainerView();
-  #filmListComponent = new FilmListView();
-  #noFilmComponent = new NoFilmView();
+  #filmListContainerComponent = new FilmListContainerView();
   #showMoreButtonComponent = new ShowMoreButtonView();
   #filterMenuComponent = null;
 
@@ -29,7 +28,6 @@ export default class FilmListPresenter {
   #renderedFilmCount = FILM_COUNT_PER_STEP;
   #filmPresenter = new Map();
   #sourcedFilms = [];
-  //#filters = [];
   #currentSortType = SortType.DEFAULT;
   #currentFilterType = FilterType.DEFAULT;
 
@@ -40,11 +38,9 @@ export default class FilmListPresenter {
   init = (films) => {
     this.#films = [...films];
     this.#sourcedFilms = [...films];
-    //this.#filterMenuComponent = new FilterMenuView(this.#films);
 
     render(this.#boardContainer, this.#filmBoardComponent, RenderPosition.BEFOREEND);
-    render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
-    render(this.#filmContainerComponent, this.#filmListComponent, RenderPosition.BEFOREEND);
+    this.#renderFilter();
 
     this.#renderFilmBoard();
   }
@@ -90,9 +86,11 @@ export default class FilmListPresenter {
     this.#filterFilms(filterType);
     removeElementActiveLook(this.#filterMenuComponent.element.querySelectorAll('.main-navigation__item'), 'main-navigation__item--active');
     makeElementLookActive(event.target, 'main-navigation__item--active');
+
+
     this.#clearFilmList();
-    this.#renderFilmList();
-    //this.#renderFilmBoard;
+    this.#renderFilmBoard();
+    this.#films = [...this.#sourcedFilms];
   }
 
   #sortFilms = (sortType) => {
@@ -136,7 +134,7 @@ export default class FilmListPresenter {
   }
 
   #renderFilm = (film) => {
-    const filmPresenter = new FilmPresenter(this.#filmListComponent, this.#handleFilmCardChange, this.#handleModeChange);
+    const filmPresenter = new FilmPresenter(this.#filmListContainerComponent, this.#handleFilmCardChange, this.#handleModeChange);
     filmPresenter.init(film);
     this.#filmPresenter.set(film.id, filmPresenter);
   }
@@ -145,10 +143,6 @@ export default class FilmListPresenter {
     this.#films
       .slice(from, to)
       .forEach((film) => this.#renderFilm(film));
-  }
-
-  #renderNoFilm = () => {
-    render(this.#filmBoardComponent, this.#noFilmComponent, RenderPosition.BEFOREEND);
   }
 
   #handleShowMoreButtonClick = () => {
@@ -161,7 +155,7 @@ export default class FilmListPresenter {
   }
 
   #renderShowMoreButton = () => {
-    render(this.#filmListComponent, this.#showMoreButtonComponent, RenderPosition.AFTEREND);
+    render(this.#filmListContainerComponent, this.#showMoreButtonComponent, RenderPosition.AFTEREND);
 
     this.#showMoreButtonComponent.setClickHandler(this.#handleShowMoreButtonClick);
   }
@@ -181,14 +175,22 @@ export default class FilmListPresenter {
     }
   }
 
-  #renderFilmBoard = () => {
+  #renderFilmBoard = () => { 
+
+    render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
+
     if (!this.#films.length) {
-      this.#renderNoFilm();
+      remove(this.#filmListContainerComponent);
+      const nofilmComponent = new NoFilmView(this.#currentFilterType);
+      
+      render(this.#filmContainerComponent, nofilmComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    this.#renderFilter();
     this.#renderSort();
+    
+    render(this.#filmContainerComponent, this.#filmListContainerComponent, RenderPosition.BEFOREEND);
+    
     this.#renderFilmList();
   }
 }
