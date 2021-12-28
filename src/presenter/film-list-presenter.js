@@ -54,9 +54,7 @@ export default class FilmListPresenter {
     this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilmCard);
     this.#filmPresenter.get(updatedFilmCard.id).init(updatedFilmCard);
     remove(this.#filterMenuComponent);
-    this.#filterMenuComponent = new FilterMenuView(this.#films);
-    render(siteMainElement, this.#filterMenuComponent, RenderPosition.AFTERBEGIN);
-    this.#filterMenuComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
+    this.#renderFilter();
   }
 
   #filterFilms = (filterType) => {
@@ -175,6 +173,8 @@ export default class FilmListPresenter {
     }
   }
 
+  //#nofilmComponent = new NoFilmView(this.#currentFilterType);
+
   #renderFilmBoard = () => { 
 
     render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
@@ -182,6 +182,9 @@ export default class FilmListPresenter {
     if (!this.#films.length) {
       remove(this.#filmListContainerComponent);
       const nofilmComponent = new NoFilmView(this.#currentFilterType);
+      if (nofilmComponent) {
+        remove(nofilmComponent);
+      }
       
       render(this.#filmContainerComponent, nofilmComponent, RenderPosition.BEFOREEND);
       return;

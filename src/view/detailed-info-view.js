@@ -3,7 +3,7 @@ import SmartView from './smart-view.js';
 import {generateComment} from '../mock/comment.js';
 import CommentView from '../view/comment-view.js';
 import {render, RenderPosition} from '../utils/render.js';
-import {EMOJIS} from '../const';
+import {EMOJIS, FilterType} from '../const';
 
 //const createEmojiImgTemplate = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji">` : '';
 
@@ -96,9 +96,9 @@ const createDetailedInfoTemplate = (film) => {
         </div>
 
         <section class="film-details__controls">
-          <button type="button" class="film-details__control-button ${watchListClassName} film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-          <button type="button" class="film-details__control-button ${watchedClassName} film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-          <button type="button" class="film-details__control-button ${favouriteClassName} film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+          <button type="button" class="film-details__control-button ${watchListClassName} film-details__control-button--watchlist" id="watchlist" name="watchlist" data-filter-type="${FilterType.WATCHLIST}">Add to watchlist</button>
+          <button type="button" class="film-details__control-button ${watchedClassName} film-details__control-button--watched" id="watched" name="watched" data-filter-type="${FilterType.WATCHED}">Already watched</button>
+          <button type="button" class="film-details__control-button ${favouriteClassName} film-details__control-button--favorite" id="favorite" name="favorite" data-filter-type="${FilterType.FAVOURITES}">Add to favorites</button>
         </section>
       </div>
 
@@ -170,19 +170,9 @@ export default class DetailedInfoView extends SmartView {
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#popupCloseHandler);
   }
 
-  setFavouriteClickHandler = (callback) => {
-    this._callback.favouriteClick = callback;
-    this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favouriteClickHandler);
-  }
-
-  setAddToWatchListClickHandler = (callback) => {
-    this._callback.addToWatchList = callback;
-    this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#addToWatchListClickHandler);
-  }
-
-  setMarkAsWatchedClickHandler = (callback) => {
-    this._callback.markAsWatched = callback;
-    this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#markAsWatchedClickHandler);
+  setAddToFilterClickHandler = (callback) => {
+    this._callback.addToFilter = callback;
+    this.element.querySelector('.film-details__controls').addEventListener('click', this.#cardControlBlockClickHandler);
   }
 
   setEmojiClickHandler = () => {
@@ -198,19 +188,13 @@ export default class DetailedInfoView extends SmartView {
     this._callback.closePopup();
   }
 
-  #favouriteClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.favouriteClick();
-  }
+  #cardControlBlockClickHandler = (evt) => {
+    if (evt.target.tagName !== 'BUTTON') {
+      return;
+    }
 
-  #addToWatchListClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.addToWatchList();
-  }
-
-  #markAsWatchedClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.markAsWatched();
+    this._callback.addToFilter(evt.target.dataset.filterType);
   }
 
   #renderComments = () => {

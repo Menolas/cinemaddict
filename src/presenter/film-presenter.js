@@ -3,6 +3,7 @@ import DetailedInfoView from '../view/detailed-info-view.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 const body = document.querySelector('body');
 const siteFooterElement = document.querySelector('.footer');
+import {FilterType} from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -43,12 +44,8 @@ export default class FilmPresenter {
       document.addEventListener('keydown', this.#onEscKeyDown);
     });
 
-    this.#filmComponent.setFavouriteClickHandler(this.#handleFavouriteClick);
-    this.#filmComponent.setAddToWatchListClickHandler(this.#handleAddToWatchListClick);
-    this.#filmComponent.setMarkAsWatchedClickHandler(this.#handleMarkAsWatchedClick);
-    this.#detailedFilmComponent.setFavouriteClickHandler(this.#handleFavouriteClick);
-    this.#detailedFilmComponent.setAddToWatchListClickHandler(this.#handleAddToWatchListClick);
-    this.#detailedFilmComponent.setMarkAsWatchedClickHandler(this.#handleMarkAsWatchedClick);
+    this.#filmComponent.setAddToFilterClickHandler(this.#handleAddToFilterClick);
+    this.#detailedFilmComponent.setAddToFilterClickHandler(this.#handleAddToFilterClick);
 
     if (prevFilmComponent === null || prevDetailedFilmComponent === null) {
       render(this.#filmBox, this.#filmComponent, RenderPosition.BEFOREEND);
@@ -100,15 +97,17 @@ export default class FilmPresenter {
     }
   }
 
-  #handleFavouriteClick = () => {
-    this.#changeData({...this.#film, isFavourite: !this.#film.isFavourite});
-  }
-
-  #handleAddToWatchListClick = () => {
-    this.#changeData({...this.#film, isInWatchlist: !this.#film.isInWatchlist});
-  }
-
-  #handleMarkAsWatchedClick = () => {
-    this.#changeData({...this.#film, isWatched: !this.#film.isWatched});
+  #handleAddToFilterClick = (filterType) => {
+    switch (filterType) {
+      case FilterType.FAVOURITES:
+        this.#changeData({...this.#film, isFavourite: !this.#film.isFavourite});
+        break;
+      case FilterType.WATCHED:
+        this.#changeData({...this.#film, isWatched: !this.#film.isWatched});
+        break;
+      case FilterType.WATCHLIST:
+        this.#changeData({...this.#film, isInWatchlist: !this.#film.isInWatchlist});
+        break; 
+    }
   }
 }

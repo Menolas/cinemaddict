@@ -1,5 +1,6 @@
 import AbstractView from './abstract-view.js';
 import {humanizeFilmReleaseDate} from '../utils/common.js';
+import {FilterType} from '../const.js';
 
 const createFilmCardTemplate = (film) => {
 
@@ -37,9 +38,9 @@ const createFilmCardTemplate = (film) => {
       <span class="film-card__comments">${commentsNumber} comments</span>
     </a>
     <div class="film-card__controls">
-        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${watchListClassName}" type="button">Add to watchlist</button>
-        <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${watchedClassName}" type="button">Mark as watched</button>
-        <button class="film-card__controls-item film-card__controls-item--favorite ${favouriteClassName}" type="button">Mark as favorite</button>
+        <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${watchListClassName}" type="button" data-filter-type="${FilterType.WATCHLIST}">Add to watchlist</button>
+        <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${watchedClassName}" type="button" data-filter-type="${FilterType.WATCHED}">Mark as watched</button>
+        <button class="film-card__controls-item film-card__controls-item--favorite ${favouriteClassName}" type="button" data-filter-type="${FilterType.FAVOURITES}">Mark as favorite</button>
     </div>
   </article>`;
 };
@@ -61,19 +62,9 @@ export default class FilmCardView extends AbstractView {
     this.element.querySelector('.film-card__link').addEventListener('click', this.#popupClickHandler);
   }
 
-  setFavouriteClickHandler = (callback) => {
-    this._callback.favouriteClick = callback;
-    this.element.querySelector('.film-card__controls-item--favorite').addEventListener('click', this.#favouriteClickHandler);
-  }
-
-  setAddToWatchListClickHandler = (callback) => {
-    this._callback.addToWatchList = callback;
-    this.element.querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this.#addToWatchListClickHandler);
-  }
-
-  setMarkAsWatchedClickHandler = (callback) => {
-    this._callback.markAsWatched = callback;
-    this.element.querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this.#markAsWatchedClickHandler);
+  setAddToFilterClickHandler = (callback) => {
+    this._callback.addToFilter = callback;
+    this.element.querySelector('.film-card__controls').addEventListener('click', this.#cardControlBlockClickHandler);
   }
 
   #popupClickHandler = (evt) => {
@@ -81,18 +72,12 @@ export default class FilmCardView extends AbstractView {
     this._callback.popupClick();
   }
 
-  #favouriteClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.favouriteClick();
-  }
+  #cardControlBlockClickHandler = (evt) => {
+    if (evt.target.tagName !== 'BUTTON') {
+      return;
+    }
 
-  #addToWatchListClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.addToWatchList();
-  }
-
-  #markAsWatchedClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.markAsWatched();
+    this._callback.addToFilter(evt.target.dataset.filterType);
   }
 }
