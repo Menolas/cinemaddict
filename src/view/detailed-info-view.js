@@ -5,7 +5,7 @@ import CommentView from '../view/comment-view.js';
 import {render, RenderPosition} from '../utils/render.js';
 import {EMOJIS, FilterType} from '../const';
 
-//const createEmojiImgTemplate = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji">` : '';
+const createEmojiImgTemplate = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji">` : '';
 
 const createDetailedInfoTemplate = (film) => {
 
@@ -27,6 +27,7 @@ const createDetailedInfoTemplate = (film) => {
     actors,
     country,
     ageRating,
+    newCommentEmoji,
   } = film;
 
   const detailedReleaseDate = humanizeFilmReleaseDetailedDate(released);
@@ -34,7 +35,7 @@ const createDetailedInfoTemplate = (film) => {
   const favouriteClassName = isFavourite ? activeClass : '';
   const watchedClassName = isWatched ? activeClass : '';
   const watchListClassName = isInWatchlist ? activeClass : '';
-  //const newEmojiImg = createEmojiImgTemplate(emoji);
+  const newEmojiImg = createEmojiImgTemplate(newCommentEmoji);
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -109,7 +110,7 @@ const createDetailedInfoTemplate = (film) => {
           <ul class="film-details__comments-list"></ul>
 
           <div class="film-details__new-comment">
-            <div class="film-details__add-emoji-label"></div>
+            <div class="film-details__add-emoji-label">${newEmojiImg}</div>
 
             <label class="film-details__comment-label">
               <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
@@ -148,21 +149,19 @@ export default class DetailedInfoView extends SmartView {
   #newCommentText = null;
   #film = null;
   #comments = null;
-  #commentsNumber = null;
-
+  
   constructor(film) {
     super();
     this.#film = film;
-    this._data = DetailedInfoView.parseFilmToData(film);
-    this.#commentsNumber = film.commentsNumber;
-    this.#comments = Array.from({length: this.#commentsNumber}, generateComment);
+    //this._data = DetailedInfoView.parseFilmToData(film);
+  
+    this.#comments = Array.from({length: this.#film.commentsNumber}, generateComment);
     this.#renderComments();
+    this.#setInnerHandlers();
   }
 
-  static parseFilmToData = (data) => ({...data, newCommentText: '', emoji: '',});
-
   get template() {
-    return createDetailedInfoTemplate(this._data);
+    return createDetailedInfoTemplate(this.#film);
   }
 
   setClosePopupClickHandler = (callback) => {
@@ -174,10 +173,6 @@ export default class DetailedInfoView extends SmartView {
     this._callback.addToFilter = callback;
     this.element.querySelector('.film-details__controls').addEventListener('click', this.#cardControlBlockClickHandler);
   }
-
-  setEmojiClickHandler = () => {
-    this.element.querySelector('.film-details__emoji-list').addEventListener('change', this.#emojiClickHandler);
-  };
 
   setCommentInputHandler = () => {
     this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#commentInputHandler);
@@ -209,9 +204,7 @@ export default class DetailedInfoView extends SmartView {
 
   #emojiClickHandler = (evt) => {
     evt.preventDefault();
-    this.updateData({
-      emogi: evt.target.value,
-    });
+    this.updateData({emogi: evt.target.value,});
   }
 
   #commentInputHandler = (evt) => {
@@ -221,12 +214,24 @@ export default class DetailedInfoView extends SmartView {
     }, true);
   }
 
+  #setInnerHandlers = () => {
+    this.element.querySelector('.film-details__emoji-list').addEventListener('change', this.#emojiClickHandler);
+  }
+
   restoreHandlers = () => {
     this.setClosePopupClickHandler;
-    this.setFavouriteClickHandler;
-    this.setAddToWatchListClickHandler;
-    this.setMarkAsWatchedClickHandler;
-    this.setEmojiClickHandler;
+    this.#cardControlBlockClickHandler();
+    this.#setInnerHandlers();
     this.setCommentInputHandler;
+  }
+
+  static parseFilmToData = (film) => ({...film, 
+    newCommentText: '', 
+    emoji: '',
+  });
+
+  static parseDataToFilm = (data) => {
+    const film = {...data};
+    return film;
   }
 }
