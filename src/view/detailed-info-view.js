@@ -3,7 +3,7 @@ import SmartView from './smart-view.js';
 import {generateComment} from '../mock/comment.js';
 import CommentView from '../view/comment-view.js';
 import {render, RenderPosition} from '../utils/render.js';
-import {EMOJIS, FilterType} from '../const';
+import {FilterType} from '../const';
 
 const createEmojiImgTemplate = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji-${emoji}">` : '';
 
@@ -37,7 +37,7 @@ const createDetailedInfoTemplate = (film) => {
   const watchedClassName = isWatched ? activeClass : '';
   const watchListClassName = isInWatchlist ? activeClass : '';
   const newEmojiImg = createEmojiImgTemplate(newCommentEmoji);
-  const checkedEmoji = (emoji) => newCommentEmoji === emoji ? 'checked="checked"' : '';
+  //const checkedEmoji = (emoji) => newCommentEmoji === emoji ? 'checked="checked"' : '';
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -223,8 +223,8 @@ export default class DetailedInfoView extends SmartView {
     this.setCommentInputHandler;
   }
 
-  static parseFilmToData = (film) => ({...film, 
-    newCommentText: '', 
+  static parseFilmToData = (film) => ({...film,
+    newCommentText: '',
     newCommentEmoji: null,
   });
 

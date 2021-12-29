@@ -70,7 +70,7 @@ export default class FilmListPresenter {
         this.#films = this.#films.filter((film) => film.isInWatchlist);
         break;
       default:
-      this.#films = [...this.#sourcedFilms];
+        this.#films = [...this.#sourcedFilms];
     }
 
     this.#currentFilterType = filterType;
@@ -175,7 +175,7 @@ export default class FilmListPresenter {
 
   //#nofilmComponent = new NoFilmView(this.#currentFilterType);
 
-  #renderFilmBoard = () => { 
+  #renderFilmBoard = () => {
 
     render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
 
@@ -185,15 +185,15 @@ export default class FilmListPresenter {
       if (nofilmComponent) {
         remove(nofilmComponent);
       }
-      
+
       render(this.#filmContainerComponent, nofilmComponent, RenderPosition.BEFOREEND);
       return;
     }
 
     this.#renderSort();
-    
+
     render(this.#filmContainerComponent, this.#filmListContainerComponent, RenderPosition.BEFOREEND);
-    
+
     this.#renderFilmList();
   }
 }

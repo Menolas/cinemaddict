@@ -14,4 +14,4 @@ export const FilterType = {
   WATCHLIST: 'There are no movies to watch now',
 };
 
-export const EMOJIS = ['smile', 'sleeping', 'puke', 'angry']; 
+//export const EMOJIS = ['smile', 'sleeping', 'puke', 'angry'];

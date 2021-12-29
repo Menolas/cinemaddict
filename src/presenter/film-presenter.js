@@ -110,7 +110,7 @@ export default class FilmPresenter {
         break;
       case FilterType.WATCHLIST:
         this.#changeData({...this.#film, isInWatchlist: !this.#film.isInWatchlist});
-        break; 
+        break;
     }
   }
 }
