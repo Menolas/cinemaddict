@@ -30,6 +30,7 @@ export default class FilmListPresenter {
   #sourcedFilms = [];
   #currentSortType = SortType.DEFAULT;
   #currentFilterType = FilterType.DEFAULT;
+  #nofilmComponent = new NoFilmView(this.#currentFilterType);
 
   constructor(boardContainer) {
     this.#boardContainer = boardContainer;
@@ -41,6 +42,15 @@ export default class FilmListPresenter {
 
     render(this.#boardContainer, this.#filmBoardComponent, RenderPosition.BEFOREEND);
     this.#renderFilter();
+    render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
+
+    if (!this.#films.length) { 
+      //remove(this.#filmListContainerComponent);
+      //remove(this.#sortListComponent);
+      render(this.#filmContainerComponent, this.#nofilmComponent, RenderPosition.BEFOREEND);
+      
+      return;
+    }
 
     this.#renderFilmBoard();
   }
@@ -76,25 +86,38 @@ export default class FilmListPresenter {
       case FilterType.WATCHLIST:
         this.#films = this.#films.filter((film) => film.isInWatchlist);
         break;
-      default:
+      case FilterType.DEFAULT:
         this.#films = [...this.#sourcedFilms];
+        break;
     }
-
   }
 
   #handleFilterTypeChange = (filterType) => {
     if (this.#currentFilterType === filterType) {
       return;
     }
-
+    
+    this.#films = [...this.#sourcedFilms];
     this.#filterFilms(filterType);
     removeElementActiveLook(this.#filterMenuComponent.element.querySelectorAll('.main-navigation__item'), 'main-navigation__item--active');
     makeElementLookActive(event.target, 'main-navigation__item--active');
+    this.#currentFilterType = filterType;
 
     this.#clearFilmList();
+
+    if (!this.#films.length) {
+      remove(this.#nofilmComponent);
+      remove(this.#filmListContainerComponent);
+      remove(this.#sortListComponent);
+      this.#nofilmComponent = new NoFilmView(this.#currentFilterType);
+      render(this.#filmContainerComponent, this.#nofilmComponent, RenderPosition.BEFOREEND);
+
+      return;
+    }
+
+    remove(this.#nofilmComponent);
     this.#renderFilmBoard();
     this.#films = [...this.#sourcedFilms];
-    this.#currentFilterType = filterType;
   }
 
   #sortFilms = (sortType) => {
@@ -180,21 +203,6 @@ export default class FilmListPresenter {
   }
 
   #renderFilmBoard = () => {
-    const nofilmComponent = new NoFilmView(this.#currentFilterType);
-
-    if (nofilmComponent) {
-      remove(nofilmComponent);
-    }
-
-    if (!this.#films.length) {
-      remove(this.#filmListContainerComponent);
-      remove(this.#sortListComponent);
-      render(this.#filmContainerComponent, nofilmComponent, RenderPosition.BEFOREEND);
-      
-      return;
-    }
-
-    render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
 
     this.#renderSort();
 

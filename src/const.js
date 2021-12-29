@@ -1,4 +1,4 @@
-export const FILM_COUNT = 20;
+export const FILM_COUNT = 23;
 export const FILM_COUNT_PER_STEP = 5;
 
 export const SortType = {
@@ -13,5 +13,3 @@ export const FilterType = {
   WATCHED: 'There are no watched movies now',
   WATCHLIST: 'There are no movies to watch now',
 };
-
-//export const EMOJIS = ['smile', 'sleeping', 'puke', 'angry'];
