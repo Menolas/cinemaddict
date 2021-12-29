@@ -217,8 +217,8 @@ export default class DetailedInfoView extends SmartView {
   }
 
   restoreHandlers = () => {
-    this.setClosePopupClickHandler;
-    this.#cardControlBlockClickHandler;
+    this.setClosePopupClickHandler(this._callback.closePopup);
+    this.setAddToFilterClickHandler(this._callback.addToFilter);
     this.#setInnerHandlers();
     this.setCommentInputHandler;
   }
