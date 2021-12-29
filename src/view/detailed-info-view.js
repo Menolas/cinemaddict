@@ -5,7 +5,7 @@ import CommentView from '../view/comment-view.js';
 import {render, RenderPosition} from '../utils/render.js';
 import {FilterType} from '../const';
 
-const createEmojiImgTemplate = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji-${emoji}">` : '';
+const createEmojiImgTemplate = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="70" height="70" alt="emoji-${emoji}">` : '';
 
 const createDetailedInfoTemplate = (film) => {
 

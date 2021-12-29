@@ -55,6 +55,13 @@ export default class FilmListPresenter {
     this.#filmPresenter.get(updatedFilmCard.id).init(updatedFilmCard);
     remove(this.#filterMenuComponent);
     this.#renderFilter();
+
+    if (this.#currentFilterType !== FilterType.DEFAULT) {
+      this.#filterFilms(this.#currentFilterType);
+      this.#clearFilmList();
+      this.#renderFilmBoard();
+      this.#films = [...this.#sourcedFilms];
+    }
   }
 
   #filterFilms = (filterType) => {
@@ -73,7 +80,6 @@ export default class FilmListPresenter {
         this.#films = [...this.#sourcedFilms];
     }
 
-    this.#currentFilterType = filterType;
   }
 
   #handleFilterTypeChange = (filterType) => {
@@ -85,10 +91,10 @@ export default class FilmListPresenter {
     removeElementActiveLook(this.#filterMenuComponent.element.querySelectorAll('.main-navigation__item'), 'main-navigation__item--active');
     makeElementLookActive(event.target, 'main-navigation__item--active');
 
-
     this.#clearFilmList();
     this.#renderFilmBoard();
     this.#films = [...this.#sourcedFilms];
+    this.#currentFilterType = filterType;
   }
 
   #sortFilms = (sortType) => {
@@ -173,22 +179,22 @@ export default class FilmListPresenter {
     }
   }
 
-  //#nofilmComponent = new NoFilmView(this.#currentFilterType);
-
   #renderFilmBoard = () => {
+    const nofilmComponent = new NoFilmView(this.#currentFilterType);
 
-    render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
+    if (nofilmComponent) {
+      remove(nofilmComponent);
+    }
 
     if (!this.#films.length) {
       remove(this.#filmListContainerComponent);
-      const nofilmComponent = new NoFilmView(this.#currentFilterType);
-      if (nofilmComponent) {
-        remove(nofilmComponent);
-      }
-
+      remove(this.#sortListComponent);
       render(this.#filmContainerComponent, nofilmComponent, RenderPosition.BEFOREEND);
+      
       return;
     }
+
+    render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
 
     this.#renderSort();
 
