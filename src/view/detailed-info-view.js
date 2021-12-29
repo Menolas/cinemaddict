@@ -171,10 +171,6 @@ export default class DetailedInfoView extends SmartView {
     this.element.querySelector('.film-details__controls').addEventListener('click', this.#cardControlBlockClickHandler);
   }
 
-  setCommentInputHandler = () => {
-    this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#commentInputHandler);
-  };
-
   #popupCloseHandler = (evt) => {
     evt.preventDefault();
     this._callback.closePopup();
@@ -220,7 +216,6 @@ export default class DetailedInfoView extends SmartView {
     this.setClosePopupClickHandler(this._callback.closePopup);
     this.setAddToFilterClickHandler(this._callback.addToFilter);
     this.#setInnerHandlers();
-    this.setCommentInputHandler;
   }
 
   static parseFilmToData = (film) => ({...film,
