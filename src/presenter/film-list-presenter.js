@@ -44,11 +44,11 @@ export default class FilmListPresenter {
     this.#renderFilter();
     render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
 
-    if (!this.#films.length) { 
+    if (!this.#films.length) {
       //remove(this.#filmListContainerComponent);
       //remove(this.#sortListComponent);
       render(this.#filmContainerComponent, this.#nofilmComponent, RenderPosition.BEFOREEND);
-      
+
       return;
     }
 
@@ -96,7 +96,7 @@ export default class FilmListPresenter {
     if (this.#currentFilterType === filterType) {
       return;
     }
-    
+
     this.#films = [...this.#sourcedFilms];
     this.#filterFilms(filterType);
     removeElementActiveLook(this.#filterMenuComponent.element.querySelectorAll('.main-navigation__item'), 'main-navigation__item--active');
