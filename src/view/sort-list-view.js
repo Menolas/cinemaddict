@@ -8,15 +8,13 @@ const createSortListTemplate = () => `<ul class="sort">
           </ul>`;
 
 export default class SortListView extends AbstractView {
-  #sortTypes = null;
 
-  constructor(sortTypes) {
+  constructor() {
     super();
-    this.#sortTypes = sortTypes;
   }
 
   get template() {
-    return createSortListTemplate(this.#sortTypes);
+    return createSortListTemplate();
   }
 
   setSortTypeChangeHandler = (callback) => {
