@@ -197,7 +197,9 @@ export default class DetailedInfoView extends SmartView {
 
   #emojiClickHandler = (evt) => {
     evt.preventDefault();
+    const scrollHeight = this.element.scrollTop;
     this.updateData({newCommentEmoji: evt.target.value,});
+    this.element.scrollTo(0, scrollHeight);
   }
 
   #commentInputHandler = (evt) => {
