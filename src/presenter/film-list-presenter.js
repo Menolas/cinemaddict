@@ -45,8 +45,6 @@ export default class FilmListPresenter {
     render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
 
     if (!this.#films.length) {
-      //remove(this.#filmListContainerComponent);
-      //remove(this.#sortListComponent);
       render(this.#filmContainerComponent, this.#nofilmComponent, RenderPosition.BEFOREEND);
 
       return;
