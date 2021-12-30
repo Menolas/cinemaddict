@@ -46,6 +46,10 @@ export default class FilmPresenter {
 
     this.#filmComponent.setAddToFilterClickHandler(this.#handleAddToFilterClick);
     this.#detailedFilmComponent.setAddToFilterClickHandler(this.#handleAddToFilterClick);
+      //const scrollHeight = this.#detailedFilmComponent.element.scrollTop;
+      
+      //this.#detailedFilmComponent.element.scrollTo(0, scrollHeight);
+    
 
     if (prevFilmComponent === null || prevDetailedFilmComponent === null) {
       render(this.#filmBox, this.#filmComponent, RenderPosition.BEFOREEND);
@@ -99,6 +103,8 @@ export default class FilmPresenter {
   }
 
   #handleAddToFilterClick = (filterType) => {
+    const scrollHeight = this.#detailedFilmComponent.element.scrollTop;
+    
     switch (filterType) {
       case FilterType.FAVOURITES:
         this.#changeData({...this.#film, isFavourite: !this.#film.isFavourite});
@@ -110,5 +116,7 @@ export default class FilmPresenter {
         this.#changeData({...this.#film, isInWatchlist: !this.#film.isInWatchlist});
         break;
     }
+
+    this.#detailedFilmComponent.element.scrollTo(0, scrollHeight);
   }
 }
