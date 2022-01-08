@@ -4,6 +4,7 @@ import {render, RenderPosition, replace, remove} from '../utils/render.js';
 const body = document.querySelector('body');
 const siteFooterElement = document.querySelector('.footer');
 import {FilterType} from '../const.js';
+import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -103,13 +104,25 @@ export default class FilmPresenter {
 
     switch (filterType) {
       case FilterType.FAVOURITES:
-        this.#changeData({...this.#film, isFavourite: !this.#film.isFavourite});
+        this.#changeData(
+          UserAction.UPDATE_FILM,
+          UpdateType.MINOR,
+          {...this.#film, isFavourite: !this.#film.isFavourite},
+        );
         break;
       case FilterType.WATCHED:
-        this.#changeData({...this.#film, isWatched: !this.#film.isWatched});
+        this.#changeData(
+          UserAction.UPDATE_FILM,
+          UpdateType.MINOR,
+          {...this.#film, isWatched: !this.#film.isWatched},
+        );
         break;
       case FilterType.WATCHLIST:
-        this.#changeData({...this.#film, isInWatchlist: !this.#film.isInWatchlist});
+        this.#changeData(
+          UserAction.UPDATE_FILM,
+          UpdateType.MINOR,
+          {...this.#film, isInWatchlist: !this.#film.isInWatchlist},
+        );
         break;
     }
 
