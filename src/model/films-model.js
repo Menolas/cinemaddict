@@ -12,7 +12,7 @@ export default class FilmsModel extends AbstractObservable {
   }
 
   updateFilm = (updateType, update) => {
-    const index = this.#films.findIndex((task) => film.id === update.id);
+    const index = this.#films.findIndex((film) => film.id === update.id);
 
     if (index === -1) {
       throw new Error('Can\'t update unexisting film card');
