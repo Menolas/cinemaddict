@@ -190,7 +190,9 @@ export default class DetailedInfoView extends SmartView {
 
     if (this.#comments.length) {
       for (const comment of this.#comments) {
-        render(commentsContainer, new CommentView(comment), RenderPosition.AFTERBEGIN);
+        const commentComponent = new CommentView(comment);
+        commentComponent.setDeleteCommentClickHandler(this.#deleteCommentHandler);
+        render(commentsContainer, commentComponent, RenderPosition.AFTERBEGIN);
       }
     }
   }
@@ -207,6 +209,10 @@ export default class DetailedInfoView extends SmartView {
     this.updateData({
       newCommentText: evt.target.value,
     }, true);
+  }
+
+  #deleteCommentHandler = (evt) => {
+    evt.preventDefault();
   }
 
   #setInnerHandlers = () => {

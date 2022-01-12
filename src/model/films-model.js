@@ -1,4 +1,4 @@
-import AbstractObservable from '../utils/absctract-observable.js';
+import AbstractObservable from '../utils/abstract-observable.js';
 
 export default class FilmsModel extends AbstractObservable {
   #films = [];
@@ -27,7 +27,7 @@ export default class FilmsModel extends AbstractObservable {
     this._notify(updateType, update);
   }
 
-  addFilm = (updateType, update) => {
+  addComment = (updateType, update) => {
     this.#films = [
       update,
       ...this.#films,
@@ -36,7 +36,7 @@ export default class FilmsModel extends AbstractObservable {
     this._notify(updateType, update);
   }
 
-  deleteFilm = (updateType, update) => {
+  deleteComment = (updateType, update) => {
     const index = this.#films.findIndex((film) => film.id === update.id);
 
     if (index === -1) {
