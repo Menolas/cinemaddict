@@ -1,4 +1,4 @@
-export const FILM_COUNT = 31;
+export const FILM_COUNT = 42;
 export const FILM_COUNT_PER_STEP = 5;
 
 export const SortType = {
@@ -15,10 +15,10 @@ export const FilterType = {
 };
 
 export const NoFilmInfo = {
-  DEFAULT: 'There are no movies in our database',
-  FAVOURITES: 'There are no favorite movies now',
-  WATCHED: 'There are no watched movies now',
-  WATCHLIST: 'There are no movies to watch now',
+  [FilterType.DEFAULT]: 'There are no movies in our database',
+  [FilterType.FAVOURITES]: 'There are no favorite movies now',
+  [FilterType.WATCHED]: 'There are no watched movies now',
+  [FilterType.WATCHLIST]: 'There are no movies to watch now',
 }
 
 export const UserAction = {

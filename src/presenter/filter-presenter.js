@@ -62,6 +62,16 @@ export default class FilterPresenter {
     remove(prevFilterComponent);
   }
 
+  destroy = () => {
+    remove(this.#filterComponent);
+    this.#filterComponent = null;
+
+    this.#filmsModel.removeObserver(this.#handleModelEvent);
+    this.#filterModel.removeObserver(this.#handleModelEvent);
+
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.DEFAULT);
+  }
+
   #handleModelEvent = () => {
     this.init();
   }
