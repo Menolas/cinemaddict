@@ -47,6 +47,7 @@ export default class BoardPresenter {
     const filteredFilms = filter[this.#currentFilterType](films);
 
     switch (this.#currentSortType) {
+      
       case SortType.DATE:
         return filteredFilms.sort(sortFilmByDate);
       case SortType.RATE:
@@ -83,12 +84,12 @@ export default class BoardPresenter {
       case UserAction.UPDATE_FILM:
         this.#filmsModel.updateFilm(updateType, update);
         break;
-      case UserAction.ADD_COMMENT:
-        this.#filmsModel.addFilm(updateType, update);
-        break;
-      case UserAction.DELETE_COMMENT:
-        this.#filmsModel.deleteFilm(updateType, update);
-        break;
+      // case UserAction.ADD_COMMENT:
+      //   this.#filmsModel.addFilm(updateType, update);
+      //   break;
+      // case UserAction.DELETE_COMMENT:
+      //   this.#filmsModel.deleteFilm(updateType, update);
+      //   break;
     }
   }
 
