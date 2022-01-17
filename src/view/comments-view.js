@@ -1,7 +1,7 @@
 import {humanizeCommentDate} from '../utils/common.js';
 import AbstractView from './abstract-view.js';
 
-const createCommentTemplate = (comment) => {
+const createCommentItemTemplate = (comment) => {
 
   const {
     text,
@@ -27,16 +27,26 @@ const createCommentTemplate = (comment) => {
     </li>`;
 };
 
-export default class CommentView extends AbstractView {
-  #comment = null;
+const createCommentsTemplate = (comments) => {
+  let filmComments = [];
+  comments.forEach((comment) => filmComments.push(createCommentItemTemplate(comment)));
+  filmComments = filmComments.join('');
 
-  constructor(comment) {
+  return `<ul class="film-details__comments-list">
+            ${filmComments}
+          </ul>`;
+}
+
+export default class CommentsView extends AbstractView {
+  #comments = null;
+
+  constructor(comments) {
     super();
-    this.#comment = comment;
+    this.#comments = comments;
   }
 
   get template() {
-    return createCommentTemplate(this.#comment);
+    return createCommentsTemplate(this.#comments);
   }
 
   setDeleteCommentClickHandler = (callback) => {

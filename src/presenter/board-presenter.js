@@ -18,6 +18,7 @@ export default class BoardPresenter {
   #boardContainer = null;
   #filmsModel = null;
   #filterModel = null;
+  #commentsModel = null;
 
   #filmBoardComponent = new FilmBoardView();
   #filmContainerComponent = new FilmContainerView();
@@ -32,13 +33,11 @@ export default class BoardPresenter {
   #currentSortType = SortType.DEFAULT;
   #currentFilterType = FilterType.DEFAULT;
   
-  constructor(boardContainer, filmsModel, filterModel) {
+  constructor(boardContainer, filmsModel, filterModel, commentsModel) {
     this.#boardContainer = boardContainer;
     this.#filmsModel = filmsModel;
     this.#filterModel = filterModel;
-
-    this.#filmsModel.addObserver(this.#handleModelEvent);
-    this.#filterModel.addObserver(this.#handleModelEvent);
+    this.#commentsModel = commentsModel;
   }
 
   get films() {
@@ -61,6 +60,10 @@ export default class BoardPresenter {
     render(this.#boardContainer, this.#filmBoardComponent, RenderPosition.BEFOREEND);
     render(this.#filmBoardComponent, this.#filmContainerComponent, RenderPosition.BEFOREEND);
 
+    this.#filmsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
+    this.#commentsModel.addObserver(this.#handleCommentEvent);
+
     this.#renderBoard();
   }
 
@@ -72,6 +75,7 @@ export default class BoardPresenter {
 
     this.#filmsModel.removeObserver(this.#handleModelEvent);
     this.#filterModel.removeObserver(this.#handleModelEvent);
+    this.#commentsModel.removeObserver(this.#handleCommentEvent);
   }
 
   #handleModeChange = () => {
@@ -110,6 +114,22 @@ export default class BoardPresenter {
     }
   }
 
+  #handleCommentEvent = (updateType, data) => {
+    this.#filmsModel.reloadComments(data.filmId);
+    this.#handleModelEvent(updateType, this.#filmsModel.getFilmById(data.filmId));
+  }
+
+  #handleCommentChange = (actionType, updateType, update) => {
+    switch (actionType) {
+      case CommentAction.DELETE:
+        this.#commentsModel.deleteComment(updateType, update);
+        break;
+      case CommentAction.ADD:
+        this.#commentsModel.addComment(updateType, update);
+        break;
+    }
+  }
+
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
@@ -128,7 +148,7 @@ export default class BoardPresenter {
   }
 
   #renderFilm = (film) => {
-    const filmPresenter = new FilmPresenter(this.#filmListContainerComponent, this.#handleViewAction, this.#handleModeChange);
+    const filmPresenter = new FilmPresenter(this.#filmListContainerComponent, this.#handleViewAction, this.#handleModeChange, this.#commentsModel, this.#handleCommentChange);
     filmPresenter.init(film);
     this.#filmPresenter.set(film.id, filmPresenter);
   }

@@ -1,7 +1,5 @@
 import {humanizeFilmReleaseDetailedDate} from '../utils/common.js';
 import SmartView from './smart-view.js';
-import {generateComment} from '../mock/comment.js';
-import CommentView from '../view/comment-view.js';
 import {render, RenderPosition} from '../utils/render.js';
 import {FilterType} from '../const';
 
@@ -18,7 +16,7 @@ const createDetailedInfoTemplate = (film) => {
     watchingTime,
     genres,
     description,
-    commentsNumber,
+    comments,
     isInWatchlist,
     isWatched,
     isFavourite,
@@ -37,7 +35,6 @@ const createDetailedInfoTemplate = (film) => {
   const watchedClassName = isWatched ? activeClass : '';
   const watchListClassName = isInWatchlist ? activeClass : '';
   const newEmojiImg = createEmojiImgTemplate(newCommentEmoji);
-  //const checkedEmoji = (emoji) => newCommentEmoji === emoji ? 'checked="checked"' : '';
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -107,9 +104,7 @@ const createDetailedInfoTemplate = (film) => {
 
       <div class="film-details__bottom-container">
         <section class="film-details__comments-wrap">
-          <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsNumber}</span></h3>
-
-          <ul class="film-details__comments-list"></ul>
+          <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
           <div class="film-details__new-comment">
             <div class="film-details__add-emoji-label">${newEmojiImg}</div>
@@ -147,13 +142,10 @@ const createDetailedInfoTemplate = (film) => {
 };
 
 export default class DetailedInfoView extends SmartView {
-  #comments = null;
 
   constructor(film) {
     super();
     this._data = DetailedInfoView.parseFilmToData(film);
-    this.#comments = Array.from({length: this._data.commentsNumber}, generateComment);
-    this.#renderComments();
     this.#setInnerHandlers();
   }
 
@@ -183,18 +175,6 @@ export default class DetailedInfoView extends SmartView {
 
     evt.preventDefault();
     this._callback.addToFilter(evt.target.dataset.filterType);
-  }
-
-  #renderComments = () => {
-    const commentsContainer = this.element.querySelector('.film-details__comments-list');
-
-    if (this.#comments.length) {
-      for (const comment of this.#comments) {
-        const commentComponent = new CommentView(comment);
-        commentComponent.setDeleteCommentClickHandler(this.#deleteCommentHandler);
-        render(commentsContainer, commentComponent, RenderPosition.AFTERBEGIN);
-      }
-    }
   }
 
   #emojiClickHandler = (evt) => {

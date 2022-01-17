@@ -1,5 +1,6 @@
 import FilmCardView from '../view/film-card-view.js';
 import DetailedInfoView from '../view/detailed-info-view.js';
+import CommentsView from '../view/comments-view.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 const body = document.querySelector('body');
 const siteFooterElement = document.querySelector('.footer');
@@ -17,28 +18,25 @@ export default class FilmPresenter {
   #changeMode = null;
   #filmComponent = null;
   #detailedFilmComponent = null;
+  #commentsModel = null;
+  #changeComment = null;
   #film = null;
   #mode = Mode.DEFAULT;
 
-  constructor(filmBox, changeData, changeMode) {
+  constructor(filmBox, changeData, changeMode, commentsModel, changeComment) {
     this.#filmBox = filmBox;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
+    this.#commentsModel = commentsModel;
+    this.#changeComment = changeComment;
   }
 
   init = (film) => {
     this.#film = film;
 
     const prevFilmComponent = this.#filmComponent;
-    const prevDetailedFilmComponent = this.#detailedFilmComponent;
 
     this.#filmComponent = new FilmCardView(film);
-    this.#detailedFilmComponent = new DetailedInfoView(film);
-
-    this.#detailedFilmComponent.setClosePopupClickHandler(() => {
-      this.#closePopup();
-      document.removeEventListener('keydown', this.#onEscKeyDown);
-    });
 
     this.#filmComponent.setPopupClickHandler(() => {
       this.#showPopup();
@@ -46,7 +44,6 @@ export default class FilmPresenter {
     });
 
     this.#filmComponent.setAddToFilterClickHandler(this.#handleAddToFilterClick);
-    this.#detailedFilmComponent.setAddToFilterClickHandler(this.#handleAddToFilterClick);
 
     if (prevFilmComponent === null || prevDetailedFilmComponent === null) {
       render(this.#filmBox, this.#filmComponent, RenderPosition.BEFOREEND);
@@ -85,6 +82,21 @@ export default class FilmPresenter {
   }
 
   #showPopup = () => {
+    const prevDetailedFilmComponent = this.#detailedFilmComponent;
+    const filmComments = this.#commentsModel.getCommentsByFilmId(this.#film.id);
+    this.#detailedFilmComponent = new DetailedInfoView(this.#film, filmComments);
+    const commentsContainer = this.#detailedFilmComponent.element.querySelector('.film-details__comments-title');
+    const commentsComponent = new CommentsView(filmComments);
+    console.log(commentsComponent.element);
+    render(commentsContainer, commentsComponent, RenderPosition.AFTEREND);
+
+    this.#detailedFilmComponent.setClosePopupClickHandler(() => {
+      this.#closePopup();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
+    });
+
+    this.#detailedFilmComponent.setAddToFilterClickHandler(this.#handleAddToFilterClick);
+
     siteFooterElement.appendChild(this.#detailedFilmComponent.element);
     body.classList.add('hide-overflow');
     this.#changeMode();
@@ -128,4 +140,16 @@ export default class FilmPresenter {
 
     this.#detailedFilmComponent.element.scrollTo(0, scrollHeight);
   }
+
+  // #renderComments = () => {
+  //   const commentsContainer = this.#detailedFilmComponent.element.querySelector('.film-details__comments-list');
+
+  //   if (this.#comments.length) {
+  //     for (const comment of this.#comments) {
+  //       const commentComponent = new CommentView(comment);
+  //       //commentComponent.setDeleteCommentClickHandler(this.#deleteCommentHandler);
+  //       render(commentsContainer, commentComponent, RenderPosition.AFTERBEGIN);
+  //     }
+  //   }
+  // }
 }
