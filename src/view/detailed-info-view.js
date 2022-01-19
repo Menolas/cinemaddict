@@ -1,8 +1,7 @@
 import he from 'he';
 import {humanizeFilmReleaseDetailedDate, humanizeCommentDate} from '../utils/common.js';
 import SmartView from './smart-view.js';
-import {render, RenderPosition} from '../utils/render.js';
-import {CommentAction, Emoji, FilmAction, FilterType} from '../const.js';
+import {CommentAction, FilterType} from '../const.js';
 
 const createCommentItem = (comment) => {
 
@@ -39,7 +38,7 @@ const createCommentsTemplate = (comments) => {
   return `<ul class="film-details__comments-list">
             ${filmComments}
           </ul>`;
-}
+};
 
 const createEmojiImgTemplate = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="70" height="70" alt="emoji-${emoji}">` : '';
 
