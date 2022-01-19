@@ -7,10 +7,8 @@ import FilmListContainerView from '../view/film-list-container-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import FilmPresenter from './film-presenter.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
-import {SortType, FilterType, UpdateType, UserAction} from '../const.js';
+import {SortType, FilterType, UpdateType, UserAction, CommentAction, FILM_COUNT_PER_STEP} from '../const.js';
 import {filter} from '../utils/filter.js';
-
-import {FILM_COUNT_PER_STEP} from '../const.js';
 
 const siteMainElement = document.querySelector('.main');
 
@@ -32,6 +30,9 @@ export default class BoardPresenter {
   #filmPresenter = new Map();
   #currentSortType = SortType.DEFAULT;
   #currentFilterType = FilterType.DEFAULT;
+
+  #filmPresenterPopupOn = null;
+  #filmPopupOnId = null;
   
   constructor(boardContainer, filmsModel, filterModel, commentsModel) {
     this.#boardContainer = boardContainer;
@@ -78,23 +79,22 @@ export default class BoardPresenter {
     this.#commentsModel.removeObserver(this.#handleCommentEvent);
   }
 
-  #handleModeChange = () => {
+  #handleCardClick = (filmPresenter, id) => {
+    this.#filmPopupOnId = id;
+    if(this.#filmPresenterPopupOn) {
+      this.#filmPresenterPopupOn.closePopup();
+    }
+    filmPresenter.showPopup();
+    this.#filmPresenterPopupOn = filmPresenter;
+  };
 
-    this.#filmPresenter.forEach((presenter) => presenter.resetView());
+  #handleCardClose = () => {
+    this.#filmPresenterPopupOn = null;
+    this.#filmPopupOnId = null;
   }
   
-  #handleViewAction = (actionType, updateType, update) => {
-    switch (actionType) {
-      case UserAction.UPDATE_FILM:
-        this.#filmsModel.updateFilm(updateType, update);
-        break;
-      // case UserAction.ADD_COMMENT:
-      //   this.#filmsModel.addFilm(updateType, update);
-      //   break;
-      // case UserAction.DELETE_COMMENT:
-      //   this.#filmsModel.deleteFilm(updateType, update);
-      //   break;
-    }
+  #handleFilmChange = (updateType, update) => {
+    this.#filmsModel.updateFilm(updateType, update);
   }
 
   #handleModelEvent = (updateType, data) => {
@@ -117,6 +117,7 @@ export default class BoardPresenter {
   #handleCommentEvent = (updateType, data) => {
     this.#filmsModel.reloadComments(data.filmId);
     this.#handleModelEvent(updateType, this.#filmsModel.getFilmById(data.filmId));
+    console.log(data);
   }
 
   #handleCommentChange = (actionType, updateType, update) => {
@@ -148,7 +149,12 @@ export default class BoardPresenter {
   }
 
   #renderFilm = (film) => {
-    const filmPresenter = new FilmPresenter(this.#filmListContainerComponent, this.#handleViewAction, this.#handleModeChange, this.#commentsModel, this.#handleCommentChange);
+    const filmPresenter = new FilmPresenter(
+      this.#filmListContainerComponent, this.#handleFilmChange, this.#commentsModel, this.#handleCommentChange
+    );
+
+    filmPresenter.setCardClick(() =>this.#handleCardClick(filmPresenter, film.id));
+    filmPresenter.setCardClose(this.#handleCardClose);
     filmPresenter.init(film);
     this.#filmPresenter.set(film.id, filmPresenter);
   }
@@ -211,19 +217,24 @@ export default class BoardPresenter {
   }
 
   #renderBoard = () => {
-    const films = this.films;
-    const filmCount = films.length;
+    const filmCount = this.films.length;
 
     if (filmCount === 0) {
       this.#renderNoFilm();
       return;
+    }
+
+    if (this.#filmPresenterPopupOn && this.#filmPopupOnId) {
+      const filmPopup = this.#filmsModel.getFilmById(this.#filmPopupOnId);
+      this.#filmPresenterPopupOn.init(filmPopup);
+      this.#filmPresenterPopupOn.showPopup();
     }
     
     this.#renderSort();
 
     render(this.#filmContainerComponent, this.#filmListContainerComponent, RenderPosition.BEFOREEND);
 
-    this.#renderFilms(films.slice(0, Math.min(filmCount, this.#renderedFilmCount)));
+    this.#renderFilms(this.films.slice(0, Math.min(filmCount, this.#renderedFilmCount)));
 
     if (filmCount > this.#renderedFilmCount) {
       this.#renderShowMoreButton();

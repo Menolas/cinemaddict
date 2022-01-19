@@ -21,10 +21,9 @@ export const NoFilmInfo = {
   [FilterType.WATCHLIST]: 'There are no movies to watch now',
 }
 
-export const UserAction = {
-  UPDATE_FILM: 'UPDATE_FILM',
-  ADD_FILM: 'ADD_COMMENT',
-  DELETE_FILM: 'DELETE_COMMENT',
+export const CommentAction = {
+  ADD: 'add',
+  DELETE: 'delete',
 };
 
 export const UpdateType = {

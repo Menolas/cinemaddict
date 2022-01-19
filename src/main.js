@@ -16,14 +16,6 @@ const siteFooterElement = document.querySelector('.footer');
 const films = Array.from({length: FILM_COUNT}, generateFilmCard);
 const comments = generateComments(films);
 
-const filters = [
-  {
-    type: 'all',
-    name: 'ALL',
-    count: 0,
-  },
-];
-
 const commentsModel = new CommentsModel();
 commentsModel.comments = comments;
 

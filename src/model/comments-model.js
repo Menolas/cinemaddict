@@ -14,10 +14,10 @@ export default class CommentsModel extends AbstractObservable {
 
   getCommentsByFilmId = (filmId) => this.comments.filter((comment) => comment.filmId === filmId);
 
-  getCommentIdsByFilmId = (filmId) => Array.from(this.getCommentsByFilmId(filmId), (comment) => comment.id);
+  getCommentsIdsByFilmId = (filmId) => Array.from(this.getCommentsByFilmId(filmId), (comment) => comment.id);
 
   addComment = (updateType, comment) => {
-    const newComment = {id: nanoid(), name: '', ...comment};
+    const newComment = {id: nanoid(), author: 'User Name', ...comment};
     this.#comments = [
       newComment,
       ...this.#comments,

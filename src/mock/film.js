@@ -193,5 +193,4 @@ export const generateFilmCard = () => ({
   actors: generateFewNonRepeatableValues(3, 6, actors),
   country: generateRandomValue(countries),
   ageRating: generateRandomValue(ageRatings),
-  newCommentEmoji: '',
 });
