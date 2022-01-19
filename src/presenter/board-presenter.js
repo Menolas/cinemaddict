@@ -7,10 +7,8 @@ import FilmListContainerView from '../view/film-list-container-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import FilmPresenter from './film-presenter.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
-import {SortType, FilterType, UpdateType, UserAction, CommentAction, FILM_COUNT_PER_STEP} from '../const.js';
+import {SortType, FilterType, UpdateType, CommentAction, FILM_COUNT_PER_STEP} from '../const.js';
 import {filter} from '../utils/filter.js';
-
-const siteMainElement = document.querySelector('.main');
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -33,7 +31,7 @@ export default class BoardPresenter {
 
   #filmPresenterPopupOn = null;
   #filmPopupOnId = null;
-  
+
   constructor(boardContainer, filmsModel, filterModel, commentsModel) {
     this.#boardContainer = boardContainer;
     this.#filmsModel = filmsModel;
@@ -47,7 +45,7 @@ export default class BoardPresenter {
     const filteredFilms = filter[this.#currentFilterType](films);
 
     switch (this.#currentSortType) {
-      
+
       case SortType.DATE:
         return filteredFilms.sort(sortFilmByDate);
       case SortType.RATE:
@@ -70,7 +68,7 @@ export default class BoardPresenter {
 
   destroy = () => {
     this.#clearBoard({resetRenderedFilmCount: true, resetSortType: true});
-    
+
     remove(this.#filmContainerComponent);
     remove(this.#filmBoardComponent);
 
@@ -92,13 +90,13 @@ export default class BoardPresenter {
     this.#filmPresenterPopupOn = null;
     this.#filmPopupOnId = null;
   }
-  
+
   #handleFilmChange = (updateType, update) => {
     this.#filmsModel.updateFilm(updateType, update);
   }
 
   #handleModelEvent = (updateType, data) => {
-    
+
     switch (updateType) {
       case UpdateType.PATCH:
         this.#filmPresenter.get(data.id).init(data);
@@ -117,7 +115,6 @@ export default class BoardPresenter {
   #handleCommentEvent = (updateType, data) => {
     this.#filmsModel.reloadComments(data.filmId);
     this.#handleModelEvent(updateType, this.#filmsModel.getFilmById(data.filmId));
-    console.log(data);
   }
 
   #handleCommentChange = (actionType, updateType, update) => {
@@ -189,7 +186,7 @@ export default class BoardPresenter {
 
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmPresenter.clear();
-    
+
     remove(this.#filterMenuComponent);
     remove(this.#sortListComponent);
     remove(this.#showMoreButtonComponent);
@@ -201,7 +198,7 @@ export default class BoardPresenter {
     if (resetRenderedFilmCount) {
       this.#renderedFilmCount = FILM_COUNT_PER_STEP;
     } else {
-     
+
       this.#renderedFilmCount = Math.min(filmCount, this.#renderedFilmCount);
     }
 
@@ -229,7 +226,7 @@ export default class BoardPresenter {
       this.#filmPresenterPopupOn.init(filmPopup);
       this.#filmPresenterPopupOn.showPopup();
     }
-    
+
     this.#renderSort();
 
     render(this.#filmContainerComponent, this.#filmListContainerComponent, RenderPosition.BEFOREEND);

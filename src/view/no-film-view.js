@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view.js';
-import {FilterType, NoFilmInfo} from '../const.js';
+import {NoFilmInfo} from '../const.js';
 
 const createNoFilmTemplate = (filterType) => (
   `<h2 class="films-list__title">${NoFilmInfo[filterType]}
@@ -15,4 +15,4 @@ export default class NoFilmView extends AbstractView {
   get template() {
     return createNoFilmTemplate(this._data);
   }
-}
+};

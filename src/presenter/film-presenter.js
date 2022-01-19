@@ -3,7 +3,7 @@ import DetailedInfoView from '../view/detailed-info-view.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 const body = document.querySelector('body');
 const siteFooterElement = document.querySelector('.footer');
-import {FilterType, CommentAction, UpdateType} from '../const.js';
+import {FilterType, UpdateType} from '../const.js';
 import {isCtrlEnterEvent, isEscEvent} from '../utils/common';
 
 export default class FilmPresenter {
@@ -38,7 +38,7 @@ export default class FilmPresenter {
       render(this.#filmBox, this.#filmComponent, RenderPosition.BEFOREEND);
       return;
     }
-    
+
     replace(this.#filmComponent, prevFilmComponent);
     remove(prevFilmComponent);
   }
@@ -65,10 +65,9 @@ export default class FilmPresenter {
 
   showPopup = () => {
     const prevDetailedFilmComponent = this.#detailedFilmComponent;
-    console.log(this.#film.id);
     const filmComments = this.#commentsModel.getCommentsByFilmId(this.#film.id);
     this.#detailedFilmComponent = new DetailedInfoView(this.#film, filmComments);
-  
+
     this.#detailedFilmComponent.setClosePopupClickHandler(this.#handleClosePopup);
 
     this.#detailedFilmComponent.setAddToFilterClickHandler(this.#handleAddToFilterClick);

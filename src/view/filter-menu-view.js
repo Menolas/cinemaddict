@@ -1,5 +1,4 @@
 import AbstractView from './abstract-view.js';
-import {FilterType} from '../const.js';
 const activeClass = 'main-navigation__item--active';
 
 const createFilterItemTemplate = (filter, currentFilter) => {
@@ -11,7 +10,7 @@ const createFilterItemTemplate = (filter, currentFilter) => {
       <span class="main-navigation__item-count">${count}</span>
     </a>`
   );
-}
+};
 
 const createFilterMenuTemplate = (filterItems, currentFilterType) => {
   const filterItemsTemplate = filterItems

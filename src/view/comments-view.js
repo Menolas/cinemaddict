@@ -35,7 +35,7 @@ const createCommentsTemplate = (comments) => {
   return `<ul class="film-details__comments-list">
             ${filmComments}
           </ul>`;
-}
+};
 
 export default class CommentsView extends AbstractView {
   #comments = null;
