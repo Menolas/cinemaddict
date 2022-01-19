@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import {nanoid} from 'nanoid';
 import {getRandomInteger, generateRandomValue} from '../utils/common.js';
 
 const emojis = [
@@ -56,4 +55,4 @@ export const generateComments = (films) => {
   });
 
   return comments;
-}
+};

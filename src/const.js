@@ -19,7 +19,7 @@ export const NoFilmInfo = {
   [FilterType.FAVOURITES]: 'There are no favorite movies now',
   [FilterType.WATCHED]: 'There are no watched movies now',
   [FilterType.WATCHLIST]: 'There are no movies to watch now',
-}
+};
 
 export const CommentAction = {
   ADD: 'add',

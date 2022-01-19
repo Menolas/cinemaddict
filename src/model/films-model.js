@@ -44,14 +44,14 @@ export default class FilmsModel extends AbstractObservable {
   }
 
   reloadComments = (filmId) => {
-    const index = this.#films.findIndex((film) => film.id === filmId);
+    const index = this.#films.findIndex((item) => item.id === filmId);
 
     if (index === -1) {
       throw new Error('Can\'t reload comment unexisting film');
     }
 
     const film = this.#films[index];
-    
+
     this.#films[index] = {...film, comments: this.#commentsModel.getCommentsIdsByFilmId(film.id)};
   }
 }

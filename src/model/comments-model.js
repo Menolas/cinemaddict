@@ -3,9 +3,9 @@ import {nanoid} from 'nanoid';
 
 export default class CommentsModel extends AbstractObservable {
   #comments = [];
-  
+
   set comments(comments) {
-  	this.#comments = [...comments];
+    this.#comments = [...comments];
   }
 
   get comments() {

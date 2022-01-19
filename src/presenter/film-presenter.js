@@ -6,11 +6,6 @@ const siteFooterElement = document.querySelector('.footer');
 import {FilterType, CommentAction, UpdateType} from '../const.js';
 import {isCtrlEnterEvent, isEscEvent} from '../utils/common';
 
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  SHOW_POPUP: 'SHOW_POPUP',
-};
-
 export default class FilmPresenter {
   #filmBox = null;
   #changeData = null;
@@ -20,14 +15,12 @@ export default class FilmPresenter {
   #commentsModel = null;
   #changeComment = null;
   #film = null;
-  #mode = Mode.DEFAULT;
 
   _callback = {};
 
-  constructor(filmBox, changeData, changeMode, commentsModel, changeComment) {
+  constructor(filmBox, changeData, commentsModel, changeComment) {
     this.#filmBox = filmBox;
     this.#changeData = changeData;
-    this.#changeMode = changeMode;
     this.#commentsModel = commentsModel;
     this.#changeComment = changeComment;
   }
@@ -72,6 +65,7 @@ export default class FilmPresenter {
 
   showPopup = () => {
     const prevDetailedFilmComponent = this.#detailedFilmComponent;
+    console.log(this.#film.id);
     const filmComments = this.#commentsModel.getCommentsByFilmId(this.#film.id);
     this.#detailedFilmComponent = new DetailedInfoView(this.#film, filmComments);
   
