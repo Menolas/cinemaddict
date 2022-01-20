@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from '../utils/common.js';
-import {generateRandomValue} from '../utils/common.js';
+import {getRandomInteger, generateRandomValue} from '../utils/common.js';
 
 const emojis = [
   'angry',
@@ -38,9 +37,22 @@ const generateDate = () => {
   return dayjs().subtract(commentGap, 'second').toDate();
 };
 
-export const generateComment = () => ({
+export const generateComment = (commentId, filmId) => ({
+  id: commentId,
+  filmId: filmId,
   text: generateRandomValue(commentText),
   emoji: generateRandomValue(emojis),
   author: generateRandomValue(authors),
   date: generateDate(),
 });
+
+export const generateComments = (films) => {
+  const comments = [];
+  films.forEach((film) => {
+    film.comments.forEach((comment) => {
+      comments.push(generateComment(comment, film.id));
+    });
+  });
+
+  return comments;
+};
