@@ -162,6 +162,13 @@ const getReleaseDate = () => {
   return dayjs().subtract(timeGap, 'second').toDate();
 };
 
+const generateComments = () => {
+  const MIN_COMMENT_COUNT = 0;
+  const MAX_COMMENT_COUNT = 5;
+  const commentCount = getRandomInteger(MIN_COMMENT_COUNT, MAX_COMMENT_COUNT);
+  return Array.from({length: commentCount}, () => nanoid());
+};
+
 export const generateFilmCard = () => ({
   id: nanoid(),
   _filmTitle: generateTitle(),
@@ -177,7 +184,7 @@ export const generateFilmCard = () => ({
   watchingTime: generateWatchingTime(),
   genres: generateFewNonRepeatableValues(1, 3, genres),
   description: generateDescription(),
-  commentsNumber: getRandomInteger(0, 5),
+  comments: generateComments(),
   isInWatchlist: false,
   isWatched: false,
   isFavorite: false,
@@ -186,5 +193,4 @@ export const generateFilmCard = () => ({
   actors: generateFewNonRepeatableValues(3, 6, actors),
   country: generateRandomValue(countries),
   ageRating: generateRandomValue(ageRatings),
-  newCommentEmoji: '',
 });
