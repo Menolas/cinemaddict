@@ -79,9 +79,10 @@ export default class BoardPresenter {
 
   #handleCardClick = (filmPresenter, id) => {
     this.#filmPopupOnId = id;
-    if(this.#filmPresenterPopupOn) {
+    if (this.#filmPresenterPopupOn) {
       this.#filmPresenterPopupOn.closePopup();
     }
+
     filmPresenter.showPopup();
     this.#filmPresenterPopupOn = filmPresenter;
   };
