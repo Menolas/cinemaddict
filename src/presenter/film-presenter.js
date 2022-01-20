@@ -1,10 +1,11 @@
 import FilmCardView from '../view/film-card-view.js';
 import DetailedInfoView from '../view/detailed-info-view.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
-const body = document.querySelector('body');
-const siteFooterElement = document.querySelector('.footer');
 import {FilterType, UpdateType} from '../const.js';
 import {isCtrlEnterEvent, isEscEvent} from '../utils/common';
+
+const body = document.querySelector('body');
+const siteFooterElement = document.querySelector('.footer');
 
 export default class FilmPresenter {
   #filmBox = null;
@@ -44,7 +45,7 @@ export default class FilmPresenter {
   }
 
   destroy = () => {
-    if(this.#detailedFilmComponent) {
+    if (this.#detailedFilmComponent) {
       this.#detailedFilmComponent.saveScroll();
     }
 
@@ -69,7 +70,6 @@ export default class FilmPresenter {
     this.#detailedFilmComponent = new DetailedInfoView(this.#film, filmComments);
 
     this.#detailedFilmComponent.setClosePopupClickHandler(this.#handleClosePopup);
-
     this.#detailedFilmComponent.setAddToFilterClickHandler(this.#handleAddToFilterClick);
     this.#detailedFilmComponent.setCommentActionHandler(this.#handlerCommentAction);
 
@@ -77,7 +77,6 @@ export default class FilmPresenter {
     body.classList.add('hide-overflow');
 
     if (prevDetailedFilmComponent === null) {
-      render(siteFooterElement, this.#detailedFilmComponent, RenderPosition.AFTEREND);
       document.addEventListener('keydown', this.#escKeyDownHandler);
       document.addEventListener('keydown', this.#ctrEnterDownHandler);
       return;
