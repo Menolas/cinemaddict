@@ -29,7 +29,7 @@ export default class SmartView extends AbstractView {
   }
 
   #restoreSavedScroll = () => {
-    if(this.#scrollLeft !== null && this.#scrollTop !== null) {
+    if (this.#scrollLeft !== null && this.#scrollTop !== null) {
       this.element.scrollTo(this.#scrollLeft, this.#scrollTop);
     }
   }
@@ -37,7 +37,7 @@ export default class SmartView extends AbstractView {
   get scrollOptions(){
     return {
       top: this.#scrollTop ? this.#scrollTop : 0,
-      left: this.#scrollLeft ? this.#scrollLeft : 0
+      left: this.#scrollLeft ? this.#scrollLeft : 0,
     };
   }
 
