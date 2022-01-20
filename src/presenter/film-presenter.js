@@ -3,8 +3,12 @@ import DetailedInfoView from '../view/detailed-info-view.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 const body = document.querySelector('body');
 const siteFooterElement = document.querySelector('.footer');
-import {FilterType, UpdateType} from '../const.js';
-import {isCtrlEnterEvent, isEscEvent} from '../utils/common';
+import {FilterType} from '../const.js';
+
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  SHOW_POPUP: 'SHOW_POPUP',
+};
 
 export default class FilmPresenter {
   #filmBox = null;
@@ -12,139 +16,103 @@ export default class FilmPresenter {
   #changeMode = null;
   #filmComponent = null;
   #detailedFilmComponent = null;
-  #commentsModel = null;
-  #changeComment = null;
   #film = null;
+  #mode = Mode.DEFAULT;
 
-  _callback = {};
-
-  constructor(filmBox, changeData, commentsModel, changeComment) {
+  constructor(filmBox, changeData, changeMode) {
     this.#filmBox = filmBox;
     this.#changeData = changeData;
-    this.#commentsModel = commentsModel;
-    this.#changeComment = changeComment;
+    this.#changeMode = changeMode;
   }
 
   init = (film) => {
     this.#film = film;
 
     const prevFilmComponent = this.#filmComponent;
+    const prevDetailedFilmComponent = this.#detailedFilmComponent;
 
     this.#filmComponent = new FilmCardView(film);
-    this.#filmComponent.setPopupClickHandler(this.#handleCardClick);
-    this.#filmComponent.setAddToFilterClickHandler(this.#handleAddToFilterClick);
+    this.#detailedFilmComponent = new DetailedInfoView(film);
 
-    if (prevFilmComponent === null) {
+    this.#detailedFilmComponent.setClosePopupClickHandler(() => {
+      this.#closePopup();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
+    });
+
+    this.#filmComponent.setPopupClickHandler(() => {
+      this.#showPopup();
+      document.addEventListener('keydown', this.#onEscKeyDown);
+    });
+
+    this.#filmComponent.setAddToFilterClickHandler(this.#handleAddToFilterClick);
+    this.#detailedFilmComponent.setAddToFilterClickHandler(this.#handleAddToFilterClick);
+
+    if (prevFilmComponent === null || prevDetailedFilmComponent === null) {
       render(this.#filmBox, this.#filmComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    replace(this.#filmComponent, prevFilmComponent);
+    if (this.#mode === Mode.DEFAULT) {
+      replace(this.#filmComponent, prevFilmComponent);
+    }
+
+    if (this.#mode === Mode.SHOW_POPUP) {
+      replace(this.#detailedFilmComponent, prevDetailedFilmComponent);
+      replace(this.#filmComponent, prevFilmComponent);
+    }
+
     remove(prevFilmComponent);
-  }
-
-  destroy = () => {
-    if(this.#detailedFilmComponent) {
-      this.#detailedFilmComponent.saveScroll();
-    }
-
-    remove(this.#filmComponent);
-  }
-
-  setCardClick = (callback) => {
-    this._callback.cardClick =  callback;
-  }
-
-  setCardClose = (callback) => {
-    this._callback.cardClose =  callback;
-  }
-
-  #handleCardClick = () => {
-    this._callback.cardClick();
-  }
-
-  showPopup = () => {
-    const prevDetailedFilmComponent = this.#detailedFilmComponent;
-    const filmComments = this.#commentsModel.getCommentsByFilmId(this.#film.id);
-    this.#detailedFilmComponent = new DetailedInfoView(this.#film, filmComments);
-
-    this.#detailedFilmComponent.setClosePopupClickHandler(this.#handleClosePopup);
-
-    this.#detailedFilmComponent.setAddToFilterClickHandler(this.#handleAddToFilterClick);
-    this.#detailedFilmComponent.setCommentActionHandler(this.#handlerCommentAction);
-
-    render(siteFooterElement, this.#detailedFilmComponent, RenderPosition.AFTEREND);
-    body.classList.add('hide-overflow');
-
-    if (prevDetailedFilmComponent === null) {
-      render(siteFooterElement, this.#detailedFilmComponent, RenderPosition.AFTEREND);
-      document.addEventListener('keydown', this.#escKeyDownHandler);
-      document.addEventListener('keydown', this.#ctrEnterDownHandler);
-      return;
-    }
-
-    replace(this.#detailedFilmComponent, prevDetailedFilmComponent);
-    this.#detailedFilmComponent.setScroll(prevDetailedFilmComponent.scrollOptions);
-
     remove(prevDetailedFilmComponent);
   }
 
-  #handleClosePopup = () => {
-    this.closePopup();
-    this._callback.cardClose();
+  destroy = () => {
+    remove(this.#filmComponent);
+    remove(this.#detailedFilmComponent);
   }
 
-  closePopup = () => {
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
-    document.removeEventListener('keydown', this.#ctrEnterDownHandler);
-    body.classList.remove('hide-overflow');
-
-    if (this.#detailedFilmComponent !== null) {
-      remove(this.#detailedFilmComponent);
-      this.#detailedFilmComponent = null;
+  resetView = () => {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#detailedFilmComponent.reset(this.#film);
+      this.#closePopup();
     }
   }
 
-  #escKeyDownHandler = (evt) => {
-    if (isEscEvent(evt)) {
+  #closePopup = () => {
+    siteFooterElement.removeChild(this.#detailedFilmComponent.element);
+    body.classList.remove('hide-overflow');
+    this.#mode = Mode.DEFAULT;
+  }
+
+  #showPopup = () => {
+    siteFooterElement.appendChild(this.#detailedFilmComponent.element);
+    body.classList.add('hide-overflow');
+    this.#changeMode();
+    this.#mode = Mode.SHOW_POPUP;
+  }
+
+  #onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      this.#detailedFilmComponent.reset(this.#film);
-      this.closePopup();
+      this.#closePopup();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
     }
   }
 
   #handleAddToFilterClick = (filterType) => {
+    const scrollHeight = this.#detailedFilmComponent.element.scrollTop;
 
     switch (filterType) {
       case FilterType.FAVOURITES:
-        this.#changeData(
-          UpdateType.MINOR,
-          {...this.#film, isFavourite: !this.#film.isFavourite},
-        );
+        this.#changeData({...this.#film, isFavourite: !this.#film.isFavourite});
         break;
       case FilterType.WATCHED:
-        this.#changeData(
-          UpdateType.MINOR,
-          {...this.#film, isWatched: !this.#film.isWatched},
-        );
+        this.#changeData({...this.#film, isWatched: !this.#film.isWatched});
         break;
       case FilterType.WATCHLIST:
-        this.#changeData(
-          UpdateType.MINOR,
-          {...this.#film, isInWatchlist: !this.#film.isInWatchlist},
-        );
+        this.#changeData({...this.#film, isInWatchlist: !this.#film.isInWatchlist});
         break;
     }
-  }
 
-  #handlerCommentAction = (type, comment) => {
-    this.#changeComment(type, UpdateType.MINOR, comment);
-  }
-
-  #ctrEnterDownHandler = (evt) => {
-    if (isCtrlEnterEvent(evt)) {
-      evt.preventDefault(evt);
-      this.#detailedFilmComponent.addCommentHandler();
-    }
+    this.#detailedFilmComponent.element.scrollTo(0, scrollHeight);
   }
 }
