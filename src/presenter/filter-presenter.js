@@ -1,7 +1,7 @@
 import FilterView from '../view/filter-menu-view.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {filter} from '../utils/filter.js';
-import {FilterType, UpdateType} from '../const.js';
+import {FilterType, MenuItem, UpdateType} from '../const.js';
 
 export default class FilterPresenter {
   #filterContainer = null;
@@ -9,6 +9,7 @@ export default class FilterPresenter {
   #filmsModel = null;
 
   #filterComponent = null;
+  #changeMenuType = null;
 
   constructor(filterContainer, filterModel, filmsModel) {
     this.#filterContainer = filterContainer;
@@ -25,7 +26,7 @@ export default class FilterPresenter {
     return [
       {
         type: FilterType.DEFAULT,
-        name: 'All',
+        name: 'All movies',
         count: filter[FilterType.DEFAULT](films).length,
       },
       {
@@ -49,9 +50,11 @@ export default class FilterPresenter {
   init = () => {
     const filters = this.filters;
     const prevFilterComponent = this.#filterComponent;
+    const currentFilter = this.#filterModel.menuType === MenuItem.FILMS ? this.#filterModel.filter : null;
 
-    this.#filterComponent = new FilterView(filters, this.#filterModel.filter);
+    this.#filterComponent = new FilterView(filters, this.#filterModel.filter, this.#filterModel.menuType);
     this.#filterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
+    this.#filterComponent.setMenuClickHandler(this.#handleChangeMenu);
 
     if (prevFilterComponent === null) {
       render(this.#filterContainer, this.#filterComponent, RenderPosition.AFTERBEGIN);
@@ -72,15 +75,35 @@ export default class FilterPresenter {
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.DEFAULT);
   }
 
+  setMenuClickHandler = (callback) => {
+    this.#changeMenuType = callback;
+  }
+
   #handleModelEvent = () => {
     this.init();
   }
 
   #handleFilterTypeChange = (filterType) => {
+    if(this.#filterModel.menuType === MenuItem.STATISTIC) {
+      this.#handleChangeMenu(MenuItem.FILMS);
+    }
+    
     if (this.#filterModel.filter === filterType) {
       return;
     }
 
     this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
+  }
+
+  #handleChangeMenu = (menuType) => {
+    if (this.#filterModel.menuType === menuType) {
+      return;
+    }
+
+    this.#filterModel.filter = FilterType.DEFAULT;
+    this.#filterModel.setMenuType(menuType);
+    this.#changeMenuType(this.#filterModel.menuType);
+
+    this.init();
   }
 }
