@@ -9,22 +9,23 @@ import FilmsModel from './model/films-model.js';
 import FilterModel from './model/filter-model.js';
 import CommentsModel from './model/comments-model.js';
 import StatisticView from './view/statistic-view';
+import ApiService from './api-service.js';
 
-//import {getGenresWithCountFromFilms, sortGenreCountDown, getTotalDuration, getFilmsFilteredByTime} from './utils/statistic.js';
-//import {MINUTES_IN_HOURS, StatisticType} from './const';
-
+const AUTHORIZATION = 'Basic dfpthgruioBVjdph';
+const END_POINT = 'https://16.ecmascript.pages.academy/cinemaddict';
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer');
 let statisticComponent = null;
 
 const films = Array.from({length: FILM_COUNT}, generateFilmCard);
+
 const comments = generateComments(films);
 
 const commentsModel = new CommentsModel();
 commentsModel.comments = comments;
 
-const filmsModel = new FilmsModel(commentsModel);
+const filmsModel = new FilmsModel(commentsModel, new ApiService(END_POINT, AUTHORIZATION));
 filmsModel.films = films;
 
 const filterModel = new FilterModel();
