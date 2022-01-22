@@ -10,6 +10,9 @@ import FilterModel from './model/filter-model.js';
 import CommentsModel from './model/comments-model.js';
 import StatisticView from './view/statistic-view';
 
+//import {getGenresWithCountFromFilms, sortGenreCountDown, getTotalDuration, getFilmsFilteredByTime} from './utils/statistic.js';
+//import {MINUTES_IN_HOURS, StatisticType} from './const';
+
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer');
@@ -25,12 +28,10 @@ const filmsModel = new FilmsModel(commentsModel);
 filmsModel.films = films;
 
 const filterModel = new FilterModel();
-console.log(filterModel.menuType);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 const boardPresenter = new BoardPresenter(siteMainElement, filmsModel, filterModel, commentsModel);
 
 const handleSiteMenuClick = (menuItem) => {
-  console.log(menuItem);
   switch (menuItem) {
     case MenuItem.FILMS:
       remove(statisticComponent);
@@ -38,7 +39,7 @@ const handleSiteMenuClick = (menuItem) => {
       break;
     case MenuItem.STATISTIC:
       boardPresenter.destroy();
-      statisticComponent = new StatisticView(filmsModel);
+      statisticComponent = new StatisticView(filmsModel.watchedFilms);
       render(siteMainElement, statisticComponent, RenderPosition.BEFOREEND);
       break;
   }
@@ -52,4 +53,6 @@ filterPresenter.init();
 boardPresenter.init();
 
 siteFooterElement.querySelector('.footer__statistics span').textContent = FILM_COUNT
-console.log(filterModel.menuType);
+
+//const filteredFilms = getFilmsFilteredByTime(statisticType, films);
+//console.log(filteredFilms);

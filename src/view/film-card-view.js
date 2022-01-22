@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view.js';
 import {humanizeFilmReleaseDate} from '../utils/common.js';
-import {FilterType} from '../const.js';
+import {FilterType, MINUTES_IN_HOURS} from '../const.js';
 
 const createFilmCardTemplate = (film) => {
 
@@ -9,7 +9,7 @@ const createFilmCardTemplate = (film) => {
     poster,
     rating,
     released,
-    watchingTime,
+    runtime,
     genres,
     description,
     comments,
@@ -24,13 +24,25 @@ const createFilmCardTemplate = (film) => {
   const watchedClassName = isWatched ? activeClass : '';
   const watchListClassName = isInWatchlist ? activeClass : '';
 
+  const getRuntime = () => {
+    const filmRuntime = {
+      hours: 0,
+      minutes: 0,
+    } 
+    
+    filmRuntime.hours = runtime / MINUTES_IN_HOURS | 0;
+    filmRuntime.minutes = runtime % MINUTES_IN_HOURS;
+    
+    return filmRuntime;
+  };
+
   return `<article class="film-card">
     <a class="film-card__link">
       <h3 class="film-card__title">${title}</h3>
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${releaseDate}</span>
-        <span class="film-card__duration">${watchingTime}</span>
+        <span class="film-card__duration">${getRuntime().hours}h ${getRuntime().minutes}m</span>
         <span class="film-card__genre">${genres}</span>
       </p>
       <img src="./images/posters/${poster}" alt="" class="film-card__poster">
