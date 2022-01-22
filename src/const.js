@@ -1,5 +1,7 @@
 export const FILM_COUNT = 42;
 export const FILM_COUNT_PER_STEP = 5;
+export const MAX_TEXT_LENGTH_ON_CARD = 140;
+export const MINUTES_IN_HOURS = 60;
 
 export const SortType = {
   DEFAULT: 'default',
@@ -30,4 +32,17 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+};
+
+export const MenuItem = {
+  FILMS: 'FILMS',
+  STATISTIC: 'STATISTIC',
+};
+
+export const StatisticType = {
+  ALL: 'all-time',
+  TODAY: 'today',
+  WEEK: 'week',
+  MONTH: 'month',
+  YEAR: 'year',
 };

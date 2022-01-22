@@ -9,12 +9,7 @@ const getRandomRating = () => {
   return (Math.round(randomNumber * 10) / 10).toFixed(1);
 };
 
-const generateWatchingTime = () => {
-  const hours = getRandomInteger(1, 2);
-  const minutes = getRandomInteger(0, 59);
-
-  return `${hours}h ${minutes}m`;
-};
+const generateWatchingTime = () =>  getRandomInteger(50, 170);
 
 const generateTitle = () => {
   const allTitles = {
@@ -111,7 +106,7 @@ const generateFewNonRepeatableValues = (a, b, array) => {
     result = result.filter((v, i, arr) =>  arr.indexOf(v) === i);
   }
 
-  return result.join(', ');
+  return result;
 };
 
 const posters = [
@@ -169,6 +164,13 @@ const generateComments = () => {
   return Array.from({length: commentCount}, () => nanoid());
 };
 
+const generateWatchingDate = () => {
+  const MAX_WATCHING_DAYS_GAP = 20;
+  const daysGap = getRandomInteger(-MAX_WATCHING_DAYS_GAP, 0);
+
+  return dayjs().add(daysGap, 'day');
+};
+
 export const generateFilmCard = () => ({
   id: nanoid(),
   _filmTitle: generateTitle(),
@@ -181,16 +183,17 @@ export const generateFilmCard = () => ({
   poster: generateRandomValue(posters),
   rating: getRandomRating(),
   released: getReleaseDate(),
-  watchingTime: generateWatchingTime(),
-  genres: generateFewNonRepeatableValues(1, 3, genres),
+  runtime: generateWatchingTime(),
+  genre: generateFewNonRepeatableValues(1, 3, genres),
   description: generateDescription(),
   comments: generateComments(),
-  isInWatchlist: false,
-  isWatched: false,
+  isInWatchlist: Boolean(getRandomInteger(0, 1)),
+  isWatched: Boolean(getRandomInteger(0, 1)),
   isFavorite: false,
   director: generateRandomValue(directors),
   writers: generateFewNonRepeatableValues(1, 3, writers),
   actors: generateFewNonRepeatableValues(3, 6, actors),
   country: generateRandomValue(countries),
   ageRating: generateRandomValue(ageRatings),
+  watchingDate: generateWatchingDate(),
 });
