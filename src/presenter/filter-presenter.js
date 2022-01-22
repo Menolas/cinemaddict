@@ -87,7 +87,7 @@ export default class FilterPresenter {
     if(this.#filterModel.menuType === MenuItem.STATISTIC) {
       this.#handleChangeMenu(MenuItem.FILMS);
     }
-    
+
     if (this.#filterModel.filter === filterType) {
       return;
     }

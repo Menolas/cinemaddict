@@ -52,7 +52,4 @@ filterPresenter.setMenuClickHandler(handleSiteMenuClick);
 filterPresenter.init();
 boardPresenter.init();
 
-siteFooterElement.querySelector('.footer__statistics span').textContent = FILM_COUNT
-
-//const filteredFilms = getFilmsFilteredByTime(statisticType, films);
-//console.log(filteredFilms);
+siteFooterElement.querySelector('.footer__statistics span').textContent = FILM_COUNT;

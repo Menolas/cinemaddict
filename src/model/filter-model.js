@@ -21,8 +21,8 @@ export default class FilterModel extends AbstractObservable {
   get menuType() {
     return this.#menuType;
   }
-  
+
   setMenuType = (menuType) => {
     this.#menuType = menuType;
   }
- }
+}

@@ -9,10 +9,7 @@ const getRandomRating = () => {
   return (Math.round(randomNumber * 10) / 10).toFixed(1);
 };
 
-const generateWatchingTime = () => {
-
-  return getRandomInteger(50, 170);
-};
+const generateWatchingTime = () =>  getRandomInteger(50, 170);
 
 const generateTitle = () => {
   const allTitles = {

@@ -10,9 +10,8 @@ const renderChart = (statisticCtx, films, statisticType) => {
   const filteredFilms = getFilmsFilteredByStatisticDate(statisticType, films);
   const filmGenresCounted = getStatisticGenres(filteredFilms);
   const sortedFilmGenres = filmGenresCounted.sort(sortGenreCountDown);
-  
+
   const filmGenres = sortedFilmGenres.map((item) => item.item);
-  console.log(filmGenres);
   const filmsByGenreEntity = sortedFilmGenres.map((genre) => genre.count);
 
   statisticCtx.height = BAR_HEIGHT * 5;

@@ -17,6 +17,9 @@ export const getStartDate = (statisticType) => {
   return null;
 };
 
+export const countFilmsByGenre = (films, genre) =>
+  films.filter((film) => film.genre.some((filmGenre) => filmGenre === genre)).length;
+
 export const getFilmsFilteredByStatisticDate = (statisticType, films) => {
   const startDate = getStartDate(statisticType);
 
@@ -31,16 +34,11 @@ export const getStatisticGenres = (films) => {
     film.genre.forEach((item) => statisticGenres.add(item));
   });
 
-  console.log(statisticGenres);
-
   return Array.from(statisticGenres, (item) => ({
     item: item,
     count: countFilmsByGenre(films, item),
   }));
 };
-
-export const countFilmsByGenre = (films, genre) =>
-  films.filter((film) => film.genre.some((filmGenre) => filmGenre === genre)).length;
 
 export const sortGenreCountDown = (genre1, genre2) => genre1.count < genre2.count ? 1 : -1;
 
