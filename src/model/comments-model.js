@@ -1,8 +1,31 @@
 import AbstractObservable from '../utils/abstract-observable.js';
 import {nanoid} from 'nanoid';
+import {UpdateType} from '../const';
 
 export default class CommentsModel extends AbstractObservable {
   #comments = [];
+  #apiService = null;
+  #film = null;
+
+  constructor(apiService) {
+    super();
+    this.#apiService = apiService;
+  }
+
+  init = async (film) => {
+    this.#film = film;
+    try {
+      const comments = await this.#apiService.getFilmComments(film.id);
+      this.#comments = comments.map(this.#adaptCommentDataToClient);
+
+    } catch(err) {
+      this.#comments = [];
+    }
+
+    console.log(this.#comments);
+
+    this._notify(UpdateType.COMMENTS, film);
+  }
 
   set comments(comments) {
     this.#comments = [...comments];
@@ -39,5 +62,14 @@ export default class CommentsModel extends AbstractObservable {
       ...this.#comments.slice(index + 1),
     ];
     this._notify(updateType, deleteComment);
+  }
+
+  #adaptCommentDataToClient = (comment) => {
+    const adaptedComment = {...comment,
+
+
+    }
+
+    return adaptedComment;
   }
 }

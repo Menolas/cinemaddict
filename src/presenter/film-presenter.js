@@ -66,6 +66,7 @@ export default class FilmPresenter {
 
   showPopup = () => {
     const prevDetailedFilmComponent = this.#detailedFilmComponent;
+    this.#commentsModel.init();
     const filmComments = this.#commentsModel.getCommentsByFilmId(this.#film.id);
     this.#detailedFilmComponent = new DetailedInfoView(this.#film, filmComments);
 

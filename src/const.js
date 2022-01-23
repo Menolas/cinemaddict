@@ -32,6 +32,8 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
+  COMMENTS: 'COMMENTS',
 };
 
 export const MenuItem = {

@@ -5,6 +5,7 @@ import SortListView from '../view/sort-list-view.js';
 import FilmContainerView from '../view/film-container-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
 import NoFilmView from '../view/no-film-view.js';
+import LoadingView from '../view/loading-view.js';
 import FilmPresenter from './film-presenter.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import {SortType, FilterType, UpdateType, CommentAction, FILM_COUNT_PER_STEP} from '../const.js';
@@ -19,6 +20,7 @@ export default class BoardPresenter {
   #filmBoardComponent = new FilmBoardView();
   #filmContainerComponent = null;
   #filmListContainerComponent = new FilmListContainerView();
+  #loadingComponent = new LoadingView();
   #showMoreButtonComponent = null;
   #sortListComponent = null;
   #filterMenuComponent = null;
@@ -31,6 +33,7 @@ export default class BoardPresenter {
 
   #filmPresenterPopupOn = null;
   #filmPopupOnId = null;
+  #isLoading = true;
 
   constructor(boardContainer, filmsModel, filterModel, commentsModel) {
     this.#boardContainer = boardContainer;
@@ -62,7 +65,7 @@ export default class BoardPresenter {
 
     this.#filmsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
-    this.#commentsModel.addObserver(this.#handleCommentEvent);
+    //this.#commentsModel.addObserver(this.#handleCommentEvent);
 
     this.#renderBoard();
   }
@@ -76,8 +79,7 @@ export default class BoardPresenter {
     remove(this.#showMoreButtonComponent);
 
     this.#filmsModel.removeObserver(this.#handleModelEvent);
-    //this.#filterModel.removeObserver(this.#handleModelEvent);
-    this.#commentsModel.removeObserver(this.#handleCommentEvent);
+    //this.#commentsModel.removeObserver(this.#handleCommentEvent);
   }
 
   #handleCardClick = (filmPresenter, id) => {
@@ -112,6 +114,12 @@ export default class BoardPresenter {
         break;
       case UpdateType.MAJOR:
         this.#clearBoard({resetRenderedFilmCount: true, resetSortType: true});
+        this.#renderBoard();
+        break;
+
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
         this.#renderBoard();
         break;
     }
@@ -165,6 +173,10 @@ export default class BoardPresenter {
     films.forEach((film) => this.#renderFilm(film));
   }
 
+  #renderLoading = () => {
+    render(this.#filmBoardComponent, this.#loadingComponent, RenderPosition.AFTERBEGIN);
+  }
+
   #handleShowMoreButtonClick = () => {
     const filmCount = this.films.length;
     const newRenderedFilmCount = Math.min(filmCount, this.#renderedFilmCount + FILM_COUNT_PER_STEP);
@@ -193,6 +205,7 @@ export default class BoardPresenter {
 
     //remove(this.#filterMenuComponent);
     remove(this.#sortListComponent);
+    remove(this.#loadingComponent);
     remove(this.#showMoreButtonComponent);
 
     if (this.#noFilmComponent) {
@@ -222,6 +235,11 @@ export default class BoardPresenter {
   }
 
   #renderBoard = () => {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+
     const filmCount = this.films.length;
 
     if (filmCount === 0) {
