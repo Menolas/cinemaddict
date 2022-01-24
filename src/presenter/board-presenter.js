@@ -65,7 +65,7 @@ export default class BoardPresenter {
 
     this.#filmsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
-    //this.#commentsModel.addObserver(this.#handleCommentEvent);
+    this.#commentsModel.addObserver(this.#handleCommentEvent);
 
     this.#renderBoard();
   }
@@ -79,7 +79,7 @@ export default class BoardPresenter {
     remove(this.#showMoreButtonComponent);
 
     this.#filmsModel.removeObserver(this.#handleModelEvent);
-    //this.#commentsModel.removeObserver(this.#handleCommentEvent);
+    this.#commentsModel.removeObserver(this.#handleCommentEvent);
   }
 
   #handleCardClick = (filmPresenter, id) => {
@@ -105,6 +105,9 @@ export default class BoardPresenter {
   #handleModelEvent = (updateType, data) => {
 
     switch (updateType) {
+      case UpdateType.COMMENTS:
+        this.#handleLoadedComment();
+        break;
       case UpdateType.PATCH:
         this.#filmPresenter.get(data.id).init(data);
         break;
@@ -126,8 +129,11 @@ export default class BoardPresenter {
   }
 
   #handleCommentEvent = (updateType, data) => {
-    this.#filmsModel.reloadComments(data.filmId);
-    this.#handleModelEvent(updateType, this.#filmsModel.getFilmById(data.filmId));
+    switch (updateType) {
+      case UpdateType.COMMENTS:
+        this.#handleModelEvent(UpdateType.COMMENTS, this.#filmsModel.getFilmById(data.filmId));
+        break;
+    }
   }
 
   #handleCommentChange = (actionType, updateType, update) => {
@@ -197,13 +203,19 @@ export default class BoardPresenter {
     render(this.#filmListContainerComponent, this.#showMoreButtonComponent, RenderPosition.AFTEREND);
   }
 
+  #handleLoadedComment = () => {
+    this.#filmPresenterPopupOn.handleLoadedComment();
+    const filmOnPopup = this.#filmsModel.getFilmById(this.#filmPopupOnId);
+    this.#filmPresenterPopupOn.init(filmOnPopup);
+    this.#filmPresenterPopupOn.showPopup();
+  }
+
   #clearBoard = ({resetRenderedFilmCount = false, resetSortType = false} = {}) => {
     const filmCount = this.films.length;
 
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmPresenter.clear();
 
-    //remove(this.#filterMenuComponent);
     remove(this.#sortListComponent);
     remove(this.#loadingComponent);
     remove(this.#showMoreButtonComponent);

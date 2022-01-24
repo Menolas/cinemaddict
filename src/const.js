@@ -48,3 +48,8 @@ export const StatisticType = {
   MONTH: 'month',
   YEAR: 'year',
 };
+
+export const ExtraTitle = {
+  TOP_RATED: 'Top rated',
+  MOST_COMMENTED: 'Most commented',
+};

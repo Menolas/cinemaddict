@@ -61,17 +61,17 @@ export default class FilmsModel extends AbstractObservable {
     this._notify(updateType, update);
   }
 
-  // reloadComments = (filmId) => {
-  //   const index = this.#films.findIndex((item) => item.id === filmId);
+  reloadComments = (filmId) => {
+    const index = this.#films.findIndex((item) => item.id === filmId);
 
-  //   if (index === -1) {
-  //     throw new Error('Can\'t reload comment unexisting film');
-  //   }
+    if (index === -1) {
+      throw new Error('Can\'t reload comment unexisting film');
+    }
 
-  //   const film = this.#films[index];
+    const film = this.#films[index];
 
-  //   this.#films[index] = {...film, comments: this.#commentsModel.getCommentsIdsByFilmId(film.id)};
-  // }
+    this.#films[index] = {...film, comments: this.#commentsModel.getCommentsIdsByFilmId(film.id)};
+  }
 
   #adaptToClient = (film) => {
     const adaptedFilm = {...film,

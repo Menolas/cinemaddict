@@ -12,37 +12,22 @@ export default class CommentsModel extends AbstractObservable {
     this.#apiService = apiService;
   }
 
-  // init = async (film) => {
-  //   this.#film = film;
-  //   try {
-  //     const comments = await this.#apiService.getFilmComments(film.id);
-  //     this.#comments = comments.map(this.#adaptCommentDataToClient);
-
-  //   } catch(err) {
-  //     this.#comments = [];
-  //   }
-
-  //   console.log(this.#comments);
-
-  //   this._notify(UpdateType.COMMENTS, film);
-  // }
-
   loadComments = async (filmId) => {
     let comments;
     try {
-      comments = await this.#apiService.getComments(filmId);
+      comments = await this.#apiService.getFilmComments(filmId);
       this.#comments.set(filmId, comments.map(this.#adaptCommentDataToClient));
     } catch (err) {
       comments = [];
     }
 
-    this._notify(UpdateType.LOADED_COMMENT, {filmId});
+    this._notify(UpdateType.COMMENTS, {filmId: filmId});
     return comments.map(this.#adaptCommentDataToClient);
   }
 
   getCommentsByFilmId = (filmId) => this.#comments.get(filmId);
 
-  getCommentsIdsByFilmId = (filmId) => Array.from(this.getCommentsByFilmId(filmId), (comment) => comment.id);
+  getCommentsIdsByFilmId = (filmId) => [...this.getCommentsByFilmId(filmId)].map((comment) => comment.id);
 
   addComment = (updateType, comment) => {
     const newComment = {id: nanoid(), author: 'User Name', ...comment};
