@@ -19,11 +19,9 @@ export default class ApiService {
       .then(ApiService.parseResponse);
   }
 
-  getFilmComments = (filmId) => {
-    return this.#load({url: `comments/${filmId}`})
+  getFilmComments = (filmId) => this.#load({url: `comments/${filmId}`})
       .then(ApiService.parseResponse);
-  }
-
+  
   updateFilm = async (film) => {
     const response = await this.#load({
       url: `movies/${film.id}`,
@@ -92,7 +90,7 @@ export default class ApiService {
     const adaptedFilm = {
       ...film,
       'film_info': {
-        
+
       }
     };
 

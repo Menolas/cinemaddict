@@ -1,5 +1,5 @@
 import AbstractObservable from '../utils/abstract-observable.js';
-//import {nanoid} from 'nanoid';
+import {nanoid} from 'nanoid';
 import {UpdateType} from '../const';
 
 export default class CommentsModel extends AbstractObservable {

@@ -81,7 +81,6 @@ export default class FilmsModel extends AbstractObservable {
       description: film.film_info.description,
       poster: film.film_info.poster,
       genre: film.film_info.genre,
-      released: film.film_info.release,
       runtime: film.film_info.runtime,
       rating: film.film_info.total_rating,
       isInWatchlist: film.user_details.watchlist,

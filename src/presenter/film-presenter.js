@@ -77,8 +77,7 @@ export default class FilmPresenter {
     } else {
       filmComments = this.#commentsModel.getCommentsByFilmId(this.#film.id);
     }
-    
-    console.log(filmComments);
+
     this.#detailedFilmComponent = new DetailedInfoView(this.#film, filmComments);
 
     this.#detailedFilmComponent.setClosePopupClickHandler(this.#handleClosePopup);
