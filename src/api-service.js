@@ -20,8 +20,8 @@ export default class ApiService {
   }
 
   getFilmComments = (filmId) => this.#load({url: `comments/${filmId}`})
-      .then(ApiService.parseResponse);
-  
+    .then(ApiService.parseResponse);
+
   updateFilm = async (film) => {
     const response = await this.#load({
       url: `movies/${film.id}`,
