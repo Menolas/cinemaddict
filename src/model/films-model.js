@@ -20,8 +20,6 @@ export default class FilmsModel extends AbstractObservable {
       this.#films = [];
     }
 
-    console.log(this.#films);
-
     this._notify(UpdateType.INIT);
   }
 
@@ -82,7 +80,7 @@ export default class FilmsModel extends AbstractObservable {
       titleOriginal: film.film_info.alternative_title,
       description: film.film_info.description,
       poster: film.film_info.poster,
-      genre: film.film_info.genre.join(', '),
+      genre: film.film_info.genre,
       released: film.film_info.release,
       runtime: film.film_info.runtime,
       rating: film.film_info.total_rating,

@@ -11,13 +11,14 @@ import ApiService from './api-service.js';
 
 const AUTHORIZATION = 'Basic gjpyrthjDHjUJOIF';
 const END_POINT = 'https://16.ecmascript.pages.academy/cinemaddict';
+const apiService = new ApiService(END_POINT, AUTHORIZATION);
 
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer');
 
-const commentsModel = new CommentsModel(new ApiService(END_POINT, AUTHORIZATION));
-const filmsModel = new FilmsModel(new ApiService(END_POINT, AUTHORIZATION), commentsModel);
+const commentsModel = new CommentsModel(apiService);
+const filmsModel = new FilmsModel(apiService, commentsModel);
 const filterModel = new FilterModel();
 
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);

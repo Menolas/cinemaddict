@@ -1,9 +1,9 @@
 import AbstractObservable from '../utils/abstract-observable.js';
-import {nanoid} from 'nanoid';
+//import {nanoid} from 'nanoid';
 import {UpdateType} from '../const';
 
 export default class CommentsModel extends AbstractObservable {
-  #comments = [];
+  #comments = new Map();
   #apiService = null;
   #film = null;
 
@@ -12,30 +12,35 @@ export default class CommentsModel extends AbstractObservable {
     this.#apiService = apiService;
   }
 
-  init = async (film) => {
-    this.#film = film;
-    try {
-      const comments = await this.#apiService.getFilmComments(film.id);
-      this.#comments = comments.map(this.#adaptCommentDataToClient);
+  // init = async (film) => {
+  //   this.#film = film;
+  //   try {
+  //     const comments = await this.#apiService.getFilmComments(film.id);
+  //     this.#comments = comments.map(this.#adaptCommentDataToClient);
 
-    } catch(err) {
-      this.#comments = [];
+  //   } catch(err) {
+  //     this.#comments = [];
+  //   }
+
+  //   console.log(this.#comments);
+
+  //   this._notify(UpdateType.COMMENTS, film);
+  // }
+
+  loadComments = async (filmId) => {
+    let comments;
+    try {
+      comments = await this.#apiService.getComments(filmId);
+      this.#comments.set(filmId, comments.map(this.#adaptCommentDataToClient));
+    } catch (err) {
+      comments = [];
     }
 
-    console.log(this.#comments);
-
-    this._notify(UpdateType.COMMENTS, film);
+    this._notify(UpdateType.LOADED_COMMENT, {filmId});
+    return comments.map(this.#adaptCommentDataToClient);
   }
 
-  set comments(comments) {
-    this.#comments = [...comments];
-  }
-
-  get comments() {
-    return this.#comments;
-  }
-
-  getCommentsByFilmId = (filmId) => this.comments.filter((comment) => comment.filmId === filmId);
+  getCommentsByFilmId = (filmId) => this.#comments.get(filmId);
 
   getCommentsIdsByFilmId = (filmId) => Array.from(this.getCommentsByFilmId(filmId), (comment) => comment.id);
 
@@ -66,9 +71,11 @@ export default class CommentsModel extends AbstractObservable {
 
   #adaptCommentDataToClient = (comment) => {
     const adaptedComment = {...comment,
-
-
-    }
+      emoji: `${comment.emotion}`,
+      text: comment.comment,
+      date: comment.date,
+      author: comment.author,
+    };
 
     return adaptedComment;
   }

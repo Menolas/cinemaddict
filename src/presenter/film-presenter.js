@@ -10,12 +10,12 @@ const siteFooterElement = document.querySelector('.footer');
 export default class FilmPresenter {
   #filmBox = null;
   #changeData = null;
-  #changeMode = null;
   #filmComponent = null;
   #detailedFilmComponent = null;
   #commentsModel = null;
   #changeComment = null;
   #film = null;
+  #isCommentLoaded = false;
 
   _callback = {};
 
@@ -52,6 +52,10 @@ export default class FilmPresenter {
     remove(this.#filmComponent);
   }
 
+  handleLoadedComment() {
+    this.#isCommentLoaded = true;
+  }
+
   setCardClick = (callback) => {
     this._callback.cardClick =  callback;
   }
@@ -66,8 +70,15 @@ export default class FilmPresenter {
 
   showPopup = () => {
     const prevDetailedFilmComponent = this.#detailedFilmComponent;
-    this.#commentsModel.init();
-    const filmComments = this.#commentsModel.getCommentsByFilmId(this.#film.id);
+    let filmComments = [];
+
+    if (!this.#isCommentLoaded) {
+      this.#commentsModel.loadComments(this.#film.id);
+    } else {
+      filmComments = this.#commentsModel.getCommentsByFilmId(this.#film.id);
+    }
+    
+    console.log(filmComments);
     this.#detailedFilmComponent = new DetailedInfoView(this.#film, filmComments);
 
     this.#detailedFilmComponent.setClosePopupClickHandler(this.#handleClosePopup);

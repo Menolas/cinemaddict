@@ -124,7 +124,7 @@ const createDetailedInfoTemplate = (film, comments) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Genres</td>
-                <td class="film-details__cell">${genre}</td>
+                <td class="film-details__cell">${genre.join(', ')}</td>
               </tr>
             </table>
 

@@ -32,7 +32,7 @@ const createFilmCardTemplate = (film) => {
       <p class="film-card__info">
         <span class="film-card__year">${releaseDate}</span>
         <span class="film-card__duration">${getRuntime(runtime).hours}h ${getRuntime(runtime).minutes}m</span>
-        <span class="film-card__genre">${genre}</span>
+        <span class="film-card__genre">${genre.join(', ')}</span>
       </p>
       <img src="${poster}" alt="" class="film-card__poster">
       <p class="film-card__description">${description}</p>
