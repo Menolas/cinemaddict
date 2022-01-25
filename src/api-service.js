@@ -87,11 +87,34 @@ export default class ApiService {
   }
 
   #adaptToServer = (film) => {
+    const filmInfo ={
+      'title': film.title,
+      'age_rating': film.ageRating,
+      'alternative_title': film.titleOriginal,
+      'description': film.description,
+      'poster': film.poster,
+      'genre': film.genre,
+      'runtime': film.runtime,
+      'total_rating': film.rating,
+      'director': film.director,
+      'actors': film.actors,
+      'writers': film.writers,
+      'release': {
+        'date': film.released,
+        'release_country': film.country,
+      },
+    };
+    const userDetails = {
+      'watchlist': film.isInWatchlist,
+      'already_watched': film.isWatched,
+      'favorite': film.isFavourite,
+      'watching_date': film.watchingDate,
+    };
     const adaptedFilm = {
-      ...film,
-      'film_info': {
-
-      }
+      'id': film.id,
+      'comments': film.comments,
+      'film_info': filmInfo,
+      'user_details': userDetails,
     };
 
     return adaptedFilm;

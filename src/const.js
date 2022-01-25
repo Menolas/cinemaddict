@@ -1,6 +1,6 @@
 export const FILM_COUNT = 42;
 export const FILM_COUNT_PER_STEP = 5;
-export const MAX_TEXT_LENGTH_ON_CARD = 140;
+export const TEXT_LENGTH_ON_FILM_CARD = 140;
 export const MINUTES_IN_HOURS = 60;
 
 export const SortType = {

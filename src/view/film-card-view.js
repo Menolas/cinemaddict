@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view.js';
-import {humanizeFilmReleaseDate} from '../utils/common.js';
-import {FilterType} from '../const.js';
+import {humanizeFilmReleaseDate, cutText} from '../utils/common.js';
+import {FilterType, TEXT_LENGTH_ON_FILM_CARD} from '../const.js';
 import {getRuntime} from '../utils/film.js';
 
 const createFilmCardTemplate = (film) => {
@@ -35,7 +35,7 @@ const createFilmCardTemplate = (film) => {
         <span class="film-card__genre">${genre.join(', ')}</span>
       </p>
       <img src="${poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${description}</p>
+      <p class="film-card__description">${cutText(description, TEXT_LENGTH_ON_FILM_CARD)}</p>
       <span class="film-card__comments">${comments.length} comments</span>
     </a>
     <div class="film-card__controls">

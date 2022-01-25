@@ -62,6 +62,10 @@ export default class CommentsModel extends AbstractObservable {
       author: comment.author,
     };
 
+    delete adaptedComment['emotion'];
+    delete adaptedComment['comment'];
+    delete adaptedComment['date'];
+
     return adaptedComment;
   }
 }
