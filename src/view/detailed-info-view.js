@@ -2,6 +2,7 @@ import he from 'he';
 import {humanizeFilmReleaseDetailedDate, humanizeCommentDate} from '../utils/common.js';
 import SmartView from './smart-view.js';
 import {CommentAction, FilterType} from '../const.js';
+import {getRuntime} from '../utils/film.js';
 
 const createCommentItem = (comment) => {
 
@@ -50,8 +51,8 @@ const createDetailedInfoTemplate = (film, comments) => {
     poster,
     rating,
     released,
-    watchingTime,
-    genres,
+    runtime,
+    genre,
     description,
     isInWatchlist,
     isWatched,
@@ -80,7 +81,7 @@ const createDetailedInfoTemplate = (film, comments) => {
         </div>
         <div class="film-details__info-wrap">
           <div class="film-details__poster">
-            <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+            <img class="film-details__poster-img" src="${poster}" alt="">
             <p class="film-details__age">${ageRating}</p>
           </div>
 
@@ -115,7 +116,7 @@ const createDetailedInfoTemplate = (film, comments) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
-                <td class="film-details__cell">${watchingTime}</td>
+                <td class="film-details__cell">${getRuntime(runtime).hours}h ${getRuntime(runtime).minutes}m</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>
@@ -123,7 +124,7 @@ const createDetailedInfoTemplate = (film, comments) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Genres</td>
-                <td class="film-details__cell">${genres}</td>
+                <td class="film-details__cell">${genre.join(', ')}</td>
               </tr>
             </table>
 

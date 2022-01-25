@@ -1,6 +1,7 @@
 import AbstractView from './abstract-view.js';
-import {humanizeFilmReleaseDate} from '../utils/common.js';
-import {FilterType, MINUTES_IN_HOURS} from '../const.js';
+import {humanizeFilmReleaseDate, cutText} from '../utils/common.js';
+import {FilterType, TEXT_LENGTH_ON_FILM_CARD} from '../const.js';
+import {getRuntime} from '../utils/film.js';
 
 const createFilmCardTemplate = (film) => {
 
@@ -10,7 +11,7 @@ const createFilmCardTemplate = (film) => {
     rating,
     released,
     runtime,
-    genres,
+    genre,
     description,
     comments,
     isInWatchlist,
@@ -24,29 +25,17 @@ const createFilmCardTemplate = (film) => {
   const watchedClassName = isWatched ? activeClass : '';
   const watchListClassName = isInWatchlist ? activeClass : '';
 
-  const getRuntime = () => {
-    const filmRuntime = {
-      hours: 0,
-      minutes: 0,
-    };
-
-    filmRuntime.hours = runtime / MINUTES_IN_HOURS | 0;
-    filmRuntime.minutes = runtime % MINUTES_IN_HOURS;
-
-    return filmRuntime;
-  };
-
   return `<article class="film-card">
     <a class="film-card__link">
       <h3 class="film-card__title">${title}</h3>
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${releaseDate}</span>
-        <span class="film-card__duration">${getRuntime().hours}h ${getRuntime().minutes}m</span>
-        <span class="film-card__genre">${genres}</span>
+        <span class="film-card__duration">${getRuntime(runtime).hours}h ${getRuntime(runtime).minutes}m</span>
+        <span class="film-card__genre">${genre.join(', ')}</span>
       </p>
-      <img src="./images/posters/${poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${description}</p>
+      <img src="${poster}" alt="" class="film-card__poster">
+      <p class="film-card__description">${cutText(description, TEXT_LENGTH_ON_FILM_CARD)}</p>
       <span class="film-card__comments">${comments.length} comments</span>
     </a>
     <div class="film-card__controls">

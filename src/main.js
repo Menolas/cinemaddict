@@ -1,7 +1,5 @@
-import {FILM_COUNT, MenuItem} from './const.js';
+import {MenuItem} from './const.js';
 import UserRankView from './view/user-rank-view.js';
-import {generateFilmCard} from './mock/film.js';
-import {generateComments} from './mock/comments.js';
 import {render, remove, RenderPosition} from './utils/render.js';
 import BoardPresenter from './presenter/board-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
@@ -9,27 +7,24 @@ import FilmsModel from './model/films-model.js';
 import FilterModel from './model/filter-model.js';
 import CommentsModel from './model/comments-model.js';
 import StatisticView from './view/statistic-view';
+import ApiService from './api-service.js';
 
-//import {getGenresWithCountFromFilms, sortGenreCountDown, getTotalDuration, getFilmsFilteredByTime} from './utils/statistic.js';
-//import {MINUTES_IN_HOURS, StatisticType} from './const';
+const AUTHORIZATION = 'Basic gjpyrthjDHjUJOIF';
+const END_POINT = 'https://16.ecmascript.pages.academy/cinemaddict';
+const apiService = new ApiService(END_POINT, AUTHORIZATION);
 
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer');
-let statisticComponent = null;
 
-const films = Array.from({length: FILM_COUNT}, generateFilmCard);
-const comments = generateComments(films);
-
-const commentsModel = new CommentsModel();
-commentsModel.comments = comments;
-
-const filmsModel = new FilmsModel(commentsModel);
-filmsModel.films = films;
-
+const commentsModel = new CommentsModel(apiService);
+const filmsModel = new FilmsModel(apiService, commentsModel);
 const filterModel = new FilterModel();
+
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 const boardPresenter = new BoardPresenter(siteMainElement, filmsModel, filterModel, commentsModel);
+
+let statisticComponent = null;
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -47,9 +42,10 @@ const handleSiteMenuClick = (menuItem) => {
 
 render(siteHeaderElement, new UserRankView(), RenderPosition.BEFOREEND);
 
-filterPresenter.setMenuClickHandler(handleSiteMenuClick);
-
-filterPresenter.init();
 boardPresenter.init();
+filmsModel.init().finally(() => {
+  filterPresenter.init();
+  filterPresenter.setMenuClickHandler(handleSiteMenuClick);
+});
 
-siteFooterElement.querySelector('.footer__statistics span').textContent = FILM_COUNT;
+siteFooterElement.querySelector('.footer__statistics span').textContent = filmsModel.films.length;
