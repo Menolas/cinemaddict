@@ -1,6 +1,5 @@
 import AbstractObservable from '../utils/abstract-observable.js';
 import {UpdateType} from '../const';
-import dayjs from 'dayjs';
 
 export default class FilmsModel extends AbstractObservable {
   #apiService = null;
