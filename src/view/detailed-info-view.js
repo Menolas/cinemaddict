@@ -4,7 +4,7 @@ import SmartView from './smart-view.js';
 import {CommentAction, FilterType} from '../const.js';
 import {getRuntime} from '../utils/film.js';
 
-const createCommentItem = (comment) => {
+const createCommentItem = (comment, isDeleting, isDisabled, deletingCommentId) => {
 
   const {
     id,
@@ -25,21 +25,17 @@ const createCommentItem = (comment) => {
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${commentDate}</span>
-          <button class="film-details__comment-delete" data-id="${id}">Delete</button>
+          <button class="film-details__comment-delete" 
+                  data-id="${id}" 
+                  ${isDisabled ? 'disabled' : ''}>
+                  ${isDeleting && id === deletingCommentId ? 'Deleting...' : 'Delete'}</button>
         </p>
       </div>
     </li>`;
 };
 
-const createCommentsTemplate = (comments) => {
-  let filmComments = [];
-  comments.forEach((comment) => filmComments.push(createCommentItem(comment)));
-  filmComments = filmComments.join('');
-
-  return `<ul class="film-details__comments-list">
-            ${filmComments}
-          </ul>`;
-};
+const createCommentsTemplate = (comments, isDeleting, isDisabled, deletingCommentId) => 
+  comments.length ? comments.map((comment) => createCommentItem(comment, isDeleting, isDisabled, deletingCommentId)).join('') : '';
 
 const createEmojiImgTemplate = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="70" height="70" alt="emoji-${emoji}">` : '';
 
@@ -64,6 +60,10 @@ const createDetailedInfoTemplate = (film, comments) => {
     ageRating,
     newCommentEmoji,
     newCommentText,
+    isDisabled,
+    isSaving,
+    isDeleting,
+    deletingCommentId,
   } = film;
 
   const detailedReleaseDate = humanizeFilmReleaseDetailedDate(released);
@@ -151,22 +151,26 @@ const createDetailedInfoTemplate = (film, comments) => {
             </label>
 
             <div class="film-details__emoji-list">
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
+              <input class="film-details__emoji-item visually-hidden" 
+                    name="comment-emoji" ${isSaving ? 'disabled' : ''} type="radio" id="emoji-smile" value="smile">
               <label class="film-details__emoji-label" for="emoji-smile">
                 <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
               </label>
 
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
+              <input class="film-details__emoji-item visually-hidden" 
+                    name="comment-emoji" ${isSaving ? 'disabled' : ''} type="radio" id="emoji-sleeping" value="sleeping">
               <label class="film-details__emoji-label" for="emoji-sleeping">
                 <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
               </label>
 
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
+              <input class="film-details__emoji-item visually-hidden" 
+                    name="comment-emoji" ${isSaving ? 'disabled' : ''} type="radio" id="emoji-puke" value="puke">
               <label class="film-details__emoji-label" for="emoji-puke">
                 <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
               </label>
 
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
+              <input class="film-details__emoji-item visually-hidden" 
+                    name="comment-emoji" ${isSaving ? 'disabled' : ''} type="radio" id="emoji-angry" value="angry">
               <label class="film-details__emoji-label" for="emoji-angry">
                 <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
               </label>
@@ -232,25 +236,22 @@ export default class DetailedInfoView extends SmartView {
     if (index === -1) {
       throw new Error('Can\'t delete unexisting comment');
     }
-    this._callback.commentAction(CommentAction.DELETE, this.#comments[index]);
+    this._callback.commentAction(CommentAction.DELETE, this.#comments[index], this._data.id);
   }
 
   addCommentHandler = () => {
     const newComment = {
-      filmId: this._data.id,
-      emoji: this._data.newCommentEmoji ? this._data.newCommentEmoji : null,
-      text: this._data.newCommentText,
-      data: '',
+      emotion: this._data.newCommentEmoji,
+      comment: this._data.newCommentText,
     };
 
-    this._callback.commentAction(CommentAction.ADD, newComment);
+    this._callback.commentAction(CommentAction.ADD, newComment, this._data.id);
+    console.log(this._data.id);
   }
 
   #emojiClickHandler = (evt) => {
     evt.preventDefault();
-    //const scrollHeight = this.element.scrollTop;
     this.updateData({newCommentEmoji: evt.target.value,});
-    //this.element.scrollTo(0, scrollHeight);
   }
 
   #commentInputHandler = (evt) => {
@@ -275,15 +276,19 @@ export default class DetailedInfoView extends SmartView {
   static parseFilmToData = (film) => ({...film,
     newCommentText: '',
     newCommentEmoji: null,
+    isDisabled: false,
+    isSaving: false,
+    isDeleting: false,
+    deletingCommentId: null,
   });
 
-  static parseDataToFilm = (data) => {
-    const film = {...data};
-    delete film.newCommentText;
-    delete film.newCommentEmoji;
+  // static parseDataToFilm = (data) => {
+  //   const film = {...data};
+  //   delete film.newCommentText;
+  //   delete film.newCommentEmoji;
 
-    return film;
-  }
+  //   return film;
+  // }
 
   reset = (film) => {
     this.updateData(

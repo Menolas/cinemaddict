@@ -33,11 +33,11 @@ export default class ApiService {
     return await ApiService.parseResponse(response);
   }
 
-  addComment = async (comment) => {
+  addComment = async (comment, filmId) => {
     const response = await this.#load({
-      url: `comments/${comment.filmId}`,
+      url: `comments/${filmId}`,
       method: Method.POST,
-      body: JSON.stringify(this.#adaptCommentToServer(comment)),
+      body: JSON.stringify(comment),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
     //console.log(response);
@@ -121,6 +121,7 @@ export default class ApiService {
   }
 
   #adaptCommentToServer = (comment) => {
+    console.log(comment);
 
     const adaptedComment = {
       ...comment,

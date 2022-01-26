@@ -6,7 +6,7 @@ import FilmContainerView from '../view/film-container-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import LoadingView from '../view/loading-view.js';
-import FilmPresenter from './film-presenter.js';
+import {FilmPresenter, State as FilmPresenterViewState} from './film-presenter.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import {SortType, FilterType, UpdateType, CommentAction, FILM_COUNT_PER_STEP} from '../const.js';
 import {filter} from '../utils/filter.js';
@@ -128,21 +128,36 @@ export default class BoardPresenter {
     }
   }
 
-  // #handleCommentEvent = (updateType, data) => {
-  //   switch (updateType) {
-  //     case UpdateType.COMMENTS:
-  //       this.#handleModelEvent(UpdateType.COMMENTS, this.#filmsModel.getFilmById(data.filmId));
-  //       break;
-  //   }
-  // }
+  #handleCommentEvent = (updateType, data) => {
+    switch (updateType) {
+      case UpdateType.COMMENTS:
+        this.#handleModelEvent(UpdateType.COMMENTS, this.#filmsModel.getFilmById(data.filmId));
+        break;
+      case UpdateType.MINOR:
+        this.#filmsModel.reloadComments(data.filmId);
+        this.#handleModelEvent(UpdateType);
+        break;
+    }
+  }
 
-  #handleCommentChange = (actionType, updateType, update) => {
+  #handleCommentChange = async (actionType, updateType, update) => {
     switch (actionType) {
       case CommentAction.DELETE:
-        this.#commentsModel.deleteComment(updateType, update);
+        this.#filmPresenterPopupOn.setViewState(FilmPresenterViewState.DELETING, update.id);
+        try {
+          await this.#commentsModel.deleteComment(updateType, update);
+        } catch (err) {
+          this.#filmPresenterPopupOn.setAborting();
+        }
         break;
       case CommentAction.ADD:
-        this.#commentsModel.addComment(updateType, update);
+      console.log(update);
+        this.#filmPresenterPopupOn.setSaving();
+        try {
+          await this.#commentsModel.addComment(updateType, update);
+        } catch (err) {
+          this.#filmPresenterPopupOn.setAborting();
+        }
         break;
     }
   }
@@ -169,7 +184,7 @@ export default class BoardPresenter {
       this.#filmListContainerComponent, this.#handleFilmChange, this.#commentsModel, this.#handleCommentChange
     );
 
-    filmPresenter.setCardClick(() =>this.#handleCardClick(filmPresenter, film.id));
+    filmPresenter.setCardClick(() => this.#handleCardClick(filmPresenter, film.id));
     filmPresenter.setCardClose(this.#handleCardClose);
     filmPresenter.init(film);
     this.#filmPresenter.set(film.id, filmPresenter);
