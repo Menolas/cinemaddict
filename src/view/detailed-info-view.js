@@ -34,7 +34,7 @@ const createCommentItem = (comment, isDeleting, isDisabled, deletingCommentId) =
     </li>`;
 };
 
-const createCommentsTemplate = (comments, isDeleting, isDisabled, deletingCommentId) => 
+const createCommentsTemplate = (comments, isDeleting, isDisabled, deletingCommentId) =>
   comments.length ? comments.map((comment) => createCommentItem(comment, isDeleting, isDisabled, deletingCommentId)).join('') : '';
 
 const createEmojiImgTemplate = (emoji) => emoji ? `<img src="./images/emoji/${emoji}.png" width="70" height="70" alt="emoji-${emoji}">` : '';
@@ -60,10 +60,7 @@ const createDetailedInfoTemplate = (film, comments) => {
     ageRating,
     newCommentEmoji,
     newCommentText,
-    isDisabled,
     isSaving,
-    isDeleting,
-    deletingCommentId,
   } = film;
 
   const detailedReleaseDate = humanizeFilmReleaseDetailedDate(released);
@@ -246,7 +243,6 @@ export default class DetailedInfoView extends SmartView {
     };
 
     this._callback.commentAction(CommentAction.ADD, newComment, this._data.id);
-    console.log(this._data.id);
   }
 
   #emojiClickHandler = (evt) => {

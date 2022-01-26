@@ -151,7 +151,6 @@ export default class BoardPresenter {
         }
         break;
       case CommentAction.ADD:
-      console.log(update);
         this.#filmPresenterPopupOn.setSaving();
         try {
           await this.#commentsModel.addComment(updateType, update);

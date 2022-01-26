@@ -121,8 +121,6 @@ export default class ApiService {
   }
 
   #adaptCommentToServer = (comment) => {
-    console.log(comment);
-
     const adaptedComment = {
       ...comment,
       comment: comment.text,
