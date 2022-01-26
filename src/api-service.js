@@ -40,7 +40,7 @@ export default class ApiService {
       body: JSON.stringify(this.#adaptCommentToServer(comment)),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
-    console.log(response);
+    //console.log(response);
     return await ApiService.parseResponse(response);
   }
 
@@ -130,7 +130,7 @@ export default class ApiService {
 
     delete adaptedComment.text;
     delete adaptedComment.emoji;
-    console.log(adaptedComment);
+    //console.log(adaptedComment);
 
     return adaptedComment;
   };
