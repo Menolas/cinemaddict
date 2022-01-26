@@ -120,6 +120,7 @@ export default class FilmPresenter {
       evt.preventDefault();
       this.#detailedFilmComponent.reset(this.#film);
       this.closePopup();
+      this._callback.cardClose();
     }
   }
 

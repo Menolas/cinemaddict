@@ -46,6 +46,5 @@ boardPresenter.init();
 filmsModel.init().finally(() => {
   filterPresenter.init();
   filterPresenter.setMenuClickHandler(handleSiteMenuClick);
+  siteFooterElement.querySelector('.footer__statistics span').textContent = filmsModel.films.length;
 });
-
-siteFooterElement.querySelector('.footer__statistics span').textContent = filmsModel.films.length;

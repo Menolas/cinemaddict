@@ -23,10 +23,6 @@ export default class FilmsModel extends AbstractObservable {
     this._notify(UpdateType.INIT);
   }
 
-  set films(films) {
-    this.#films = [...films];
-  }
-
   get films() {
     return this.#films;
   }

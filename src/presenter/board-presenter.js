@@ -18,9 +18,9 @@ export default class BoardPresenter {
   #commentsModel = null;
 
   #filmBoardComponent = new FilmBoardView();
-  #filmContainerComponent = null;
   #filmListContainerComponent = new FilmListContainerView();
   #loadingComponent = new LoadingView();
+  #filmContainerComponent = null;
   #showMoreButtonComponent = null;
   #sortListComponent = null;
   #filterMenuComponent = null;
@@ -65,7 +65,7 @@ export default class BoardPresenter {
 
     this.#filmsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
-    this.#commentsModel.addObserver(this.#handleCommentEvent);
+    this.#commentsModel.addObserver(this.#handleModelEvent);
 
     this.#renderBoard();
   }
@@ -79,7 +79,7 @@ export default class BoardPresenter {
     remove(this.#showMoreButtonComponent);
 
     this.#filmsModel.removeObserver(this.#handleModelEvent);
-    this.#commentsModel.removeObserver(this.#handleCommentEvent);
+    this.#commentsModel.removeObserver(this.#handleModelEvent);
   }
 
   #handleCardClick = (filmPresenter, id) => {
@@ -128,13 +128,13 @@ export default class BoardPresenter {
     }
   }
 
-  #handleCommentEvent = (updateType, data) => {
-    switch (updateType) {
-      case UpdateType.COMMENTS:
-        this.#handleModelEvent(UpdateType.COMMENTS, this.#filmsModel.getFilmById(data.filmId));
-        break;
-    }
-  }
+  // #handleCommentEvent = (updateType, data) => {
+  //   switch (updateType) {
+  //     case UpdateType.COMMENTS:
+  //       this.#handleModelEvent(UpdateType.COMMENTS, this.#filmsModel.getFilmById(data.filmId));
+  //       break;
+  //   }
+  // }
 
   #handleCommentChange = (actionType, updateType, update) => {
     switch (actionType) {
