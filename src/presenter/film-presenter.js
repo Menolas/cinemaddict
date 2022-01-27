@@ -13,7 +13,7 @@ export const State = {
 const body = document.querySelector('body');
 const siteFooterElement = document.querySelector('.footer');
 
-export class FilmPresenter {
+export default class FilmPresenter {
   #filmBox = null;
   #changeData = null;
   #filmComponent = null;
@@ -83,7 +83,6 @@ export class FilmPresenter {
       filmComments = this.#commentsModel.getComments(this.#film.id);
     }
 
-    //console.log(filmComments);
     this.#detailedFilmComponent = new DetailedInfoView(this.#film, filmComments);
 
     this.#detailedFilmComponent.setClosePopupClickHandler(this.#handleClosePopup);

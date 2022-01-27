@@ -5,11 +5,14 @@ import SortListView from '../view/sort-list-view.js';
 import FilmContainerView from '../view/film-container-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
 import NoFilmView from '../view/no-film-view.js';
+import UserRankView from '../view/user-rank-view.js';
 import LoadingView from '../view/loading-view.js';
-import {FilmPresenter, State as FilmPresenterViewState} from './film-presenter.js';
+import FilmPresenter, {State as FilmPresenterViewState} from './film-presenter.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import {SortType, FilterType, UpdateType, CommentAction, FILM_COUNT_PER_STEP} from '../const.js';
 import {filter} from '../utils/filter.js';
+
+const siteHeaderElement = document.querySelector('.header');
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -25,6 +28,7 @@ export default class BoardPresenter {
   #sortListComponent = null;
   #filterMenuComponent = null;
   #noFilmComponent = null;
+  #userProfileComponent = null;
 
   #renderedFilmCount = FILM_COUNT_PER_STEP;
   #filmPresenter = new Map();
@@ -50,9 +54,9 @@ export default class BoardPresenter {
     switch (this.#currentSortType) {
 
       case SortType.DATE:
-        return filteredFilms.sort(sortFilmByDate);
+        return [...filteredFilms].sort(sortFilmByDate);
       case SortType.RATE:
-        return filteredFilms.sort(sortFilmByRate);
+        return [...filteredFilms].sort(sortFilmByRate);
     }
 
     return filteredFilms;
@@ -224,12 +228,18 @@ export default class BoardPresenter {
     this.#filmPresenterPopupOn.showPopup();
   }
 
+  #renderUserProfile = () => {
+    this.#userProfileComponent = new UserRankView(this.#filmsModel.watchedFilms.length);
+    render(siteHeaderElement, this.#userProfileComponent, RenderPosition.BEFOREEND);
+  }
+
   #clearBoard = ({resetRenderedFilmCount = false, resetSortType = false} = {}) => {
     const filmCount = this.films.length;
 
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmPresenter.clear();
-
+    
+    remove(this.#userProfileComponent);
     remove(this.#sortListComponent);
     remove(this.#loadingComponent);
     remove(this.#showMoreButtonComponent);
@@ -267,6 +277,8 @@ export default class BoardPresenter {
     }
 
     const filmCount = this.films.length;
+    
+    this.#renderUserProfile();
 
     if (filmCount === 0) {
       this.#renderNoFilm();

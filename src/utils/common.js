@@ -15,3 +15,17 @@ export const sortFilmByRate = (filmA, filmB) => filmB.rating - filmA.rating;
 export const isCtrlEnterEvent = (evt) => evt.key === 'Enter' && evt.ctrlKey;
 
 export const cutText = (text, length) =>  text.length > length ? `${text.slice(0, length)}...` : text;
+
+export const getUserRank = (films) => {
+  let rank;
+
+  if (films > 0 && films < 11) {
+    rank = 'Novice';
+  } else if (films > 11 && films < 21) {
+    rank = 'Fan';
+  } else if (films >= 21) {
+    rank = 'Movie Buff';
+  }
+
+  return rank;
+};

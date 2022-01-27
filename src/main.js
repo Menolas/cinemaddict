@@ -1,5 +1,4 @@
 import {MenuItem} from './const.js';
-import UserRankView from './view/user-rank-view.js';
 import {render, remove, RenderPosition} from './utils/render.js';
 import BoardPresenter from './presenter/board-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
@@ -13,7 +12,6 @@ const AUTHORIZATION = 'Basic gjpyrthjDHjUJOIF';
 const END_POINT = 'https://16.ecmascript.pages.academy/cinemaddict';
 const apiService = new ApiService(END_POINT, AUTHORIZATION);
 
-const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const siteFooterElement = document.querySelector('.footer');
 
@@ -35,12 +33,11 @@ const handleSiteMenuClick = (menuItem) => {
     case MenuItem.STATISTIC:
       boardPresenter.destroy();
       statisticComponent = new StatisticView(filmsModel.watchedFilms);
+
       render(siteMainElement, statisticComponent, RenderPosition.BEFOREEND);
       break;
   }
 };
-
-render(siteHeaderElement, new UserRankView(), RenderPosition.BEFOREEND);
 
 boardPresenter.init();
 filmsModel.init().finally(() => {

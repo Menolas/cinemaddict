@@ -120,7 +120,7 @@ const createDetailedInfoTemplate = (film, comments) => {
                 <td class="film-details__cell">${country}</td>
               </tr>
               <tr class="film-details__row">
-                <td class="film-details__term">Genres</td>
+                <td class="film-details__term">Genre${genre.length > 1 ? 's' : ''}</td>
                 <td class="film-details__cell">${genre.join(', ')}</td>
               </tr>
             </table>
@@ -278,13 +278,13 @@ export default class DetailedInfoView extends SmartView {
     deletingCommentId: null,
   });
 
-  // static parseDataToFilm = (data) => {
-  //   const film = {...data};
-  //   delete film.newCommentText;
-  //   delete film.newCommentEmoji;
+  static parseDataToFilm = (data) => {
+    const film = {...data};
+    delete film.newCommentText;
+    delete film.newCommentEmoji;
 
-  //   return film;
-  // }
+    return film;
+  }
 
   reset = (film) => {
     this.updateData(
