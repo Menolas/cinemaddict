@@ -238,7 +238,7 @@ export default class BoardPresenter {
 
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmPresenter.clear();
-    
+
     remove(this.#userProfileComponent);
     remove(this.#sortListComponent);
     remove(this.#loadingComponent);
@@ -277,7 +277,7 @@ export default class BoardPresenter {
     }
 
     const filmCount = this.films.length;
-    
+
     this.#renderUserProfile();
 
     if (filmCount === 0) {

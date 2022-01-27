@@ -40,7 +40,7 @@ export default class ApiService {
       body: JSON.stringify(comment),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
-    
+
     return await ApiService.parseResponse(response);
   }
 
