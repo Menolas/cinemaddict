@@ -216,7 +216,7 @@ export default class FilmPresenter {
   }
 
   setAbortingDeleteComment = () => {
-     const resetFormState = () => {
+    const resetFormState = () => {
       this.#detailedFilmComponent.updateData({
         isDisabled: false,
         isSaving: false,
