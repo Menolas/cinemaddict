@@ -157,6 +157,11 @@ export default class BoardPresenter {
         this.#filmPresenterPopupOn.setViewState(FilmPresenterViewState.DELETING, update.id);
         try {
           await this.#commentsModel.deleteComment(updateType, update);
+          if (this.#mostCommentedFilmsComponent) {
+            remove(this.#mostCommentedFilmsComponent);
+            this.#renderTopCommentedSection(this.#filmsModel.films);
+          }
+
         } catch (err) {
           this.#filmPresenterPopupOn.setAbortingDeleteComment(update.comment.id);
         }
@@ -165,6 +170,12 @@ export default class BoardPresenter {
         this.#filmPresenterPopupOn.setSaving();
         try {
           await this.#commentsModel.addComment(updateType, update);
+
+          if (this.#mostCommentedFilmsComponent) {
+            remove(this.#mostCommentedFilmsComponent);
+            this.#renderTopCommentedSection(this.#filmsModel.films);
+          }
+
         } catch (err) {
           this.#filmPresenterPopupOn.setAbortingNewComment();
         }
@@ -204,20 +215,24 @@ export default class BoardPresenter {
     films.forEach((film) => this.#renderFilm(film, container));
   }
 
-  #renderExtraFilmSections = (films) => {
-    const topRatedFilms = this.#topRatedFilms(films);
-    const mostCommentedFilms = this.#mostCommentedFilms(films);
+  #renderTopCommentedSection = (films) => {
 
-    if (topRatedFilms.length) {
-      this.#topRatedFilmsComponent = new FilmListExtraView(ExtraTitle.TOP_RATED);
-      render(this.#filmBoardComponent, this.#topRatedFilmsComponent, RenderPosition.BEFOREEND);
-      this.#renderFilms(topRatedFilms, this.#topRatedFilmsComponent.element.querySelector('.films-list__container'));
-    }
+    const mostCommentedFilms = this.#mostCommentedFilms(films);
 
     if (mostCommentedFilms.length) {
       this.#mostCommentedFilmsComponent = new FilmListExtraView(ExtraTitle.MOST_COMMENTED);
       render(this.#filmBoardComponent, this.#mostCommentedFilmsComponent, RenderPosition.BEFOREEND);
       this.#renderFilms(mostCommentedFilms, this.#mostCommentedFilmsComponent.element.querySelector('.films-list__container'));
+    }
+  }
+
+  #renderTopRatedSection = (films) => {
+    const topRatedFilms = this.#topRatedFilms(films);
+
+    if (topRatedFilms.length) {
+      this.#topRatedFilmsComponent = new FilmListExtraView(ExtraTitle.TOP_RATED);
+      render(this.#filmBoardComponent, this.#topRatedFilmsComponent, RenderPosition.BEFOREEND);
+      this.#renderFilms(topRatedFilms, this.#topRatedFilmsComponent.element.querySelector('.films-list__container'));
     }
   }
 
@@ -311,7 +326,10 @@ export default class BoardPresenter {
     const filmCount = this.films.length;
 
     this.#renderUserProfile();
-    this.#renderExtraFilmSections(this.#filmsModel.films);
+
+    this.#renderTopRatedSection(this.#filmsModel.films);
+
+    this.#renderTopCommentedSection(this.#filmsModel.films);
 
     if (filmCount === 0) {
       this.#renderNoFilm();
