@@ -215,7 +215,7 @@ export default class FilmPresenter {
     this.#detailedFilmComponent.shakeNewComment(resetFormState);
   }
 
-  setAbortingDeleteComment = () => {
+  setAbortingDeleteComment = (commentId) => {
     const resetFormState = () => {
       this.#detailedFilmComponent.updateData({
         isDisabled: false,
@@ -225,6 +225,6 @@ export default class FilmPresenter {
       });
     };
 
-    this.#detailedFilmComponent.shakeComment(resetFormState);
+    this.#detailedFilmComponent.shakeComment(resetFormState, commentId);
   }
 }

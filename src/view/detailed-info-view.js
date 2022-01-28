@@ -17,7 +17,7 @@ const createCommentItem = (comment, isDeleting, isDisabled, deletingCommentId) =
 
   const commentDate = humanizeCommentDate(date);
 
-  return `<li id="${id}" class="film-details__comment">
+  return `<li id="a${id}" class="film-details__comment">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">
       </span>
@@ -294,10 +294,10 @@ export default class DetailedInfoView extends SmartView {
     );
   }
 
-  shakeComment(callback) {
-    this.element.querySelector('.film-details__comments-list').style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+  shakeComment(callback, commentId) {
+    this.element.querySelector(`#a${commentId}`).style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
     setTimeout(() => {
-      this.element.querySelector('.film-details__comments-list').style.animation = '';
+      this.element.querySelector(`#a${commentId}`).style.animation = '';
       callback();
     }, SHAKE_ANIMATION_TIMEOUT);
   }
