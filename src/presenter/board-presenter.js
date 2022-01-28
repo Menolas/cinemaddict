@@ -89,13 +89,9 @@ export default class BoardPresenter {
     this.#commentsModel.removeObserver(this.#handleModelEvent);
   }
 
-  #topRatedFilms = (films) => {
-    return films.filter((film) => film.rating > 0).sort(sortFilmByRate).slice(0, FILM_TOP_RATED_COUNT);
-  }
+  #topRatedFilms = (films) => films.filter((film) => film.rating > 0).sort(sortFilmByRate).slice(0, FILM_TOP_RATED_COUNT);
 
-  #mostCommentedFilms = (films) => {
-    return films.filter((film) => film.comments.length > 0).sort(sortFilmByComments).slice(0, FILM_MOST_COMMENTED_COUNT);
-  }
+  #mostCommentedFilms = (films) => films.filter((film) => film.comments.length > 0).sort(sortFilmByComments).slice(0, FILM_MOST_COMMENTED_COUNT);
 
   #handleCardClick = (filmPresenter, id) => {
     this.#filmPopupOnId = id;
@@ -210,16 +206,14 @@ export default class BoardPresenter {
 
   #renderExtraFilmSections = (films) => {
     const topRatedFilms = this.#topRatedFilms(films);
-    console.log(topRatedFilms);
     const mostCommentedFilms = this.#mostCommentedFilms(films);
-    console.log(mostCommentedFilms);
 
     if (topRatedFilms.length) {
       this.#topRatedFilmsComponent = new FilmListExtraView(ExtraTitle.TOP_RATED);
       render(this.#filmBoardComponent, this.#topRatedFilmsComponent, RenderPosition.BEFOREEND);
       this.#renderFilms(topRatedFilms, this.#topRatedFilmsComponent.element.querySelector('.films-list__container'));
     }
-    
+
     if (mostCommentedFilms.length) {
       this.#mostCommentedFilmsComponent = new FilmListExtraView(ExtraTitle.MOST_COMMENTED);
       render(this.#filmBoardComponent, this.#mostCommentedFilmsComponent, RenderPosition.BEFOREEND);
