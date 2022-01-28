@@ -23,10 +23,6 @@ export default class FilmsModel extends AbstractObservable {
     this._notify(UpdateType.INIT);
   }
 
-  set films(films) {
-    this.#films = [...films];
-  }
-
   get films() {
     return this.#films;
   }
@@ -77,7 +73,7 @@ export default class FilmsModel extends AbstractObservable {
 
     const film = this.#films[index];
 
-    this.#films[index] = {...film, comments: this.#commentsModel.getCommentsIdsByFilmId(film.id)};
+    this.#films[index] = {...film, comments: this.#commentsModel.loadComments(film.id)};
   }
 
   #adaptToClient = (film) => {

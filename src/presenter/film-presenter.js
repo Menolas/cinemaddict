@@ -4,6 +4,12 @@ import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {FilterType, UpdateType} from '../const.js';
 import {isCtrlEnterEvent, isEscEvent} from '../utils/common';
 
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};
+
 const body = document.querySelector('body');
 const siteFooterElement = document.querySelector('.footer');
 
@@ -15,7 +21,7 @@ export default class FilmPresenter {
   #commentsModel = null;
   #changeComment = null;
   #film = null;
-  #isCommentLoaded = false;
+  #isCommentsLoaded = false;
 
   _callback = {};
 
@@ -53,7 +59,7 @@ export default class FilmPresenter {
   }
 
   handleLoadedComment() {
-    this.#isCommentLoaded = true;
+    this.#isCommentsLoaded = true;
   }
 
   setCardClick = (callback) => {
@@ -71,11 +77,10 @@ export default class FilmPresenter {
   showPopup = () => {
     const prevDetailedFilmComponent = this.#detailedFilmComponent;
     let filmComments = [];
-
-    if (!this.#isCommentLoaded) {
+    if (!this.#isCommentsLoaded) {
       this.#commentsModel.loadComments(this.#film.id);
     } else {
-      filmComments = this.#commentsModel.getCommentsByFilmId(this.#film.id);
+      filmComments = this.#commentsModel.getComments(this.#film.id);
     }
 
     this.#detailedFilmComponent = new DetailedInfoView(this.#film, filmComments);
@@ -120,6 +125,7 @@ export default class FilmPresenter {
       evt.preventDefault();
       this.#detailedFilmComponent.reset(this.#film);
       this.closePopup();
+      this._callback.cardClose();
     }
   }
 
@@ -147,8 +153,8 @@ export default class FilmPresenter {
     }
   }
 
-  #handlerCommentAction = (type, comment) => {
-    this.#changeComment(type, UpdateType.MINOR, comment);
+  #handlerCommentAction = (type, comment, filmId) => {
+    this.#changeComment(type, UpdateType.MINOR, {comment: comment, filmId: filmId});
   }
 
   #ctrEnterDownHandler = (evt) => {
@@ -156,5 +162,69 @@ export default class FilmPresenter {
       evt.preventDefault(evt);
       this.#detailedFilmComponent.addCommentHandler();
     }
+  }
+
+  setViewState = (state, updateId = null) => {
+    const resetFormState = () => {
+      this.#detailedFilmComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+        deletingCommentId: null,
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this.#detailedFilmComponent.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        this.#detailedFilmComponent.updateData({
+          isDisabled: true,
+          isDeleting: true,
+          deletingCommentId: updateId,
+        });
+        break;
+      case State.ABORTING:
+        //this.#filmComponent.shake(resetFormState);
+        this.#detailedFilmComponent.shakeNewComment(resetFormState);
+        break;
+    }
+  }
+
+  setSaving = () => {
+    this.#detailedFilmComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAbortingNewComment = () => {
+    const resetFormState = () => {
+      this.#detailedFilmComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+        deletingCommentId: null,
+      });
+    };
+
+    this.#detailedFilmComponent.shakeNewComment(resetFormState);
+  }
+
+  setAbortingDeleteComment = (commentId) => {
+    const resetFormState = () => {
+      this.#detailedFilmComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+        deletingCommentId: null,
+      });
+    };
+
+    this.#detailedFilmComponent.shakeComment(resetFormState, commentId);
   }
 }

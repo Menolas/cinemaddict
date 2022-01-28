@@ -50,7 +50,6 @@ export default class FilterPresenter {
   init = () => {
     const filters = this.filters;
     const prevFilterComponent = this.#filterComponent;
-    //const currentFilter = this.#filterModel.menuType === MenuItem.FILMS ? this.#filterModel.filter : null;
 
     this.#filterComponent = new FilterView(filters, this.#filterModel.filter, this.#filterModel.menuType);
     this.#filterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);

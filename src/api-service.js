@@ -33,11 +33,11 @@ export default class ApiService {
     return await ApiService.parseResponse(response);
   }
 
-  addComment = async (comment) => {
+  addComment = async (comment, filmId) => {
     const response = await this.#load({
-      url: 'comments',
+      url: `comments/${filmId}`,
       method: Method.POST,
-      body: JSON.stringify(this.#adaptToServer(comment)),
+      body: JSON.stringify(comment),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
 
@@ -87,7 +87,7 @@ export default class ApiService {
   }
 
   #adaptToServer = (film) => {
-    const filmInfo ={
+    const filmInfo = {
       'title': film.title,
       'age_rating': film.ageRating,
       'alternative_title': film.titleOriginal,
@@ -119,4 +119,17 @@ export default class ApiService {
 
     return adaptedFilm;
   }
+
+  #adaptCommentToServer = (comment) => {
+    const adaptedComment = {
+      ...comment,
+      comment: comment.text,
+      emotion: comment.emoji,
+    };
+
+    delete adaptedComment.text;
+    delete adaptedComment.emoji;
+
+    return adaptedComment;
+  };
 }
