@@ -189,8 +189,8 @@ export default class FilmPresenter {
         });
         break;
       case State.ABORTING:
-        this.#filmComponent.shake(resetFormState);
-        this.#detailedFilmComponent.shake(resetFormState);
+        //this.#filmComponent.shake(resetFormState);
+        this.#detailedFilmComponent.shakeNewComment(resetFormState);
         break;
     }
   }
@@ -202,7 +202,7 @@ export default class FilmPresenter {
     });
   }
 
-  setAborting = () => {
+  setAbortingNewComment = () => {
     const resetFormState = () => {
       this.#detailedFilmComponent.updateData({
         isDisabled: false,
@@ -212,6 +212,19 @@ export default class FilmPresenter {
       });
     };
 
-    this.#detailedFilmComponent.shake(resetFormState);
+    this.#detailedFilmComponent.shakeNewComment(resetFormState);
+  }
+
+  setAbortingDeleteComment = () => {
+     const resetFormState = () => {
+      this.#detailedFilmComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+        deletingCommentId: null,
+      });
+    };
+
+    this.#detailedFilmComponent.shakeComment(resetFormState);
   }
 }

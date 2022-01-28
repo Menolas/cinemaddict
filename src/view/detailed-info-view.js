@@ -3,6 +3,7 @@ import {humanizeFilmReleaseDetailedDate, humanizeCommentDate} from '../utils/com
 import SmartView from './smart-view.js';
 import {CommentAction, FilterType} from '../const.js';
 import {getRuntime} from '../utils/film.js';
+const SHAKE_ANIMATION_TIMEOUT = 600;
 
 const createCommentItem = (comment, isDeleting, isDisabled, deletingCommentId) => {
 
@@ -16,7 +17,7 @@ const createCommentItem = (comment, isDeleting, isDisabled, deletingCommentId) =
 
   const commentDate = humanizeCommentDate(date);
 
-  return `<li class="film-details__comment">
+  return `<li id="${id}" class="film-details__comment">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">
       </span>
@@ -139,7 +140,7 @@ const createDetailedInfoTemplate = (film, comments) => {
       <div class="film-details__bottom-container">
         <section class="film-details__comments-wrap">
           <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
-          ${createCommentsTemplate(comments)}
+          <ul class="film-details__comments-list">${createCommentsTemplate(comments)}</ul>
           <div class="film-details__new-comment">
             <div class="film-details__add-emoji-label">${newEmojiImg}</div>
 
@@ -181,6 +182,7 @@ const createDetailedInfoTemplate = (film, comments) => {
 
 export default class DetailedInfoView extends SmartView {
   #comments = [];
+  //#newCommentForm = this.element.querySelector('.film-details__new-comment');
 
   constructor(film, comments) {
     super();
@@ -290,5 +292,21 @@ export default class DetailedInfoView extends SmartView {
     this.updateData(
       DetailedInfoView.parseFilmToData(film),
     );
+  }
+
+  shakeComment(callback) {
+    this.element.querySelector('.film-details__comments-list').style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    setTimeout(() => {
+      this.element.querySelector('.film-details__comments-list').style.animation = '';
+      callback();
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  shakeNewComment(callback) {
+    this.element.querySelector('.film-details__new-comment').style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    setTimeout(() => {
+      this.element.querySelector('.film-details__new-comment').style.animation = '';
+      callback();
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 }

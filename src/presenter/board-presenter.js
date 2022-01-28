@@ -151,7 +151,7 @@ export default class BoardPresenter {
         try {
           await this.#commentsModel.deleteComment(updateType, update);
         } catch (err) {
-          this.#filmPresenterPopupOn.setAborting();
+          this.#filmPresenterPopupOn.setAbortingDeleteComment();
         }
         break;
       case CommentAction.ADD:
@@ -159,7 +159,7 @@ export default class BoardPresenter {
         try {
           await this.#commentsModel.addComment(updateType, update);
         } catch (err) {
-          this.#filmPresenterPopupOn.setAborting();
+          this.#filmPresenterPopupOn.setAbortingNewComment();
         }
         break;
     }
@@ -238,7 +238,7 @@ export default class BoardPresenter {
 
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmPresenter.clear();
-
+    
     remove(this.#userProfileComponent);
     remove(this.#sortListComponent);
     remove(this.#loadingComponent);
@@ -277,7 +277,7 @@ export default class BoardPresenter {
     }
 
     const filmCount = this.films.length;
-
+    
     this.#renderUserProfile();
 
     if (filmCount === 0) {
