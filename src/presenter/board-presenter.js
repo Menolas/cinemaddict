@@ -145,7 +145,6 @@ export default class BoardPresenter {
   }
 
   #handleCommentChange = async (actionType, updateType, update) => {
-    console.log(update);
     switch (actionType) {
       case CommentAction.DELETE:
         this.#filmPresenterPopupOn.setViewState(FilmPresenterViewState.DELETING, update.id);
