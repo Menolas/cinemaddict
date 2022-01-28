@@ -21,9 +21,9 @@ export const cutText = (text, length) =>  text.length > length ? `${text.slice(0
 export const getUserRank = (films) => {
   let rank;
 
-  if (films > 0 && films < 11) {
+  if (films >= 1 && films < 11) {
     rank = 'Novice';
-  } else if (films > 11 && films < 21) {
+  } else if (films >= 11 && films < 21) {
     rank = 'Fan';
   } else if (films >= 21) {
     rank = 'Movie Buff';
