@@ -1,6 +1,7 @@
-export const FILM_COUNT = 42;
 export const FILM_COUNT_PER_STEP = 5;
 export const TEXT_LENGTH_ON_FILM_CARD = 140;
+export const FILM_TOP_RATED_COUNT = 2;
+export const FILM_MOST_COMMENTED_COUNT = 2;
 export const MINUTES_IN_HOURS = 60;
 
 export const SortType = {

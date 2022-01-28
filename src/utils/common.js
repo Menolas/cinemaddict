@@ -12,6 +12,8 @@ export const sortFilmByDate = (filmA, filmB) => dayjs(filmB.released).diff(dayjs
 
 export const sortFilmByRate = (filmA, filmB) => filmB.rating - filmA.rating;
 
+export const sortFilmByComments = (film1, film2) => film1.comments.length < film2.comments.length ? 1 : -1;
+
 export const isCtrlEnterEvent = (evt) => evt.key === 'Enter' && evt.ctrlKey;
 
 export const cutText = (text, length) =>  text.length > length ? `${text.slice(0, length)}...` : text;
