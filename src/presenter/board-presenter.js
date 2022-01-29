@@ -51,6 +51,7 @@ export default class BoardPresenter {
 
   get films() {
     this.#currentFilterType = this.#filterModel.filter;
+    
     const films = this.#filmsModel.films;
     const filteredFilms = filter[this.#currentFilterType](films);
 
@@ -63,6 +64,11 @@ export default class BoardPresenter {
     }
 
     return filteredFilms;
+
+    // return {
+    //   films: films,
+    //   filteredFilms: filteredFilms,
+    // };
   }
 
   init = () => {
@@ -161,7 +167,7 @@ export default class BoardPresenter {
             remove(this.#mostCommentedFilmsComponent);
             this.#renderTopCommentedSection(this.#filmsModel.films);
           }
-
+ 
         } catch (err) {
           this.#filmPresenterPopupOn.setAbortingDeleteComment(update.comment.id);
         }
@@ -327,9 +333,9 @@ export default class BoardPresenter {
 
     this.#renderUserProfile();
 
-    this.#renderTopRatedSection(this.#filmsModel.films);
+    this.#renderTopRatedSection(this.films);
 
-    this.#renderTopCommentedSection(this.#filmsModel.films);
+    this.#renderTopCommentedSection(this.films);
 
     if (filmCount === 0) {
       this.#renderNoFilm();
