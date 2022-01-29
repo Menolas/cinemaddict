@@ -189,7 +189,6 @@ export default class FilmPresenter {
         });
         break;
       case State.ABORTING:
-        //this.#filmComponent.shake(resetFormState);
         this.#detailedFilmComponent.shakeNewComment(resetFormState);
         break;
     }
