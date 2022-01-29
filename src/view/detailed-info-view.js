@@ -1,5 +1,5 @@
 import he from 'he';
-import {humanizeFilmReleaseDetailedDate, humanizeCommentDate} from '../utils/common.js';
+import {humanizeFilmReleaseDetailedDate, getCommentTime} from '../utils/common.js';
 import SmartView from './smart-view.js';
 import {CommentAction, FilterType} from '../const.js';
 import {getRuntime} from '../utils/film.js';
@@ -15,8 +15,6 @@ const createCommentItem = (comment, isDeleting, isDisabled, deletingCommentId) =
     date,
   } = comment;
 
-  const commentDate = humanizeCommentDate(date);
-
   return `<li id="a${id}" class="film-details__comment">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">
@@ -25,7 +23,7 @@ const createCommentItem = (comment, isDeleting, isDisabled, deletingCommentId) =
         <p class="film-details__comment-text">${text}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${commentDate}</span>
+          <span class="film-details__comment-day">${getCommentTime(date)}</span>
           <button class="film-details__comment-delete" 
                   data-id="${id}" 
                   ${isDisabled ? 'disabled' : ''}>

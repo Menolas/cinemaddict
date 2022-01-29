@@ -74,12 +74,10 @@ export default class CommentsModel extends AbstractObservable {
     const adaptedComment = {...comment,
       emoji: `${comment.emotion}`,
       text: comment.comment,
-      date: comment.date,
     };
 
     delete adaptedComment['emotion'];
     delete adaptedComment['comment'];
-    delete adaptedComment['date'];
 
     return adaptedComment;
   }
