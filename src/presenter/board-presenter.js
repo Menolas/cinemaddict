@@ -51,7 +51,7 @@ export default class BoardPresenter {
 
   get films() {
     this.#currentFilterType = this.#filterModel.filter;
-    
+
     const films = this.#filmsModel.films;
     const filteredFilms = filter[this.#currentFilterType](films);
 
@@ -167,7 +167,7 @@ export default class BoardPresenter {
             remove(this.#mostCommentedFilmsComponent);
             this.#renderTopCommentedSection(this.#filmsModel.films);
           }
- 
+
         } catch (err) {
           this.#filmPresenterPopupOn.setAbortingDeleteComment(update.comment.id);
         }
