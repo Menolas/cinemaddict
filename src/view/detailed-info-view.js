@@ -180,7 +180,6 @@ const createDetailedInfoTemplate = (film, comments) => {
 
 export default class DetailedInfoView extends SmartView {
   #comments = [];
-  //#newCommentForm = this.element.querySelector('.film-details__new-comment');
 
   constructor(film, comments) {
     super();

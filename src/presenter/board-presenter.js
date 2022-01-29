@@ -64,11 +64,6 @@ export default class BoardPresenter {
     }
 
     return filteredFilms;
-
-    // return {
-    //   films: films,
-    //   filteredFilms: filteredFilms,
-    // };
   }
 
   init = () => {
