@@ -4,7 +4,6 @@ import {UpdateType} from '../const';
 export default class CommentsModel extends AbstractObservable {
   #comments = new Map();
   #apiService = null;
-  #film = null;
 
   constructor(apiService) {
     super();
