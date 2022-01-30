@@ -27,7 +27,6 @@ export default class BoardPresenter {
   #filmContainerComponent = null;
   #showMoreButtonComponent = null;
   #sortListComponent = null;
-  #filterMenuComponent = null;
   #topRatedFilmsComponent = null;
   #mostCommentedFilmsComponent = null;
   #noFilmComponent = null;
@@ -136,18 +135,6 @@ export default class BoardPresenter {
         this.#isLoading = false;
         remove(this.#loadingComponent);
         this.#renderBoard();
-        break;
-    }
-  }
-
-  #handleCommentEvent = (updateType, data) => {
-    switch (updateType) {
-      case UpdateType.COMMENTS:
-        this.#handleModelEvent(UpdateType.COMMENTS, this.#filmsModel.getFilmById(data.filmId));
-        break;
-      case UpdateType.MINOR:
-        this.#filmsModel.reloadComments(data.filmId);
-        this.#handleModelEvent(UpdateType);
         break;
     }
   }

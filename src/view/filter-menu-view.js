@@ -10,8 +10,7 @@ const createFilterItemTemplate = (filter, currentFilter) => {
     `<a href="#${name.toLowerCase()}" 
         class="main-navigation__item ${type === currentFilter ? activeClass : ''}" 
         data-filter-type="${type}">
-      ${name}
-      <span class="main-navigation__item-count">${count}</span>
+        ${name} ${name !== 'All movies' ? `<span class="main-navigation__item-count">${count}</span>` : ''}
     </a>`
   );
 };
