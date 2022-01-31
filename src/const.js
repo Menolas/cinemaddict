@@ -3,6 +3,13 @@ export const TEXT_LENGTH_ON_FILM_CARD = 140;
 export const FILM_TOP_RATED_COUNT = 2;
 export const FILM_MOST_COMMENTED_COUNT = 2;
 export const MINUTES_IN_HOURS = 60;
+export const STATISTIC_BAR_HEIGHT = 50;
+
+export const StatisticDiagramColors = {
+  STATISTIC_BAR_COLOR: '#ffe800',
+  HOVER_STATISTIC_BAR_COLOR: '#ffe800',
+  STATISTIC_DIAGRAM_LABELS_COLOR: '#ffffff',
+};
 
 export const SortType = {
   DEFAULT: 'default',
@@ -14,7 +21,7 @@ export const FilterType = {
   DEFAULT: 'All movies',
   FAVOURITES: 'Favourites',
   WATCHED: 'History',
-  WATCHLIST: 'Whatchlist',
+  WATCHLIST: 'Watchlist',
 };
 
 export const NoFilmInfo = {

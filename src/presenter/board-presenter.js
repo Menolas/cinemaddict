@@ -31,7 +31,7 @@ export default class BoardPresenter {
   #topRatedFilmsComponent = null;
   #mostCommentedFilmsComponent = null;
   #noFilmComponent = null;
-  #userProfileComponent = null;
+  userProfileComponent = null;
 
   #renderedFilmCount = FILM_COUNT_PER_STEP;
   #filmPresenter = new Map();
@@ -88,6 +88,11 @@ export default class BoardPresenter {
 
     this.#filmsModel.removeObserver(this.#handleModelEvent);
     this.#commentsModel.removeObserver(this.#handleModelEvent);
+  }
+
+  renderUserProfile = (watchedFilms) => {
+    this.userProfileComponent = new UserRankView(watchedFilms);
+    render(siteHeaderElement, this.userProfileComponent, RenderPosition.BEFOREEND);
   }
 
   #topRatedFilms = (films) => films.filter((film) => film.rating > 0).sort(sortFilmByRate).slice(0, FILM_TOP_RATED_COUNT);
@@ -155,14 +160,9 @@ export default class BoardPresenter {
   #handleCommentChange = async (actionType, updateType, update) => {
     switch (actionType) {
       case CommentAction.DELETE:
-        this.#filmPresenterPopupOn.setViewState(FilmPresenterViewState.DELETING, update.id);
+        this.#filmPresenterPopupOn.setViewState(FilmPresenterViewState.DELETING, update.comment.id);
         try {
           await this.#commentsModel.deleteComment(updateType, update);
-          if (this.#mostCommentedFilmsComponent) {
-            remove(this.#mostCommentedFilmsComponent);
-            this.#renderTopCommentedSection(this.#filmsModel.films);
-          }
-
         } catch (err) {
           this.#filmPresenterPopupOn.setAbortingDeleteComment(update.comment.id);
         }
@@ -171,12 +171,6 @@ export default class BoardPresenter {
         this.#filmPresenterPopupOn.setSaving();
         try {
           await this.#commentsModel.addComment(updateType, update);
-
-          if (this.#mostCommentedFilmsComponent) {
-            remove(this.#mostCommentedFilmsComponent);
-            this.#renderTopCommentedSection(this.#filmsModel.films);
-          }
-
         } catch (err) {
           this.#filmPresenterPopupOn.setAbortingNewComment();
         }
@@ -268,18 +262,13 @@ export default class BoardPresenter {
     this.#filmPresenterPopupOn.showPopup();
   }
 
-  #renderUserProfile = () => {
-    this.#userProfileComponent = new UserRankView(this.#filmsModel.watchedFilms.length);
-    render(siteHeaderElement, this.#userProfileComponent, RenderPosition.BEFOREEND);
-  }
-
   #clearBoard = ({resetRenderedFilmCount = false, resetSortType = false} = {}) => {
     const filmCount = this.films.length;
 
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmPresenter.clear();
 
-    remove(this.#userProfileComponent);
+    remove(this.userProfileComponent);
     remove(this.#sortListComponent);
     remove(this.#loadingComponent);
     remove(this.#showMoreButtonComponent);
@@ -326,7 +315,7 @@ export default class BoardPresenter {
 
     const filmCount = this.films.length;
 
-    this.#renderUserProfile();
+    this.renderUserProfile(this.#filmsModel.watchedFilms.length);
 
     this.#renderTopRatedSection(this.films);
 

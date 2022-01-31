@@ -1,20 +1,19 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart-view.js';
-import {MINUTES_IN_HOURS, StatisticType} from '../const';
+import {getUserRank} from '../utils/common.js';
+import {MINUTES_IN_HOURS, STATISTIC_BAR_HEIGHT, StatisticDiagramColors, StatisticType} from '../const';
 import {getStatisticGenres, sortGenreCountDown, getTotalDuration, getFilmsFilteredByStatisticDate} from '../utils/statistic.js';
 
 
 const renderChart = (statisticCtx, films, statisticType) => {
-  const BAR_HEIGHT = 50;
   const filteredFilms = getFilmsFilteredByStatisticDate(statisticType, films);
   const filmGenresCounted = getStatisticGenres(filteredFilms);
   const sortedFilmGenres = filmGenresCounted.sort(sortGenreCountDown);
-
   const filmGenres = sortedFilmGenres.map((item) => item.item);
   const filmsByGenreEntity = sortedFilmGenres.map((genre) => genre.count);
 
-  statisticCtx.height = BAR_HEIGHT * 5;
+  statisticCtx.height = STATISTIC_BAR_HEIGHT * filmGenres.length;
 
   return new Chart(statisticCtx, {
     plugins: [ChartDataLabels],
@@ -23,8 +22,8 @@ const renderChart = (statisticCtx, films, statisticType) => {
       labels: filmGenres,
       datasets: [{
         data: filmsByGenreEntity,
-        backgroundColor: '#ffe800',
-        hoverBackgroundColor: '#ffe800',
+        backgroundColor: StatisticDiagramColors.STATISTIC_BAR_COLOR,
+        hoverBackgroundColor: StatisticDiagramColors.HOVER_STATISTIC_BAR_COLOR,
         anchor: 'start',
         barThickness: 24,
       }],
@@ -36,7 +35,7 @@ const renderChart = (statisticCtx, films, statisticType) => {
           font: {
             size: 20,
           },
-          color: '#ffffff',
+          color: StatisticDiagramColors.STATISTIC_DIAGRAM_LABELS_COLOR,
           anchor: 'start',
           align: 'start',
           offset: 40,
@@ -45,7 +44,7 @@ const renderChart = (statisticCtx, films, statisticType) => {
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: '#ffffff',
+            fontColor: StatisticDiagramColors.STATISTIC_DIAGRAM_LABELS_COLOR,
             padding: 100,
             fontSize: 20,
           },
@@ -95,57 +94,58 @@ const createStatisticTemplate = (data) => {
     topGenre = sortedFilmGenres.length ? sortedFilmGenres[0].item : null;
   }
 
-  return `<section class="statistic">
-    <p class="statistic__rank">
-      Your rank
-      <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">Movie buff</span>
-    </p>
+  return (
+    `<section class="statistic">
+      <p class="statistic__rank">
+        Your rank
+        <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
+        <span class="statistic__rank-label">${getUserRank(films.length)}</span>
+      </p>
 
-    <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
-      <p class="statistic__filters-description">Show stats:</p>
+      <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
+        <p class="statistic__filters-description">Show stats:</p>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" 
-        value="${StatisticType.ALL}" ${checkedStatisticType(StatisticType.ALL)}>
-      <label for="statistic-all-time" class="statistic__filters-label">All time</label>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" 
+          value="${StatisticType.ALL}" ${checkedStatisticType(StatisticType.ALL)}>
+        <label for="statistic-all-time" class="statistic__filters-label">All time</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" 
-        value="${StatisticType.TODAY}" ${checkedStatisticType(StatisticType.TODAY)}>
-      <label for="statistic-today" class="statistic__filters-label">Today</label>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" 
+          value="${StatisticType.TODAY}" ${checkedStatisticType(StatisticType.TODAY)}>
+        <label for="statistic-today" class="statistic__filters-label">Today</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" 
-        value="${StatisticType.WEEK}" ${checkedStatisticType(StatisticType.WEEK)}>
-      <label for="statistic-week" class="statistic__filters-label">Week</label>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" 
+          value="${StatisticType.WEEK}" ${checkedStatisticType(StatisticType.WEEK)}>
+        <label for="statistic-week" class="statistic__filters-label">Week</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" 
-        value="${StatisticType.MONTH}" ${checkedStatisticType(StatisticType.MONTH)}>
-      <label for="statistic-month" class="statistic__filters-label">Month</label>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" 
+          value="${StatisticType.MONTH}" ${checkedStatisticType(StatisticType.MONTH)}>
+        <label for="statistic-month" class="statistic__filters-label">Month</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" 
-        value="${StatisticType.YEAR}" ${checkedStatisticType(StatisticType.YEAR)}>
-      <label for="statistic-year" class="statistic__filters-label">Year</label>
-    </form>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" 
+          value="${StatisticType.YEAR}" ${checkedStatisticType(StatisticType.YEAR)}>
+        <label for="statistic-year" class="statistic__filters-label">Year</label>
+      </form>
 
-    <ul class="statistic__text-list">
-      <li class="statistic__text-item">
-        <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">${watchedFilms}<span class="statistic__item-description">movies</span></p>
-      </li>
-      <li class="statistic__text-item">
-        <h4 class="statistic__item-title">Total duration</h4>
-        <p class="statistic__item-text">${totalDurationHourse}<span class="statistic__item-description">h</span>${totalDurationMinutes}<span class="statistic__item-description">m</span></p>
-      </li>
-      <li class="statistic__text-item">
-        <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">${topGenre ? topGenre : ''}</p>
-      </li>
-    </ul>
+      <ul class="statistic__text-list">
+        <li class="statistic__text-item">
+          <h4 class="statistic__item-title">You watched</h4>
+          <p class="statistic__item-text">${watchedFilms}<span class="statistic__item-description">movies</span></p>
+        </li>
+        <li class="statistic__text-item">
+          <h4 class="statistic__item-title">Total duration</h4>
+          <p class="statistic__item-text">${totalDurationHourse}<span class="statistic__item-description">h</span>${totalDurationMinutes}<span class="statistic__item-description">m</span></p>
+        </li>
+        <li class="statistic__text-item">
+          <h4 class="statistic__item-title">Top genre</h4>
+          <p class="statistic__item-text">${topGenre ? topGenre : ''}</p>
+        </li>
+      </ul>
 
-    <div class="statistic__chart-wrap">
-      <canvas class="statistic__chart" width="1000"></canvas>
-    </div>
-
-  </section>`;
+      <div class="statistic__chart-wrap">
+        <canvas class="statistic__chart" width="1000"></canvas>
+      </div>
+    </section>`
+  );
 };
 
 export default class StatisticView extends SmartView {
